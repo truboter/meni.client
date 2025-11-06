@@ -21,6 +21,7 @@ interface CartBarProps {
   language: Language;
   currency: Currency;
   convertPrices: boolean;
+  onItemClick?: (cartItem: CartItem) => void;
 }
 
 export function CartBar({
@@ -29,6 +30,7 @@ export function CartBar({
   language,
   currency,
   convertPrices,
+  onItemClick,
 }: CartBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -120,7 +122,8 @@ export function CartBar({
           <Button
             data-cart-button
             onClick={() => setIsOpen(true)}
-            className="h-14 w-14 rounded-full shadow-xl bg-white!"
+            className="h-14 w-14 rounded-full shadow-xl"
+            style={{ backgroundColor: "#0EA5E9" }}
             size="icon"
             variant="secondary"
           >
@@ -164,7 +167,8 @@ export function CartBar({
             onClick={handleCartButtonClick}
             onMouseEnter={handleCartButtonHover}
             onFocus={handleCartButtonHover}
-            className={`gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 has-[>svg]:px-4 h-14 text-base shadow-xl flex items-center px-6 bg-white! ${
+            style={{ backgroundColor: "#0EA5E9" }}
+            className={`gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive text-white hover:opacity-90 has-[>svg]:px-4 h-14 text-base shadow-xl flex items-center px-6 ${
               isExpanded
                 ? "w-full rounded-md justify-between"
                 : "w-14 px-0 justify-center ml-auto rounded-full"
@@ -205,7 +209,10 @@ export function CartBar({
 
                 return (
                   <div key={index} className="space-y-2">
-                    <div className="flex gap-3">
+                    <div
+                      className="flex gap-3 cursor-pointer hover:bg-secondary/50 p-2 -m-2 rounded-lg transition-colors"
+                      onClick={() => onItemClick?.(cartItem)}
+                    >
                       <img
                         src={cartItem.menuItem.image}
                         alt={cartItem.menuItem.name}
@@ -221,11 +228,14 @@ export function CartBar({
                           </p>
                         )}
                         <div className="flex items-center justify-between mt-2">
-                          <div className="flex items-center gap-2 bg-secondary rounded-lg p-1">
+                          <div
+                            className="flex items-center gap-2 bg-secondary rounded-lg p-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <Button
                               size="icon"
                               variant="ghost"
-                              className="h-7 w-7"
+                              className="h-7 w-7 text-muted-foreground hover:text-foreground"
                               onClick={() => handleQuantityChange(index, -1)}
                             >
                               <Minus size={14} weight="bold" />
@@ -236,13 +246,16 @@ export function CartBar({
                             <Button
                               size="icon"
                               variant="ghost"
-                              className="h-7 w-7"
+                              className="h-7 w-7 text-muted-foreground hover:text-foreground"
                               onClick={() => handleQuantityChange(index, 1)}
                             >
                               <Plus size={14} weight="bold" />
                             </Button>
                           </div>
-                          <div className="flex items-center gap-3">
+                          <div
+                            className="flex items-center gap-3"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <span className="font-semibold">
                               {formatPrice(
                                 cartItem.totalPrice,
@@ -279,7 +292,8 @@ export function CartBar({
               </span>
             </div>
             <Button
-              className="w-full h-14 px-6 rounded-md shadow-xl bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none text-base font-medium outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 transition-all flex items-center justify-between gap-2"
+              style={{ backgroundColor: "#0EA5E9" }}
+              className="w-full h-14 px-6 rounded-md shadow-xl text-white hover:opacity-90 disabled:opacity-50 disabled:pointer-events-none text-base font-medium outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 transition-all flex items-center justify-between gap-2"
               size="lg"
             >
               <span className="flex items-center gap-3">

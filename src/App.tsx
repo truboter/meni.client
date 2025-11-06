@@ -23,6 +23,7 @@ export default function App() {
   const [convertPrices, setConvertPrices] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingCartIndex, setEditingCartIndex] = useState<number | null>(null);
   const [animatingElement, setAnimatingElement] = useState<{
     element: HTMLElement;
     imageUrl: string;
@@ -31,6 +32,7 @@ export default function App() {
   const t = translations[language];
 
   const handleItemClick = (item: MenuItem) => {
+    setEditingCartIndex(null);
     setSelectedItem(item);
     setIsDialogOpen(true);
   };
@@ -54,7 +56,19 @@ export default function App() {
     });
 
     setCart((currentCart) => {
-      // Check if exact same item with same modifiers exists
+      // Если редактируем существующий элемент
+      if (editingCartIndex !== null) {
+        const updated = [...currentCart];
+        updated[editingCartIndex] = {
+          menuItem: item,
+          quantity,
+          selectedModifiers,
+          totalPrice,
+        };
+        return updated;
+      }
+
+      // Если добавляем новый - проверяем дубликат
       const existingIndex = currentCart.findIndex(
         (cartItem) =>
           cartItem.menuItem.id === item.id &&
@@ -83,7 +97,7 @@ export default function App() {
       }
     });
 
-    toast.success(t.addedToOrder);
+    setEditingCartIndex(null);
   };
 
   const handleQuickAdd = (item: MenuItem) => {
@@ -128,6 +142,19 @@ export default function App() {
 
   const handleUpdateCart = (updatedCart: CartItem[]) => {
     setCart(updatedCart);
+  };
+
+  const handleCartItemClick = (cartItem: CartItem) => {
+    // Найти индекс этого элемента в корзине
+    const index = cart.findIndex(
+      (item) =>
+        item.menuItem.id === cartItem.menuItem.id &&
+        JSON.stringify(item.selectedModifiers) ===
+          JSON.stringify(cartItem.selectedModifiers)
+    );
+    setEditingCartIndex(index);
+    setSelectedItem(cartItem.menuItem);
+    setIsDialogOpen(true);
   };
 
   const filteredItems =
@@ -178,17 +205,30 @@ export default function App() {
       <MenuItemDialog
         item={selectedItem}
         open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
+        onClose={() => {
+          setIsDialogOpen(false);
+          setEditingCartIndex(null);
+        }}
         onAddToCart={handleAddToCart}
         language={language}
         onLanguageChange={setLanguage}
         currency={currency}
         convertPrices={convertPrices}
+        editMode={editingCartIndex !== null}
+        initialQuantity={
+          editingCartIndex !== null ? cart[editingCartIndex]?.quantity : 1
+        }
+        initialModifiers={
+          editingCartIndex !== null
+            ? cart[editingCartIndex]?.selectedModifiers
+            : {}
+        }
       />
 
       <CartBar
         items={cart}
         onUpdateCart={handleUpdateCart}
+        onItemClick={handleCartItemClick}
         language={language}
         currency={currency}
         convertPrices={convertPrices}

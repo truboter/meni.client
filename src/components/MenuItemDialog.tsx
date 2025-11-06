@@ -31,6 +31,9 @@ interface MenuItemDialogProps {
   onLanguageChange: (language: Language) => void;
   currency: Currency;
   convertPrices: boolean;
+  editMode?: boolean;
+  initialQuantity?: number;
+  initialModifiers?: Record<string, string[]>;
 }
 
 export function MenuItemDialog({
@@ -42,18 +45,20 @@ export function MenuItemDialog({
   onLanguageChange,
   currency,
   convertPrices,
+  editMode = false,
+  initialQuantity = 1,
+  initialModifiers = {},
 }: MenuItemDialogProps) {
-  const [quantity, setQuantity] = useState(1);
-  const [selectedModifiers, setSelectedModifiers] = useState<
-    Record<string, string[]>
-  >({});
+  const [quantity, setQuantity] = useState(initialQuantity);
+  const [selectedModifiers, setSelectedModifiers] =
+    useState<Record<string, string[]>>(initialModifiers);
 
   useEffect(() => {
     if (open) {
-      setQuantity(1);
-      setSelectedModifiers({});
+      setQuantity(initialQuantity);
+      setSelectedModifiers(initialModifiers);
     }
-  }, [open, item]);
+  }, [open, item, initialQuantity, initialModifiers]);
 
   if (!item) return null;
 
@@ -113,9 +118,9 @@ export function MenuItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] p-0 gap-0 !bg-white">
+      <DialogContent className="max-w-2xl max-h-[90vh] p-0 gap-0 !bg-white flex flex-col overflow-hidden rounded-xl">
         {/* Image */}
-        <div className="relative h-64 overflow-hidden">
+        <div className="relative h-48 overflow-hidden shrink-0 rounded-t-xl">
           <img
             src={item.image}
             alt={item.name}
@@ -148,18 +153,18 @@ export function MenuItemDialog({
           )}
         </div>
 
-        <div className="flex flex-col max-h-[calc(90vh-16rem)] !bg-white">
-          <DialogHeader className="px-6 pt-6 !bg-white">
-            <DialogTitle className="text-2xl">{item.name}</DialogTitle>
-            <p className="text-muted-foreground text-sm mt-2">
+        <div className="flex flex-col flex-1 min-h-0 bg-white!">
+          <DialogHeader className="px-6 pt-4 pb-2 bg-white! shrink-0">
+            <DialogTitle className="text-xl">{item.name}</DialogTitle>
+            <p className="text-muted-foreground text-sm mt-1">
               {item.description}
             </p>
-            <p className="text-xl font-semibold mt-2">
+            <p className="text-lg font-semibold mt-1">
               {formatPrice(item.price, currency, convertPrices)}
             </p>
           </DialogHeader>
 
-          <ScrollArea className="flex-1 px-6 !bg-white">
+          <ScrollArea className="flex-1 px-6 bg-white! overflow-y-auto">
             {/* Modifiers */}
             {item.modifiers && item.modifiers.length > 0 && (
               <div className="space-y-6 py-6">
@@ -183,6 +188,7 @@ export function MenuItemDialog({
                         return (
                           <button
                             key={option.id}
+                            type="button"
                             onClick={() =>
                               handleModifierToggle(
                                 group.id,
@@ -190,7 +196,7 @@ export function MenuItemDialog({
                                 group.multiple || false
                               )
                             }
-                            className={`w-full flex items-center justify-between p-3 rounded-lg border-2 transition-all ${
+                            className={`w-full flex items-center justify-between p-3 rounded-lg border-2 transition-all cursor-pointer ${
                               isSelected
                                 ? "border-primary bg-primary/5"
                                 : "border-border hover:border-primary/50"
@@ -234,14 +240,14 @@ export function MenuItemDialog({
             )}
           </ScrollArea>
 
-          <DialogFooter className="px-6 py-4 border-t !bg-white">
+          <DialogFooter className="px-6 py-4 border-t bg-white! shrink-0">
             <div className="flex items-center justify-between w-full gap-4">
               {/* Quantity Controls */}
               <div className="flex items-center gap-2 bg-secondary rounded-lg p-1">
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-9 w-9"
+                  className="h-9 w-9 text-muted-foreground hover:text-foreground"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   disabled={quantity <= 1}
                 >
@@ -253,21 +259,24 @@ export function MenuItemDialog({
                 <Button
                   size="icon"
                   variant="ghost"
-                  className="h-9 w-9"
+                  className="h-9 w-9 text-muted-foreground hover:text-foreground"
                   onClick={() => setQuantity(quantity + 1)}
                 >
                   <Plus size={18} weight="bold" />
                 </Button>
               </div>
 
-              {/* Add to Cart Button */}
+              {/* Add to Cart / Update Button */}
               <Button
-                className="flex-1 h-11"
+                style={{ backgroundColor: "#0EA5E9" }}
+                className="flex-1 h-11 text-white hover:opacity-90"
                 size="lg"
                 onClick={handleAddToCart}
               >
-                {getUITranslation("addToCart", language)} •{" "}
-                {formatPrice(totalPrice, currency, convertPrices)}
+                {editMode
+                  ? getUITranslation("update", language)
+                  : getUITranslation("addToCart", language)}{" "}
+                • {formatPrice(totalPrice, currency, convertPrices)}
               </Button>
             </div>
           </DialogFooter>

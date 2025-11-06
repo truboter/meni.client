@@ -33,7 +33,7 @@ export function LanguageSelector({
         <Button
           variant="ghost"
           size="sm"
-          className="h-9 px-3 gap-2 text-foreground hover:bg-secondary"
+          className="h-9 px-3 gap-2 text-foreground hover:bg-secondary focus-visible:ring-0 focus-visible:ring-offset-0"
         >
           <Translate weight="bold" className="h-4 w-4" />
           <span className="inline-flex items-center justify-center w-6 h-6 text-xs font-semibold bg-primary text-primary-foreground rounded-full">
