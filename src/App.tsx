@@ -6,10 +6,9 @@ import { CartBar } from "./components/CartBar";
 import { MenuItemDialog } from "./components/MenuItemDialog";
 import { FlyToCartAnimation } from "./components/FlyToCartAnimation";
 import { restaurantData, venueInfo } from "./lib/data";
-import { translations, type Language } from "./lib/translations";
+import { type Language } from "./lib/translations";
 import { type Currency } from "./lib/currency";
 import { Toaster } from "./components/ui/sonner";
-import { toast } from "sonner";
 import type { CartItem, MenuItem } from "./lib/types";
 import type { GridColumns } from "./components/GridViewToggle";
 import "./index.css";
@@ -28,8 +27,6 @@ export default function App() {
     element: HTMLElement;
     imageUrl: string;
   } | null>(null);
-
-  const t = translations[language];
 
   const handleItemClick = (item: MenuItem) => {
     setEditingCartIndex(null);

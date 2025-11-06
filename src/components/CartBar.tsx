@@ -70,10 +70,6 @@ export function CartBar({
     setIsOpen(true);
   };
 
-  const handleCartButtonHover = () => {
-    setIsExpanded(true);
-  };
-
   const handleQuantityChange = (index: number, delta: number) => {
     const updatedCart = [...items];
     const newQuantity = updatedCart[index].quantity + delta;
