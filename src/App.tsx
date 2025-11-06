@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { VenueHeader } from './components/VenueHeader';
 import { CategoryChips } from './components/CategoryChips';
 import { MenuGrid } from './components/MenuGrid';
-import { LanguageSelector } from './components/LanguageSelector';
 import { CartBar } from './components/CartBar';
 import { Badge } from './components/ui/badge';
 import { restaurantData, venueInfo } from './lib/data';
-import { translations, Languages } from './lib/translations';
-import { convertPrice, currencySymbol, CurrencyCode } from './lib/currency';
+import { translations, type Language } from './lib/translations';
+import { currencySymbol, type Currency } from './lib/currency';
 import { Toaster } from './components/ui/sonner';
 import type { CartItem, MenuItem } from './lib/types';
 import type { GridColumns } from './components/GridViewToggle';
@@ -15,8 +14,8 @@ import './index.css';
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [language, setLanguage] = useState<Languages>('en');
-  const [currency, setCurrency] = useState<CurrencyCode>('USD');
+  const [language, setLanguage] = useState<Language>('en');
+  const [currency, setCurrency] = useState<Currency>('USD');
   const [cart, setCart] = useState<CartItem[]>([]);
   const [gridColumns, setGridColumns] = useState<GridColumns>(3);
   const [convertPrices, setConvertPrices] = useState<boolean>(false);
@@ -92,20 +91,14 @@ export default function App() {
               categories={restaurantData.categories}
               activeCategory={selectedCategory}
               onCategoryChange={setSelectedCategory}
+              language={language}
             />
             
-            <div className="flex items-center gap-4">
-              <LanguageSelector
-                currentLanguage={language}
-                onLanguageChange={setLanguage}
-              />
-              
-              {getTotalItems() > 0 && (
-                <Badge variant="secondary" className="text-sm">
-                  {getTotalItems()} {t.items} • {currencySymbol[currency]}{getTotalPrice().toFixed(2)}
-                </Badge>
-              )}
-            </div>
+            {getTotalItems() > 0 && (
+              <Badge variant="secondary" className="text-sm">
+                {getTotalItems()} {t.items} • {currencySymbol[currency]}{getTotalPrice().toFixed(2)}
+              </Badge>
+            )}
           </div>
         </div>
 

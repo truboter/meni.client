@@ -1,13 +1,15 @@
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'
+import { getTranslatedCategory, type Language } from '@/lib/translations'
 
 interface CategoryChipsProps {
   categories: string[]
   activeCategory: string
   onCategoryChange: (category: string) => void
+  language: Language
 }
 
-export function CategoryChips({ categories, activeCategory, onCategoryChange }: CategoryChipsProps) {
+export function CategoryChips({ categories, activeCategory, onCategoryChange, language }: CategoryChipsProps) {
   return (
     <div className="w-full border-b border-border bg-background sticky top-0 z-10">
       <ScrollArea className="w-full whitespace-nowrap">
@@ -24,7 +26,7 @@ export function CategoryChips({ categories, activeCategory, onCategoryChange }: 
                   : 'bg-transparent border border-border text-foreground hover:bg-secondary'
               )}
             >
-              {category}
+              {getTranslatedCategory(category, language)}
             </button>
           ))}
         </div>
