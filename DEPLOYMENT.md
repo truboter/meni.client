@@ -11,10 +11,10 @@
 
 ## Current Status
 
-- **Last Deploy**: 2025-11-06T14:52:04 (Failed)
-- **Status**: FAILED
-- **Commit**: ebcfd554c5b54d70c6eeaf5d23d343648c76975f
-- **Message**: "Add auto-start dev server on VS Code open"
+- **Last Deploy**: Job #6 - 2025-11-06 ✅ **SUCCESS**
+- **Frontend URL**: https://main.d2mf63neo372qs.amplifyapp.com
+- **Status**: DEPLOYED (Frontend only)
+- **Backend**: Available for local development via `npx ampx sandbox`
 
 ## Build Configuration
 
@@ -49,12 +49,13 @@ frontend:
 
 ## Recent Deployment History
 
-| Job ID | Status | Commit Message | Date |
-|--------|--------|----------------|------|
-| 4 | FAILED | Add auto-start dev server on VS Code open | 2025-11-06 14:50 |
-| 3 | FAILED | Fix TypeScript build: add path aliases, fix lucide-react imports | 2025-11-06 14:45 |
-| 2 | FAILED | Migrate visual-menu frontend: React 19, Vite 6.2, shadcn/ui | 2025-11-06 14:36 |
-| 1 | FAILED | HEAD | 2025-11-06 13:26 |
+| Job ID | Status | Commit Message | Date | Notes |
+|--------|--------|----------------|------|-------|
+| 6 | ✅ SUCCESS | Temporarily disable backend deployment in CI/CD | 2025-11-06 15:56 | Frontend deployed successfully |
+| 5 | FAILED | Fix AWS Amplify deployment: upgrade lucide-react | 2025-11-06 15:42 | Backend CDK asset publish error |
+| 4 | FAILED | Add auto-start dev server on VS Code open | 2025-11-06 14:50 | lucide-react peer dependency conflict |
+| 3 | FAILED | Fix TypeScript build: add path aliases, fix lucide-react imports | 2025-11-06 14:45 | lucide-react peer dependency conflict |
+| 2 | FAILED | Migrate visual-menu frontend: React 19, Vite 6.2, shadcn/ui | 2025-11-06 14:36 | lucide-react peer dependency conflict |
 
 ## Current Issue
 
@@ -131,3 +132,48 @@ aws amplify start-job --app-id d2mf63neo372qs --branch-name main --job-type RELE
 
 ## Webhook
 - **Created**: 2025-11-06T13:26:38
+
+## Backend Deployment
+
+### Current Setup
+Backend deployment is currently **disabled** in the CI/CD pipeline due to CDK asset publishing errors. The backend code is available for local development.
+
+### Local Backend Development
+To run the backend locally:
+```bash
+npx ampx sandbox
+```
+
+This will deploy the backend to your AWS account in a sandbox environment.
+
+### Enabling Backend in CI/CD (TODO)
+To enable backend deployment in the pipeline:
+
+1. **Set up CDK Bootstrap** (if not already done):
+   ```bash
+   npx cdk bootstrap aws://220427457121/eu-central-1
+   ```
+
+2. **Update IAM Role** - The Amplify service role needs permissions for:
+   - CloudFormation stack creation/updates
+   - S3 bucket access for CDK assets
+   - AppSync API creation
+   - DynamoDB table creation
+   - Cognito Identity Pool creation
+
+3. **Update amplify.yml** - Add backend deployment:
+   ```yaml
+   backend:
+     phases:
+       build:
+         commands:
+           - npm ci --cache .npm --prefer-offline
+           - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+   ```
+
+4. **Verify permissions** - Ensure the role `AmplifySSRLoggingRole-5bf5168d-9ea5-44f6-b822-3287a4b3bda0` has required policies.
+
+### Backend Architecture
+- **Auth**: Cognito Identity Pool (guest access enabled)
+- **Data**: AppSync GraphQL API with DynamoDB
+- **Schema**: Todo model with content field
