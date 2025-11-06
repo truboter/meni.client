@@ -59,6 +59,21 @@ export function SettingsMenu({
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleLanguageChange = (lang: Language) => {
+    onLanguageChange(lang);
+    setIsMenuOpen(false);
+  };
+
+  const handleCurrencyChange = (curr: Currency) => {
+    onCurrencyChange(curr);
+    setIsMenuOpen(false);
+  };
+
+  const handleGridColumnsChange = (cols: GridColumns) => {
+    onGridColumnsChange(cols);
+    setIsMenuOpen(false);
+  };
+
   return (
     <div className="flex items-center gap-2">
       <Button
@@ -75,7 +90,7 @@ export function SettingsMenu({
           <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
             <LanguageSelector
               currentLanguage={language}
-              onLanguageChange={onLanguageChange}
+              onLanguageChange={handleLanguageChange}
             />
           </div>
 
@@ -90,7 +105,7 @@ export function SettingsMenu({
                 {currencyList.map((curr: CurrencyInfo) => (
                   <DropdownMenuItem
                     key={curr.code}
-                    onClick={() => onCurrencyChange(curr.code)}
+                    onClick={() => handleCurrencyChange(curr.code)}
                   >
                     <Check
                       size={16}
@@ -109,7 +124,7 @@ export function SettingsMenu({
           <div className="bg-white backdrop-blur-sm rounded-full shadow-sm px-2">
             <GridViewToggle
               value={gridColumns}
-              onChange={onGridColumnsChange}
+              onChange={handleGridColumnsChange}
             />
           </div>
         </div>
