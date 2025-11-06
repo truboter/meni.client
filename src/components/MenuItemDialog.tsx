@@ -94,7 +94,7 @@ export function MenuItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] p-0 gap-0">
+      <DialogContent className="max-w-2xl max-h-[90vh] p-0 gap-0 bg-background">
         {/* Image */}
         <div className="relative h-64 overflow-hidden">
           <img
@@ -119,8 +119,8 @@ export function MenuItemDialog({
           )}
         </div>
 
-        <div className="flex flex-col max-h-[calc(90vh-16rem)]">
-          <DialogHeader className="px-6 pt-6">
+        <div className="flex flex-col max-h-[calc(90vh-16rem)] bg-background">
+          <DialogHeader className="px-6 pt-6 bg-background">
             <DialogTitle className="text-2xl">{item.name}</DialogTitle>
             <p className="text-muted-foreground text-sm mt-2">{item.description}</p>
             <p className="text-xl font-semibold mt-2">
@@ -184,7 +184,7 @@ export function MenuItemDialog({
             )}
           </ScrollArea>
 
-          <DialogFooter className="px-6 py-4 border-t">
+          <DialogFooter className="px-6 py-4 border-t bg-background">
             <div className="flex items-center justify-between w-full gap-4">
               {/* Quantity Controls */}
               <div className="flex items-center gap-2 bg-secondary rounded-lg p-1">
