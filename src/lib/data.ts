@@ -30,6 +30,7 @@ export const menuItems: MenuItem[] = [
         id: 'm1',
         name: 'Cooking Temperature',
         required: true,
+        multiple: false,
         maxSelections: 1,
         options: [
           { id: 'rare', name: 'Rare', price: 0 },
@@ -41,6 +42,7 @@ export const menuItems: MenuItem[] = [
         id: 'm2',
         name: 'Add-ons',
         required: false,
+        multiple: true,
         maxSelections: 3,
         options: [
           { id: 'cheese', name: 'Extra Cheese', price: 2 },

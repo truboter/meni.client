@@ -56,6 +56,7 @@ export const uiTranslations: Record<Language, Record<string, string>> = {
   en: {
     'search': 'Search menu...',
     'addToOrder': 'Add to Order',
+    'addToCart': 'Add to Cart',
     'viewCart': 'View Order',
     'cart': 'Cart',
     'yourOrder': 'Your Order',
@@ -65,11 +66,13 @@ export const uiTranslations: Record<Language, Record<string, string>> = {
     'checkout': 'Checkout',
     'addedToOrder': 'Added to order',
     'items': 'items',
-    'item': 'item'
+    'item': 'item',
+    'required': 'Required'
   },
   ru: {
     'search': 'Поиск в меню...',
     'addToOrder': 'Добавить в заказ',
+    'addToCart': 'Добавить в корзину',
     'viewCart': 'Посмотреть заказ',
     'cart': 'Корзина',
     'yourOrder': 'Ваш заказ',
@@ -79,7 +82,8 @@ export const uiTranslations: Record<Language, Record<string, string>> = {
     'checkout': 'Оформить заказ',
     'addedToOrder': 'Добавлено в заказ',
     'items': 'позиций',
-    'item': 'позиция'
+    'item': 'позиция',
+    'required': 'Обязательно'
   }
 }
 

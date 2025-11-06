@@ -17,6 +17,7 @@ export interface ModifierGroup {
   id: string
   name: string
   required: boolean
+  multiple?: boolean // Allow multiple selections
   maxSelections: number
   options: ModifierOption[]
 }
@@ -24,7 +25,7 @@ export interface ModifierGroup {
 export interface ModifierOption {
   id: string
   name: string
-  price: number
+  price: number // Additional price for this modifier
 }
 
 export interface CartItem {
