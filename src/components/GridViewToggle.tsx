@@ -22,7 +22,7 @@ export function GridViewToggle({ value, onChange }: GridViewToggleProps) {
           <SquaresFour size={20} weight="bold" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900">
+      <DropdownMenuContent align="end" className="!bg-white">
         {[1, 2, 3].map((cols) => (
           <DropdownMenuItem
             key={cols}

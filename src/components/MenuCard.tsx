@@ -1,30 +1,46 @@
-import { useState } from 'react'
-import { Plus } from '@phosphor-icons/react'
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import type { MenuItem } from '@/lib/types'
-import type { Currency } from '@/lib/currency'
-import { formatPrice } from '@/lib/currency'
+import { useState, useRef } from "react";
+import { Plus } from "@phosphor-icons/react";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import type { MenuItem } from "@/lib/types";
+import type { Currency } from "@/lib/currency";
+import { formatPrice } from "@/lib/currency";
 
 interface MenuCardProps {
-  item: MenuItem
-  onClick: () => void
-  onQuickAdd?: () => void
-  currency: Currency
-  convertPrices: boolean
+  item: MenuItem;
+  onClick: () => void;
+  onQuickAdd?: () => void;
+  currency: Currency;
+  convertPrices: boolean;
+  onAnimationStart?: (element: HTMLElement, imageUrl: string) => void;
 }
 
-export function MenuCard({ item, onClick, onQuickAdd, currency, convertPrices }: MenuCardProps) {
-  const [imageLoaded, setImageLoaded] = useState(false)
+export function MenuCard({
+  item,
+  onClick,
+  onQuickAdd,
+  currency,
+  convertPrices,
+  onAnimationStart,
+}: MenuCardProps) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   const handleQuickAdd = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onQuickAdd?.()
-  }
+    e.stopPropagation();
+
+    // Запускаем анимацию
+    if (cardRef.current && onAnimationStart) {
+      onAnimationStart(cardRef.current, item.image);
+    }
+
+    onQuickAdd?.();
+  };
 
   return (
     <Card
+      ref={cardRef}
       onClick={onClick}
       className="group cursor-pointer border-border hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-100 flex flex-col relative pb-14 p-0 overflow-hidden"
     >
@@ -38,17 +54,17 @@ export function MenuCard({ item, onClick, onQuickAdd, currency, convertPrices }:
           loading="lazy"
           onLoad={() => setImageLoaded(true)}
           className={`w-full h-full object-cover transition-all duration-300 ${
-            imageLoaded ? 'opacity-100' : 'opacity-0'
+            imageLoaded ? "opacity-100" : "opacity-0"
           }`}
         />
-        
+
         {/* Badges */}
         {item.badges && item.badges.length > 0 && (
           <div className="absolute top-2 right-2 flex gap-1 flex-wrap">
             {item.badges.map((badge) => (
-              <Badge 
-                key={badge} 
-                variant="secondary" 
+              <Badge
+                key={badge}
+                variant="secondary"
                 className="text-xs font-medium bg-white/90 text-gray-800 hover:bg-white"
               >
                 {badge}
@@ -65,12 +81,12 @@ export function MenuCard({ item, onClick, onQuickAdd, currency, convertPrices }:
         <p className="text-sm text-muted-foreground line-clamp-2 flex-1 mb-3">
           {item.description}
         </p>
-        
+
         <div className="flex items-center justify-between">
           <span className="font-semibold text-lg">
             {formatPrice(item.price, currency, convertPrices)}
           </span>
-          
+
           {onQuickAdd && (
             <Button
               size="sm"
@@ -83,5 +99,5 @@ export function MenuCard({ item, onClick, onQuickAdd, currency, convertPrices }:
         </div>
       </div>
     </Card>
-  )
+  );
 }

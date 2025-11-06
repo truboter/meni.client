@@ -36,7 +36,7 @@ export function SettingsMenu({
   const timeoutRef = useRef<number | null>(null);
   const currencyList = Object.values(currencies) as CurrencyInfo[];
 
-  // Auto-collapse after 3 seconds of inactivity
+  // Auto-collapse after 20 seconds of inactivity
   useEffect(() => {
     if (isMenuOpen) {
       if (timeoutRef.current) {
@@ -45,7 +45,7 @@ export function SettingsMenu({
 
       timeoutRef.current = window.setTimeout(() => {
         setIsMenuOpen(false);
-      }, 3000);
+      }, 20000);
 
       return () => {
         if (timeoutRef.current) {
@@ -59,12 +59,6 @@ export function SettingsMenu({
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleMenuButtonHover = () => {
-    if (!isMenuOpen) {
-      setIsMenuOpen(true);
-    }
-  };
-
   return (
     <div className="flex items-center gap-2">
       <Button
@@ -72,8 +66,6 @@ export function SettingsMenu({
         size="icon"
         className="rounded-full bg-white hover:bg-white/90 shadow-lg border-2 border-neutral-200"
         onClick={handleMenuButtonClick}
-        onMouseEnter={handleMenuButtonHover}
-        onFocus={handleMenuButtonHover}
       >
         <List size={24} weight="bold" className="text-neutral-800" />
       </Button>

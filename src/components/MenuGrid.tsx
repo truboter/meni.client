@@ -1,8 +1,8 @@
-import { MenuCard } from './MenuCard'
-import type { MenuItem } from '@/lib/types'
-import type { Currency } from '@/lib/currency'
+import { MenuCard } from "./MenuCard";
+import type { MenuItem } from "@/lib/types";
+import type { Currency } from "@/lib/currency";
 
-export type GridColumns = 1 | 2 | 3
+export type GridColumns = 1 | 2 | 3;
 
 interface MenuCardSkeletonProps {
   // Just a placeholder for skeleton
@@ -22,41 +22,43 @@ function MenuCardSkeleton({}: MenuCardSkeletonProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 interface MenuGridProps {
-  items: MenuItem[]
-  onItemClick: (item: MenuItem) => void
-  onQuickAdd?: (item: MenuItem) => void
-  isLoading?: boolean
-  columns?: GridColumns
-  currency: Currency
-  convertPrices: boolean
+  items: MenuItem[];
+  onItemClick: (item: MenuItem) => void;
+  onQuickAdd?: (item: MenuItem) => void;
+  isLoading?: boolean;
+  columns?: GridColumns;
+  currency: Currency;
+  convertPrices: boolean;
+  onAnimationStart?: (element: HTMLElement, imageUrl: string) => void;
 }
 
-export function MenuGrid({ 
-  items, 
+export function MenuGrid({
+  items,
   onItemClick,
-  onQuickAdd, 
-  isLoading = false, 
+  onQuickAdd,
+  isLoading = false,
   columns = 3,
   currency,
-  convertPrices
+  convertPrices,
+  onAnimationStart,
 }: MenuGridProps) {
   if (isLoading) {
     return (
-      <div 
+      <div
         className="grid gap-4 md:gap-6"
         style={{
-          gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`
+          gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
         }}
       >
         {Array.from({ length: 8 }).map((_, i) => (
           <MenuCardSkeleton key={i} />
         ))}
       </div>
-    )
+    );
   }
 
   if (items.length === 0) {
@@ -68,26 +70,27 @@ export function MenuGrid({
           Try selecting a different category or adjusting your filters
         </p>
       </div>
-    )
+    );
   }
 
   return (
-    <div 
+    <div
       className="grid gap-4 md:gap-6"
       style={{
-        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`
+        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
       }}
     >
       {items.map((item) => (
-        <MenuCard 
-          key={item.id} 
-          item={item} 
+        <MenuCard
+          key={item.id}
+          item={item}
           onClick={() => onItemClick(item)}
           onQuickAdd={() => onQuickAdd?.(item)}
+          onAnimationStart={onAnimationStart}
           currency={currency}
           convertPrices={convertPrices}
         />
       ))}
     </div>
-  )
+  );
 }

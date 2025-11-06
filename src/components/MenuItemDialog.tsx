@@ -113,7 +113,7 @@ export function MenuItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] p-0 gap-0 !bg-white dark:!bg-gray-900">
+      <DialogContent className="max-w-2xl max-h-[90vh] p-0 gap-0 !bg-white">
         {/* Image */}
         <div className="relative h-64 overflow-hidden">
           <img
@@ -148,8 +148,8 @@ export function MenuItemDialog({
           )}
         </div>
 
-        <div className="flex flex-col max-h-[calc(90vh-16rem)] !bg-white dark:!bg-gray-900">
-          <DialogHeader className="px-6 pt-6 !bg-white dark:!bg-gray-900">
+        <div className="flex flex-col max-h-[calc(90vh-16rem)] !bg-white">
+          <DialogHeader className="px-6 pt-6 !bg-white">
             <DialogTitle className="text-2xl">{item.name}</DialogTitle>
             <p className="text-muted-foreground text-sm mt-2">
               {item.description}
@@ -159,7 +159,7 @@ export function MenuItemDialog({
             </p>
           </DialogHeader>
 
-          <ScrollArea className="flex-1 px-6 !bg-white dark:!bg-gray-900">
+          <ScrollArea className="flex-1 px-6 !bg-white">
             {/* Modifiers */}
             {item.modifiers && item.modifiers.length > 0 && (
               <div className="space-y-6 py-6">
@@ -234,7 +234,7 @@ export function MenuItemDialog({
             )}
           </ScrollArea>
 
-          <DialogFooter className="px-6 py-4 border-t !bg-white dark:!bg-gray-900">
+          <DialogFooter className="px-6 py-4 border-t !bg-white">
             <div className="flex items-center justify-between w-full gap-4">
               {/* Quantity Controls */}
               <div className="flex items-center gap-2 bg-secondary rounded-lg p-1">

@@ -4,6 +4,7 @@ import { CategoryChips } from "./components/CategoryChips";
 import { MenuGrid } from "./components/MenuGrid";
 import { CartBar } from "./components/CartBar";
 import { MenuItemDialog } from "./components/MenuItemDialog";
+import { FlyToCartAnimation } from "./components/FlyToCartAnimation";
 import { restaurantData, venueInfo } from "./lib/data";
 import { translations, type Language } from "./lib/translations";
 import { type Currency } from "./lib/currency";
@@ -15,13 +16,17 @@ import "./index.css";
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [language, setLanguage] = useState<Language>("en");
+  const [language, setLanguage] = useState<Language>("ka");
   const [currency, setCurrency] = useState<Currency>("USD");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [gridColumns, setGridColumns] = useState<GridColumns>(3);
   const [convertPrices, setConvertPrices] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [animatingElement, setAnimatingElement] = useState<{
+    element: HTMLElement;
+    imageUrl: string;
+  } | null>(null);
 
   const t = translations[language];
 
@@ -113,6 +118,14 @@ export default function App() {
     });
   };
 
+  const handleAnimationStart = (element: HTMLElement, imageUrl: string) => {
+    setAnimatingElement({ element, imageUrl });
+  };
+
+  const handleAnimationComplete = () => {
+    setAnimatingElement(null);
+  };
+
   const handleUpdateCart = (updatedCart: CartItem[]) => {
     setCart(updatedCart);
   };
@@ -141,14 +154,12 @@ export default function App() {
         />
 
         {/* Controls */}
-        <div className="px-4 py-6">
-          <CategoryChips
-            categories={restaurantData.categories}
-            activeCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-            language={language}
-          />
-        </div>
+        <CategoryChips
+          categories={restaurantData.categories}
+          activeCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+          language={language}
+        />
 
         {/* Menu */}
         <div className="px-4 pb-8">
@@ -156,6 +167,7 @@ export default function App() {
             items={filteredItems}
             onItemClick={handleItemClick}
             onQuickAdd={handleQuickAdd}
+            onAnimationStart={handleAnimationStart}
             currency={currency}
             convertPrices={convertPrices}
             columns={gridColumns}
@@ -181,6 +193,14 @@ export default function App() {
         currency={currency}
         convertPrices={convertPrices}
       />
+
+      {animatingElement && (
+        <FlyToCartAnimation
+          startElement={animatingElement.element}
+          imageUrl={animatingElement.imageUrl}
+          onComplete={handleAnimationComplete}
+        />
+      )}
 
       <Toaster />
     </div>
