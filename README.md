@@ -1,6 +1,6 @@
-# AWS Amplify React+Vite Starter Template
+# Meni Client
 
-This repository provides a starter template for creating applications using React+Vite and AWS Amplify, emphasizing easy setup for authentication, API, and database capabilities.
+React+Vite frontend application powered by AWS Amplify, designed for scalability and performance.
 
 ## Overview
 
