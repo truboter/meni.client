@@ -157,7 +157,8 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       item: "ერთეული",
       required: "აუცილებელია",
       currencyWarningTitle: "ყურადღება!",
-      currencyWarningMessage: "თუ თქვენ აირჩევთ ვალუტას, რომელიც განსხვავდება დაწესებულების ვალუტისგან, ნაჩვენები ფასები გამოითვლება მიმდინარე კურსით, მაგრამ გადახდას მაინც დაწესებულების ვალუტაში განახორციელებთ!",
+      currencyWarningMessage:
+        "თუ თქვენ აირჩევთ ვალუტას, რომელიც განსხვავდება დაწესებულების ვალუტისგან, ნაჩვენები ფასები გამოითვლება მიმდინარე კურსით, მაგრამ გადახდას მაინც დაწესებულების ვალუტაში განახორციელებთ!",
       ok: "კარგი",
     },
     en: {
@@ -177,7 +178,8 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       item: "item",
       required: "Required",
       currencyWarningTitle: "Attention!",
-      currencyWarningMessage: "If you choose a currency different from the venue's currency, the prices shown to you will be calculated at the current exchange rate, but you will still pay in the venue's currency!",
+      currencyWarningMessage:
+        "If you choose a currency different from the venue's currency, the prices shown to you will be calculated at the current exchange rate, but you will still pay in the venue's currency!",
       ok: "OK",
     },
     ru: {
@@ -197,7 +199,8 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       item: "позиция",
       required: "Обязательно",
       currencyWarningTitle: "Внимание!",
-      currencyWarningMessage: "Если Вы выбираете валюту отличную от валюты заведения, показываемые Вам цены будут рассчитаны по текущему курсу, но оплату Вы будете производить всё равно в валюте заведения!",
+      currencyWarningMessage:
+        "Если Вы выбираете валюту отличную от валюты заведения, показываемые Вам цены будут рассчитаны по текущему курсу, но оплату Вы будете производить всё равно в валюте заведения!",
       ok: "ОК",
     },
   };
