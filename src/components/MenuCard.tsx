@@ -91,7 +91,8 @@ export function MenuCard({
             <Button
               size="sm"
               onClick={handleQuickAdd}
-              className="h-8 w-8 p-0 rounded-full"
+              className="h-8 w-8 p-0 rounded-full bg-secondary text-foreground hover:bg-secondary/80"
+              variant="secondary"
             >
               <Plus size={16} weight="bold" />
             </Button>

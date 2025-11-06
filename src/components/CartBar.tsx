@@ -67,7 +67,6 @@ export function CartBar({
   }, [totalItems, isEmpty]);
 
   const handleCartButtonClick = () => {
-    setIsExpanded(true);
     setIsOpen(true);
   };
 
@@ -122,8 +121,7 @@ export function CartBar({
           <Button
             data-cart-button
             onClick={() => setIsOpen(true)}
-            className="h-14 w-14 rounded-full shadow-xl"
-            style={{ backgroundColor: "#0EA5E9" }}
+            className="h-14 w-14 rounded-full shadow-xl bg-white! text-foreground hover:bg-gray-100"
             size="icon"
             variant="secondary"
           >
@@ -165,8 +163,6 @@ export function CartBar({
           <Button
             data-cart-button
             onClick={handleCartButtonClick}
-            onMouseEnter={handleCartButtonHover}
-            onFocus={handleCartButtonHover}
             style={{ backgroundColor: "#0EA5E9" }}
             className={`gap-2 whitespace-nowrap font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive text-white hover:opacity-90 has-[>svg]:px-4 h-14 text-base shadow-xl flex items-center px-6 ${
               isExpanded
