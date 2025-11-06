@@ -1,24 +1,36 @@
-import { useState, useEffect } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
-import { Plus, Minus } from '@phosphor-icons/react'
-import type { MenuItem } from '@/lib/types'
-import type { Language } from '@/lib/translations'
-import type { Currency } from '@/lib/currency'
-import { formatPrice } from '@/lib/currency'
-import { getUITranslation } from '@/lib/translations'
+import { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Plus, Minus } from "@phosphor-icons/react";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import type { MenuItem } from "@/lib/types";
+import type { Language } from "@/lib/translations";
+import type { Currency } from "@/lib/currency";
+import { formatPrice } from "@/lib/currency";
+import { getUITranslation } from "@/lib/translations";
 
 interface MenuItemDialogProps {
-  item: MenuItem | null
-  open: boolean
-  onClose: () => void
-  onAddToCart: (item: MenuItem, quantity: number, selectedModifiers: Record<string, string[]>) => void
-  language: Language
-  currency: Currency
-  convertPrices: boolean
+  item: MenuItem | null;
+  open: boolean;
+  onClose: () => void;
+  onAddToCart: (
+    item: MenuItem,
+    quantity: number,
+    selectedModifiers: Record<string, string[]>
+  ) => void;
+  language: Language;
+  onLanguageChange: (language: Language) => void;
+  currency: Currency;
+  convertPrices: boolean;
 }
 
 export function MenuItemDialog({
@@ -27,74 +39,81 @@ export function MenuItemDialog({
   onClose,
   onAddToCart,
   language,
+  onLanguageChange,
   currency,
-  convertPrices
+  convertPrices,
 }: MenuItemDialogProps) {
-  const [quantity, setQuantity] = useState(1)
-  const [selectedModifiers, setSelectedModifiers] = useState<Record<string, string[]>>({})
+  const [quantity, setQuantity] = useState(1);
+  const [selectedModifiers, setSelectedModifiers] = useState<
+    Record<string, string[]>
+  >({});
 
   useEffect(() => {
     if (open) {
-      setQuantity(1)
-      setSelectedModifiers({})
+      setQuantity(1);
+      setSelectedModifiers({});
     }
-  }, [open, item])
+  }, [open, item]);
 
-  if (!item) return null
+  if (!item) return null;
 
-  const handleModifierToggle = (groupId: string, optionId: string, isMultiple: boolean) => {
+  const handleModifierToggle = (
+    groupId: string,
+    optionId: string,
+    isMultiple: boolean
+  ) => {
     setSelectedModifiers((prev) => {
-      const current = prev[groupId] || []
-      
+      const current = prev[groupId] || [];
+
       if (isMultiple) {
         // Multiple selection
         if (current.includes(optionId)) {
           return {
             ...prev,
-            [groupId]: current.filter((id) => id !== optionId)
-          }
+            [groupId]: current.filter((id) => id !== optionId),
+          };
         } else {
           return {
             ...prev,
-            [groupId]: [...current, optionId]
-          }
+            [groupId]: [...current, optionId],
+          };
         }
       } else {
         // Single selection
         return {
           ...prev,
-          [groupId]: current.includes(optionId) ? [] : [optionId]
-        }
+          [groupId]: current.includes(optionId) ? [] : [optionId],
+        };
       }
-    })
-  }
+    });
+  };
 
   const calculateTotalPrice = () => {
-    let total = item.price
+    let total = item.price;
 
     item.modifiers?.forEach((group) => {
-      const selectedIds = selectedModifiers[group.id] || []
+      const selectedIds = selectedModifiers[group.id] || [];
       selectedIds.forEach((optionId) => {
-        const option = group.options.find((o) => o.id === optionId)
+        const option = group.options.find((o) => o.id === optionId);
         if (option && option.price > 0) {
-          total += option.price
+          total += option.price;
         }
-      })
-    })
+      });
+    });
 
-    return total * quantity
-  }
+    return total * quantity;
+  };
 
   const handleAddToCart = () => {
-    onAddToCart(item, quantity, selectedModifiers)
-    onClose()
-  }
+    onAddToCart(item, quantity, selectedModifiers);
+    onClose();
+  };
 
-  const totalPrice = calculateTotalPrice()
+  const totalPrice = calculateTotalPrice();
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] p-0 gap-0 bg-background">
+      <DialogContent className="max-w-2xl max-h-[90vh] p-0 gap-0 !bg-white dark:!bg-gray-900">
         {/* Image */}
         <div className="relative h-64 overflow-hidden">
           <img
@@ -102,14 +121,24 @@ export function MenuItemDialog({
             alt={item.name}
             className="w-full h-full object-cover"
           />
-          
+
+          {/* Language Selector in top-left */}
+          <div className="absolute top-4 left-4 z-10">
+            <div className="bg-white/90 backdrop-blur-sm rounded-full shadow-sm">
+              <LanguageSelector
+                currentLanguage={language}
+                onLanguageChange={onLanguageChange}
+              />
+            </div>
+          </div>
+
           {/* Badges */}
           {item.badges && item.badges.length > 0 && (
             <div className="absolute top-4 right-4 flex gap-2 flex-wrap">
               {item.badges.map((badge) => (
-                <Badge 
-                  key={badge} 
-                  variant="secondary" 
+                <Badge
+                  key={badge}
+                  variant="secondary"
                   className="text-xs font-medium bg-white/90 text-gray-800"
                 >
                   {badge}
@@ -119,16 +148,18 @@ export function MenuItemDialog({
           )}
         </div>
 
-        <div className="flex flex-col max-h-[calc(90vh-16rem)] bg-background">
-          <DialogHeader className="px-6 pt-6 bg-background">
+        <div className="flex flex-col max-h-[calc(90vh-16rem)] !bg-white dark:!bg-gray-900">
+          <DialogHeader className="px-6 pt-6 !bg-white dark:!bg-gray-900">
             <DialogTitle className="text-2xl">{item.name}</DialogTitle>
-            <p className="text-muted-foreground text-sm mt-2">{item.description}</p>
+            <p className="text-muted-foreground text-sm mt-2">
+              {item.description}
+            </p>
             <p className="text-xl font-semibold mt-2">
               {formatPrice(item.price, currency, convertPrices)}
             </p>
           </DialogHeader>
 
-          <ScrollArea className="flex-1 px-6">
+          <ScrollArea className="flex-1 px-6 !bg-white dark:!bg-gray-900">
             {/* Modifiers */}
             {item.modifiers && item.modifiers.length > 0 && (
               <div className="space-y-6 py-6">
@@ -138,45 +169,64 @@ export function MenuItemDialog({
                       <h3 className="font-semibold text-base">{group.name}</h3>
                       {group.required && (
                         <Badge variant="destructive" className="text-xs">
-                          {getUITranslation('required', language)}
+                          {getUITranslation("required", language)}
                         </Badge>
                       )}
                     </div>
-                    
+
                     <div className="space-y-2">
                       {group.options.map((option) => {
-                        const isSelected = (selectedModifiers[group.id] || []).includes(option.id)
-                        
+                        const isSelected = (
+                          selectedModifiers[group.id] || []
+                        ).includes(option.id);
+
                         return (
                           <button
                             key={option.id}
-                            onClick={() => handleModifierToggle(group.id, option.id, group.multiple || false)}
+                            onClick={() =>
+                              handleModifierToggle(
+                                group.id,
+                                option.id,
+                                group.multiple || false
+                              )
+                            }
                             className={`w-full flex items-center justify-between p-3 rounded-lg border-2 transition-all ${
                               isSelected
-                                ? 'border-primary bg-primary/5'
-                                : 'border-border hover:border-primary/50'
+                                ? "border-primary bg-primary/5"
+                                : "border-border hover:border-primary/50"
                             }`}
                           >
                             <div className="flex items-center gap-3">
-                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                                isSelected ? 'border-primary bg-primary' : 'border-muted-foreground'
-                              }`}>
+                              <div
+                                className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                                  isSelected
+                                    ? "border-primary bg-primary"
+                                    : "border-muted-foreground"
+                                }`}
+                              >
                                 {isSelected && (
                                   <div className="w-2 h-2 rounded-full bg-white" />
                                 )}
                               </div>
-                              <span className="text-sm font-medium">{option.name}</span>
+                              <span className="text-sm font-medium">
+                                {option.name}
+                              </span>
                             </div>
                             {option.price > 0 && (
                               <span className="text-sm text-muted-foreground">
-                                +{formatPrice(option.price, currency, convertPrices)}
+                                +
+                                {formatPrice(
+                                  option.price,
+                                  currency,
+                                  convertPrices
+                                )}
                               </span>
                             )}
                           </button>
-                        )
+                        );
                       })}
                     </div>
-                    
+
                     <Separator className="mt-6" />
                   </div>
                 ))}
@@ -184,7 +234,7 @@ export function MenuItemDialog({
             )}
           </ScrollArea>
 
-          <DialogFooter className="px-6 py-4 border-t bg-background">
+          <DialogFooter className="px-6 py-4 border-t !bg-white dark:!bg-gray-900">
             <div className="flex items-center justify-between w-full gap-4">
               {/* Quantity Controls */}
               <div className="flex items-center gap-2 bg-secondary rounded-lg p-1">
@@ -216,12 +266,13 @@ export function MenuItemDialog({
                 size="lg"
                 onClick={handleAddToCart}
               >
-                {getUITranslation('addToCart', language)} • {formatPrice(totalPrice, currency, convertPrices)}
+                {getUITranslation("addToCart", language)} •{" "}
+                {formatPrice(totalPrice, currency, convertPrices)}
               </Button>
             </div>
           </DialogFooter>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

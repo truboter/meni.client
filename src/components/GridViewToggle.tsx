@@ -1,26 +1,43 @@
-export type GridColumns = 1 | 2 | 3
+import { SquaresFour, Check } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+export type GridColumns = 1 | 2 | 3;
 
 interface GridViewToggleProps {
-  value: GridColumns
-  onChange: (value: GridColumns) => void
+  value: GridColumns;
+  onChange: (value: GridColumns) => void;
 }
 
 export function GridViewToggle({ value, onChange }: GridViewToggleProps) {
   return (
-    <div className="flex items-center gap-1 bg-secondary rounded-lg p-1">
-      {[1, 2, 3].map((cols) => (
-        <button
-          key={cols}
-          onClick={() => onChange(cols as GridColumns)}
-          className={`px-3 py-1.5 rounded text-sm font-medium transition-colors ${
-            value === cols
-              ? 'bg-background shadow-sm text-foreground'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          {cols}
-        </button>
-      ))}
-    </div>
-  )
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="rounded-full">
+          <SquaresFour size={20} weight="bold" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900">
+        {[1, 2, 3].map((cols) => (
+          <DropdownMenuItem
+            key={cols}
+            onClick={() => onChange(cols as GridColumns)}
+            className="cursor-pointer"
+          >
+            <Check
+              size={16}
+              weight="bold"
+              className={value === cols ? "mr-2" : "mr-2 opacity-0"}
+            />
+            {cols} {cols === 1 ? "column" : "columns"}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }

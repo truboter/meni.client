@@ -1,39 +1,69 @@
-import { CurrencyCircleDollar, List, Check } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { CurrencyCircleDollar, List, Check } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { LanguageSelector } from '@/components/LanguageSelector'
-import { GridViewToggle, type GridColumns } from '@/components/GridViewToggle'
-import type { Language } from '@/lib/translations'
-import type { Currency, CurrencyInfo } from '@/lib/currency'
-import { currencies } from '@/lib/currency'
-import { useState } from 'react'
+} from "@/components/ui/dropdown-menu";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import { GridViewToggle, type GridColumns } from "@/components/GridViewToggle";
+import type { Language } from "@/lib/translations";
+import type { Currency, CurrencyInfo } from "@/lib/currency";
+import { currencies } from "@/lib/currency";
+import { useState, useEffect, useRef } from "react";
 
 interface SettingsMenuProps {
-  language: Language
-  onLanguageChange: (language: Language) => void
-  gridColumns: GridColumns
-  onGridColumnsChange: (columns: GridColumns) => void
-  currency: Currency
-  onCurrencyChange: (currency: Currency) => void
-  convertPrices: boolean
-  onConvertPricesChange: (convert: boolean) => void
+  language: Language;
+  onLanguageChange: (language: Language) => void;
+  gridColumns: GridColumns;
+  onGridColumnsChange: (columns: GridColumns) => void;
+  currency: Currency;
+  onCurrencyChange: (currency: Currency) => void;
+  convertPrices: boolean;
+  onConvertPricesChange: (convert: boolean) => void;
 }
 
-export function SettingsMenu({ 
-  language, 
+export function SettingsMenu({
+  language,
   onLanguageChange,
   gridColumns,
   onGridColumnsChange,
   currency,
   onCurrencyChange,
 }: SettingsMenuProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const currencyList = Object.values(currencies) as CurrencyInfo[]
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
+  const currencyList = Object.values(currencies) as CurrencyInfo[];
+
+  // Auto-collapse after 3 seconds of inactivity
+  useEffect(() => {
+    if (isMenuOpen) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = window.setTimeout(() => {
+        setIsMenuOpen(false);
+      }, 3000);
+
+      return () => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+      };
+    }
+  }, [isMenuOpen]);
+
+  const handleMenuButtonClick = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleMenuButtonHover = () => {
+    if (!isMenuOpen) {
+      setIsMenuOpen(true);
+    }
+  };
 
   return (
     <div className="flex items-center gap-2">
@@ -41,19 +71,23 @@ export function SettingsMenu({
         variant="secondary"
         size="icon"
         className="rounded-full bg-white hover:bg-white/90 shadow-lg border-2 border-neutral-200"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        onClick={handleMenuButtonClick}
+        onMouseEnter={handleMenuButtonHover}
+        onFocus={handleMenuButtonHover}
       >
         <List size={24} weight="bold" className="text-neutral-800" />
       </Button>
 
       {isMenuOpen && (
         <div className="flex items-center gap-2">
-          <LanguageSelector
-            currentLanguage={language}
-            onLanguageChange={onLanguageChange}
-          />
+          <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
+            <LanguageSelector
+              currentLanguage={language}
+              onLanguageChange={onLanguageChange}
+            />
+          </div>
 
-          <div className="bg-white/90 backdrop-blur-sm rounded-full shadow-sm">
+          <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
@@ -69,7 +103,9 @@ export function SettingsMenu({
                     <Check
                       size={16}
                       weight="bold"
-                      className={currency === curr.code ? 'mr-2' : 'mr-2 opacity-0'}
+                      className={
+                        currency === curr.code ? "mr-2" : "mr-2 opacity-0"
+                      }
                     />
                     {curr.symbol} {curr.code}
                   </DropdownMenuItem>
@@ -78,7 +114,7 @@ export function SettingsMenu({
             </DropdownMenu>
           </div>
 
-          <div className="bg-white/90 backdrop-blur-sm rounded-full shadow-sm px-2">
+          <div className="bg-white backdrop-blur-sm rounded-full shadow-sm px-2">
             <GridViewToggle
               value={gridColumns}
               onChange={onGridColumnsChange}
@@ -87,5 +123,5 @@ export function SettingsMenu({
         </div>
       )}
     </div>
-  )
+  );
 }

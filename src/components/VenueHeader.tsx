@@ -1,24 +1,24 @@
-import type { VenueInfo } from '@/lib/types'
-import type { Language } from '@/lib/translations'
-import type { Currency } from '@/lib/currency'
-import { SettingsMenu } from '@/components/SettingsMenu'
-import type { GridColumns } from '@/components/GridViewToggle'
+import type { VenueInfo } from "@/lib/types";
+import type { Language } from "@/lib/translations";
+import type { Currency } from "@/lib/currency";
+import { SettingsMenu } from "@/components/SettingsMenu";
+import type { GridColumns } from "@/components/GridViewToggle";
 
 interface VenueHeaderProps {
-  venue?: VenueInfo
-  children?: React.ReactNode
-  currentLanguage: Language
-  onLanguageChange: (language: Language) => void
-  gridColumns: GridColumns
-  onGridColumnsChange: (columns: GridColumns) => void
-  currency: Currency
-  onCurrencyChange: (currency: Currency) => void
-  convertPrices: boolean
-  onConvertPricesChange: (convert: boolean) => void
+  venue?: VenueInfo;
+  children?: React.ReactNode;
+  currentLanguage: Language;
+  onLanguageChange: (language: Language) => void;
+  gridColumns: GridColumns;
+  onGridColumnsChange: (columns: GridColumns) => void;
+  currency: Currency;
+  onCurrencyChange: (currency: Currency) => void;
+  convertPrices: boolean;
+  onConvertPricesChange: (convert: boolean) => void;
 }
 
-export function VenueHeader({ 
-  venue, 
+export function VenueHeader({
+  venue,
   children,
   currentLanguage,
   onLanguageChange,
@@ -27,7 +27,7 @@ export function VenueHeader({
   currency,
   onCurrencyChange,
   convertPrices,
-  onConvertPricesChange
+  onConvertPricesChange,
 }: VenueHeaderProps) {
   if (!venue) {
     return null;
@@ -36,10 +36,10 @@ export function VenueHeader({
   return (
     <div className="relative">
       {/* Banner Image */}
-      <div 
+      <div
         className="h-48 md:h-64 bg-cover bg-center bg-gray-200 relative"
         style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${venue.bannerImage})`
+          backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6)), url(${venue.bannerImage})`,
         }}
       >
         {/* Settings Menu in top-left */}
@@ -67,27 +67,22 @@ export function VenueHeader({
                   className="w-full h-full object-cover"
                 />
               </div>
-              
+
               {/* Venue Info */}
               <div className="flex-1 text-white">
                 <h1 className="text-2xl md:text-3xl font-bold leading-tight">
                   {venue.name}
                 </h1>
-                <p className="text-sm md:text-base opacity-90">
-                  {venue.subtitle}
-                </p>
               </div>
-              
+
               {/* Action buttons area */}
               {children && (
-                <div className="flex items-end gap-2">
-                  {children}
-                </div>
+                <div className="flex items-end gap-2">{children}</div>
               )}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

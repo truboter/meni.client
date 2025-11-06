@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -31,10 +31,47 @@ export function CartBar({
   convertPrices,
 }: CartBarProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
+  const timeoutRef = useRef<number | null>(null);
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce((sum, item) => sum + item.totalPrice, 0);
   const isEmpty = items.length === 0;
+
+  // Auto-collapse after 3 seconds of inactivity
+  useEffect(() => {
+    if (!isEmpty && isExpanded) {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setIsExpanded(false);
+      }, 3000);
+
+      return () => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+      };
+    }
+  }, [isExpanded, isEmpty]);
+
+  // Expand when items change (item added/removed)
+  useEffect(() => {
+    if (!isEmpty) {
+      setIsExpanded(true);
+    }
+  }, [totalItems, isEmpty]);
+
+  const handleCartButtonClick = () => {
+    setIsExpanded(true);
+    setIsOpen(true);
+  };
+
+  const handleCartButtonHover = () => {
+    setIsExpanded(true);
+  };
 
   const handleQuantityChange = (index: number, delta: number) => {
     const updatedCart = [...items];
@@ -119,26 +156,43 @@ export function CartBar({
 
   return (
     <>
-      <div className="fixed bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-background via-background to-transparent">
-        <Button
-          onClick={() => setIsOpen(true)}
-          className="w-full h-14 text-base shadow-xl flex items-center justify-between px-6 bg-primary hover:bg-primary/90"
-          size="lg"
-        >
-          <div className="flex items-center gap-3">
-            <ShoppingCart size={24} weight="bold" />
-            <span>
-              {totalItems} {getUITranslation("items", language)}
-            </span>
-          </div>
-          <span className="font-semibold">
-            {formatPrice(totalPrice, currency, convertPrices)}
-          </span>
-        </Button>
+      <div className="fixed bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-white via-white to-transparent pointer-events-none">
+        <div className="pointer-events-auto max-w-4xl mx-auto">
+          <Button
+            onClick={handleCartButtonClick}
+            onMouseEnter={handleCartButtonHover}
+            onFocus={handleCartButtonHover}
+            className={`h-14 text-base shadow-xl flex items-center justify-between px-6 bg-primary hover:bg-primary/90 transition-all duration-300 ${
+              isExpanded
+                ? "w-full rounded-xl"
+                : "w-14 px-0 justify-center ml-auto rounded-full"
+            }`}
+            size="lg"
+          >
+            <div
+              className={`flex items-center gap-3 ${isExpanded ? "" : "justify-center"}`}
+            >
+              <ShoppingCart size={24} weight="bold" />
+              {isExpanded && (
+                <span className="whitespace-nowrap">
+                  {totalItems} {getUITranslation("items", language)}
+                </span>
+              )}
+            </div>
+            {isExpanded && (
+              <span className="font-semibold whitespace-nowrap">
+                {formatPrice(totalPrice, currency, convertPrices)}
+              </span>
+            )}
+          </Button>
+        </div>
       </div>
 
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent side="bottom" className="h-[85vh]">
+        <SheetContent
+          side="bottom"
+          className="h-[85vh] !bg-white dark:!bg-gray-900"
+        >
           <SheetHeader>
             <SheetTitle className="text-2xl">
               {getUITranslation("yourOrder", language)}
