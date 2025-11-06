@@ -118,7 +118,10 @@ export function MenuItemDialog({
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-2xl max-h-[90vh] p-0 gap-0 !bg-white flex flex-col overflow-hidden rounded-xl">
+      <DialogContent
+        adaptiveCloseButton
+        className="max-w-2xl max-h-[90vh] p-0 gap-0 bg-white! flex flex-col overflow-hidden rounded-xl"
+      >
         {/* Image */}
         <div className="relative h-48 overflow-hidden shrink-0 rounded-t-xl">
           <img
@@ -128,7 +131,7 @@ export function MenuItemDialog({
           />
 
           {/* Language Selector in top-left */}
-          <div className="absolute top-4 left-4 z-10">
+          <div className="absolute top-1 left-1 z-10 scale-[0.67]">
             <div className="bg-white/90 backdrop-blur-sm rounded-full shadow-sm">
               <LanguageSelector
                 currentLanguage={language}
