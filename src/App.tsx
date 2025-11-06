@@ -16,7 +16,7 @@ import "./index.css";
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [language, setLanguage] = useState<Language>("ka");
-  const [currency, setCurrency] = useState<Currency>("USD");
+  const [currency, setCurrency] = useState<Currency>("GEL");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [gridColumns, setGridColumns] = useState<GridColumns>(3);
   const [convertPrices, setConvertPrices] = useState<boolean>(false);
