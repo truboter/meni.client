@@ -25,6 +25,16 @@ The application will be available at:
 - Default: <http://localhost:5173>
 - Port 7003: <http://localhost:7003>
 
+### Auto-start Development Server
+
+The project is configured to automatically start the development server when you open the workspace in VS Code:
+
+1. Open the project folder in VS Code
+2. When prompted "Allow Automatic Tasks in Folder?", click **Allow**
+3. The dev server will start automatically on port 7003
+
+To disable auto-start, go to VS Code settings and set `task.allowAutomaticTasks` to `off`.
+
 ## Features
 
 - **Authentication**: Setup with Amazon Cognito for secure user authentication.
