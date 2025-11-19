@@ -31,23 +31,33 @@ The application supports dynamic menu loading from CDN based on location IDs. Th
 
 #### 1. URL Path (Development)
 
-Navigate to `http://localhost:7003/{locationId}`:
+Navigate to `http://localhost:7003/{locationId}/{lang}`:
 
-- URL: `http://localhost:7003/lnc2w74z`
-- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/ru.json` (for Russian)
+- URL: `http://localhost:7003/lnc2w74z/en`
+- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/en.json` (English)
+
+Or just specify the language:
+
+- URL: `http://localhost:7003/ru`
+- Uses default location with Russian language
 
 #### 2. Subdomain (Production)
 
-Use a subdomain like `https://{locationId}.meni.ge`:
+Use a subdomain like `https://{locationId}.meni.ge/{lang}`:
 
+- URL: `https://lnc2w74z.meni.ge/en`
+- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/en.json` (English)
+- URL: `https://lnc2w74z.meni.ge/ru`
+- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/ru.json` (Russian)
 - URL: `https://lnc2w74z.meni.ge`
-- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/ka.json` (for Georgian)
+- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/ka.json` (Georgian - default)
 
 The app will automatically:
 
 - Fetch menu data from `https://cdn.meni.ge/locations/loc-{locationId}/{lang}.json`
 - Load images from `https://cdn.meni.ge/locations/loc-{locationId}/{itemId}/medium.webp`
-- Change language dynamically when the user selects a different language
+- Set initial language based on URL path (e.g., `/en`, `/ru`)
+- Allow language changes through the UI language selector
 
 **CDN Data Format:**
 

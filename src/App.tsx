@@ -20,7 +20,7 @@ import {
 import "./index.css";
 
 export default function App() {
-  const { locationId: urlLocationId } = useParams<{ locationId: string }>();
+  const { locationId: urlLocationId, lang: urlLang } = useParams<{ locationId: string; lang: string }>();
   
   // Get locationId from URL path or subdomain
   const getLocationId = (): string | undefined => {
@@ -41,10 +41,22 @@ export default function App() {
     return undefined;
   };
   
+  // Get language from URL path (e.g., /en, /ru)
+  const getLanguageFromUrl = (): Language => {
+    // Check URL parameter first (e.g., /lnc2w74z/ru or just /ru)
+    if (urlLang && urlLang.length === 2) {
+      return urlLang as Language;
+    }
+    
+    // Default to Georgian
+    return "ka";
+  };
+  
   const locationId = getLocationId();
+  const initialLanguage = getLanguageFromUrl();
   
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [language, setLanguage] = useState<Language>("ka");
+  const [language, setLanguage] = useState<Language>(initialLanguage);
   const [currency, setCurrency] = useState<Currency>("GEL");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [gridColumns, setGridColumns] = useState<GridColumns>(3);
