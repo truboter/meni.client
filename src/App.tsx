@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { VenueHeader } from "./components/VenueHeader";
 import { CategoryChips } from "./components/CategoryChips";
 import { MenuGrid } from "./components/MenuGrid";
@@ -19,8 +19,11 @@ import {
 } from "./lib/locationService";
 import "./index.css";
 
+const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
+
 export default function App() {
   const { locationId: urlLocationId, lang: urlLang } = useParams<{ locationId: string; lang: string }>();
+  const navigate = useNavigate();
   
   // Get locationId from URL path or subdomain
   const getLocationId = (): string | undefined => {
@@ -41,11 +44,17 @@ export default function App() {
     return undefined;
   };
   
-  // Get language from URL path (e.g., /en, /ru)
-  const getLanguageFromUrl = (): Language => {
+  // Get language from URL path or localStorage
+  const getInitialLanguage = (): Language => {
     // Check URL parameter first (e.g., /lnc2w74z/ru or just /ru)
     if (urlLang && urlLang.length === 2) {
       return urlLang as Language;
+    }
+    
+    // Check localStorage
+    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    if (savedLanguage && savedLanguage.length === 2) {
+      return savedLanguage as Language;
     }
     
     // Default to Georgian
@@ -53,7 +62,7 @@ export default function App() {
   };
   
   const locationId = getLocationId();
-  const initialLanguage = getLanguageFromUrl();
+  const initialLanguage = getInitialLanguage();
   
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [language, setLanguage] = useState<Language>(initialLanguage);
@@ -75,6 +84,21 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
+
+  // Update URL when language changes
+  useEffect(() => {
+    // Save language to localStorage
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    
+    // Update URL if language is different from URL parameter
+    if (language !== urlLang) {
+      if (locationId) {
+        navigate(`/${locationId}/${language}`, { replace: true });
+      } else {
+        navigate(`/${language}`, { replace: true });
+      }
+    }
+  }, [language, locationId, urlLang, navigate]);
 
   // Fetch location data when locationId or language changes
   useEffect(() => {
