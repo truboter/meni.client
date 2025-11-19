@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Plus } from "@phosphor-icons/react";
+import { Plus, Minus } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ interface MenuCardProps {
   item: MenuItem;
   onClick: () => void;
   onQuickAdd?: () => void;
+  onQuickRemove?: () => void;
+  cartQuantity?: number;
   currency: Currency;
   convertPrices: boolean;
   onAnimationStart?: (element: HTMLElement, imageUrl: string) => void;
@@ -20,6 +22,8 @@ export function MenuCard({
   item,
   onClick,
   onQuickAdd,
+  onQuickRemove,
+  cartQuantity = 0,
   currency,
   convertPrices,
   onAnimationStart,
@@ -36,6 +40,11 @@ export function MenuCard({
     }
 
     onQuickAdd?.();
+  };
+
+  const handleQuickRemove = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onQuickRemove?.();
   };
 
   return (
@@ -88,14 +97,40 @@ export function MenuCard({
           </span>
 
           {onQuickAdd && (
-            <Button
-              size="sm"
-              onClick={handleQuickAdd}
-              className="h-8 w-8 p-0 rounded-full bg-secondary text-foreground hover:bg-secondary/80"
-              variant="secondary"
-            >
-              <Plus size={16} weight="bold" />
-            </Button>
+            <div className="flex items-center gap-2">
+              {cartQuantity > 0 ? (
+                <>
+                  <Button
+                    size="sm"
+                    onClick={handleQuickRemove}
+                    className="h-8 w-8 p-0 rounded-full bg-secondary text-foreground hover:bg-secondary/80"
+                    variant="secondary"
+                  >
+                    <Minus size={16} weight="bold" />
+                  </Button>
+                  <span className="font-semibold text-base min-w-6 text-center">
+                    {cartQuantity}
+                  </span>
+                  <Button
+                    size="sm"
+                    onClick={handleQuickAdd}
+                    className="h-8 w-8 p-0 rounded-full bg-secondary text-foreground hover:bg-secondary/80"
+                    variant="secondary"
+                  >
+                    <Plus size={16} weight="bold" />
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  size="sm"
+                  onClick={handleQuickAdd}
+                  className="h-8 w-8 p-0 rounded-full bg-secondary text-foreground hover:bg-secondary/80"
+                  variant="secondary"
+                >
+                  <Plus size={16} weight="bold" />
+                </Button>
+              )}
+            </div>
           )}
         </div>
       </div>

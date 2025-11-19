@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { VenueHeader } from "./components/VenueHeader";
 import { CategoryChips } from "./components/CategoryChips";
 import { MenuGrid } from "./components/MenuGrid";
@@ -9,11 +10,17 @@ import { restaurantData, venueInfo } from "./lib/data";
 import { type Language } from "./lib/translations";
 import { type Currency } from "./lib/currency";
 import { Toaster } from "./components/ui/sonner";
-import type { CartItem, MenuItem } from "./lib/types";
+import type { CartItem, MenuItem, LocationData } from "./lib/types";
 import type { GridColumns } from "./components/GridViewToggle";
+import {
+  fetchLocationData,
+  convertLocationDataToMenuItems,
+  extractCategories,
+} from "./lib/locationService";
 import "./index.css";
 
 export default function App() {
+  const { locationId } = useParams<{ locationId: string }>();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [language, setLanguage] = useState<Language>("ka");
   const [currency, setCurrency] = useState<Currency>("GEL");
@@ -27,6 +34,49 @@ export default function App() {
     element: HTMLElement;
     imageUrl: string;
   } | null>(null);
+
+  // State for location data
+  const [locationData, setLocationData] = useState<LocationData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
+
+  // Fetch location data when locationId or language changes
+  useEffect(() => {
+    if (!locationId) {
+      // Use default data if no locationId
+      setMenuItems(restaurantData.menuItems);
+      setCategories(restaurantData.categories);
+      return;
+    }
+
+    const loadLocationData = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const data = await fetchLocationData(locationId, language);
+        setLocationData(data);
+
+        const items = convertLocationDataToMenuItems(data);
+        const cats = extractCategories(data);
+
+        setMenuItems(items);
+        setCategories(cats);
+      } catch (err) {
+        console.error("Failed to load location data:", err);
+        setError("Failed to load menu data. Please try again later.");
+        // Fallback to default data
+        setMenuItems(restaurantData.menuItems);
+        setCategories(restaurantData.categories);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadLocationData();
+  }, [locationId, language]);
 
   const handleItemClick = (item: MenuItem) => {
     setEditingCartIndex(null);
@@ -129,6 +179,36 @@ export default function App() {
     });
   };
 
+  const handleQuickRemove = (item: MenuItem) => {
+    setCart((currentCart) => {
+      const existingIndex = currentCart.findIndex(
+        (cartItem) =>
+          cartItem.menuItem.id === item.id &&
+          Object.keys(cartItem.selectedModifiers).length === 0
+      );
+
+      if (existingIndex >= 0) {
+        const updated = [...currentCart];
+        const currentQuantity = updated[existingIndex].quantity;
+
+        if (currentQuantity > 1) {
+          // Уменьшаем количество
+          updated[existingIndex] = {
+            ...updated[existingIndex],
+            quantity: currentQuantity - 1,
+            totalPrice: updated[existingIndex].totalPrice - item.price,
+          };
+          return updated;
+        } else {
+          // Удаляем из корзины
+          return updated.filter((_, index) => index !== existingIndex);
+        }
+      }
+
+      return currentCart;
+    });
+  };
+
   const handleAnimationStart = (element: HTMLElement, imageUrl: string) => {
     setAnimatingElement({ element, imageUrl });
   };
@@ -156,17 +236,47 @@ export default function App() {
 
   const filteredItems =
     selectedCategory === "all"
-      ? restaurantData.menuItems
-      : restaurantData.menuItems.filter(
-          (item) => item.category === selectedCategory
-        );
+      ? menuItems
+      : menuItems.filter((item) => item.category === selectedCategory);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading menu...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error && !menuItems.length) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto px-4">
+          <p className="text-destructive mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <VenueHeader
-          venue={venueInfo}
+          venue={{
+            ...venueInfo,
+            name: locationData?.locationName || venueInfo.name,
+          }}
           currentLanguage={language}
           onLanguageChange={setLanguage}
           gridColumns={gridColumns}
@@ -179,7 +289,7 @@ export default function App() {
 
         {/* Controls */}
         <CategoryChips
-          categories={restaurantData.categories}
+          categories={categories}
           activeCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
           language={language}
@@ -191,6 +301,8 @@ export default function App() {
             items={filteredItems}
             onItemClick={handleItemClick}
             onQuickAdd={handleQuickAdd}
+            onQuickRemove={handleQuickRemove}
+            cart={cart}
             onAnimationStart={handleAnimationStart}
             currency={currency}
             convertPrices={convertPrices}

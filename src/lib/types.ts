@@ -48,3 +48,22 @@ export interface VenueInfo {
   bannerImage: string;
   logoImage: string;
 }
+
+// Location data from CDN
+export interface LocationMenuItem {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+export interface LocationCategory {
+  id: string;
+  name: string;
+  items: LocationMenuItem[];
+}
+
+export interface LocationData {
+  locationId: string;
+  locationName: string;
+  categories: LocationCategory[];
+}

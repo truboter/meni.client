@@ -1,5 +1,5 @@
 import { MenuCard } from "./MenuCard";
-import type { MenuItem } from "@/lib/types";
+import type { MenuItem, CartItem } from "@/lib/types";
 import type { Currency } from "@/lib/currency";
 
 export type GridColumns = 1 | 2 | 3;
@@ -29,6 +29,8 @@ interface MenuGridProps {
   items: MenuItem[];
   onItemClick: (item: MenuItem) => void;
   onQuickAdd?: (item: MenuItem) => void;
+  onQuickRemove?: (item: MenuItem) => void;
+  cart?: CartItem[];
   isLoading?: boolean;
   columns?: GridColumns;
   currency: Currency;
@@ -40,12 +42,23 @@ export function MenuGrid({
   items,
   onItemClick,
   onQuickAdd,
+  onQuickRemove,
+  cart = [],
   isLoading = false,
   columns = 3,
   currency,
   convertPrices,
   onAnimationStart,
 }: MenuGridProps) {
+  // Функция для подсчета количества товара в корзине (без модификаторов)
+  const getCartQuantity = (itemId: string) => {
+    const cartItem = cart.find(
+      (ci) =>
+        ci.menuItem.id === itemId &&
+        Object.keys(ci.selectedModifiers).length === 0
+    );
+    return cartItem?.quantity || 0;
+  };
   if (isLoading) {
     return (
       <div
@@ -86,6 +99,8 @@ export function MenuGrid({
           item={item}
           onClick={() => onItemClick(item)}
           onQuickAdd={() => onQuickAdd?.(item)}
+          onQuickRemove={() => onQuickRemove?.(item)}
+          cartQuantity={getCartQuantity(item.id)}
           onAnimationStart={onAnimationStart}
           currency={currency}
           convertPrices={convertPrices}

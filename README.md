@@ -25,6 +25,42 @@ The application will be available at:
 - Default: <http://localhost:5173>
 - Port 7003: <http://localhost:7003>
 
+### Using Location-based Menus
+
+The application supports dynamic menu loading from CDN based on location IDs. To view a specific location's menu:
+
+1. Navigate to `http://localhost:7003/{locationId}` (e.g., `http://localhost:7003/lnc2w74z`)
+2. The app will automatically fetch menu data from `https://cdn.meni.ge/locations/loc-{locationId}/{lang}.json`
+3. Change the language in the app to load different language versions
+
+**Example:**
+
+- URL: `http://localhost:7003/lnc2w74z`
+- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/ru.json` (for Russian)
+- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/en.json` (for English)
+
+The JSON format should follow this structure:
+
+```json
+{
+  "locationId": "loc-lnc2w74z",
+  "locationName": "Restaurant Name",
+  "categories": [
+    {
+      "id": "category-id",
+      "name": "Category Name",
+      "items": [
+        {
+          "id": "item-id",
+          "name": "Item Name",
+          "description": "Item Description"
+        }
+      ]
+    }
+  ]
+}
+```
+
 ### Auto-start Development Server
 
 The project is configured to automatically start the development server when you open the workspace in VS Code:
