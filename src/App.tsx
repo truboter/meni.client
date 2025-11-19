@@ -85,6 +85,13 @@ export default function App() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
 
+  // Check if location is in subdomain (not in URL path)
+  const isLocationInSubdomain = (): boolean => {
+    const hostname = window.location.hostname;
+    const parts = hostname.split('.');
+    return parts.length >= 3 && parts[parts.length - 2] === 'meni' && parts[parts.length - 1] === 'ge';
+  };
+
   // Update URL when language changes
   useEffect(() => {
     // Save language to localStorage
@@ -92,7 +99,10 @@ export default function App() {
     
     // Update URL if language is different from URL parameter
     if (language !== urlLang) {
-      if (locationId) {
+      // If location is in subdomain, don't include it in path
+      if (isLocationInSubdomain()) {
+        navigate(`/${language}`, { replace: true });
+      } else if (locationId) {
         navigate(`/${locationId}/${language}`, { replace: true });
       } else {
         navigate(`/${language}`, { replace: true });
