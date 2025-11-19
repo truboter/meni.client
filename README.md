@@ -27,17 +27,29 @@ The application will be available at:
 
 ### Using Location-based Menus
 
-The application supports dynamic menu loading from CDN based on location IDs. To view a specific location's menu:
+The application supports dynamic menu loading from CDN based on location IDs. There are two ways to specify a location:
 
-1. Navigate to `http://localhost:7003/{locationId}` (e.g., `http://localhost:7003/lnc2w74z`)
-2. The app will automatically fetch menu data from `https://cdn.meni.ge/locations/loc-{locationId}/{lang}.json`
-3. Change the language in the app to load different language versions
+#### 1. URL Path (Development)
 
-**Example:**
+Navigate to `http://localhost:7003/{locationId}`:
 
 - URL: `http://localhost:7003/lnc2w74z`
 - Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/ru.json` (for Russian)
-- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/en.json` (for English)
+
+#### 2. Subdomain (Production)
+
+Use a subdomain like `https://{locationId}.meni.ge`:
+
+- URL: `https://lnc2w74z.meni.ge`
+- Fetches: `https://cdn.meni.ge/locations/loc-lnc2w74z/ka.json` (for Georgian)
+
+The app will automatically:
+
+- Fetch menu data from `https://cdn.meni.ge/locations/loc-{locationId}/{lang}.json`
+- Load images from `https://cdn.meni.ge/locations/loc-{locationId}/{itemId}/medium.webp`
+- Change language dynamically when the user selects a different language
+
+**CDN Data Format:**
 
 The JSON format should follow this structure:
 

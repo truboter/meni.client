@@ -20,7 +20,29 @@ import {
 import "./index.css";
 
 export default function App() {
-  const { locationId } = useParams<{ locationId: string }>();
+  const { locationId: urlLocationId } = useParams<{ locationId: string }>();
+  
+  // Get locationId from URL path or subdomain
+  const getLocationId = (): string | undefined => {
+    // First, check URL parameter
+    if (urlLocationId) {
+      return urlLocationId;
+    }
+    
+    // Then check subdomain (e.g., lnc2w74z.meni.ge)
+    const hostname = window.location.hostname;
+    const parts = hostname.split('.');
+    
+    // Check if it's a subdomain of meni.ge
+    if (parts.length >= 3 && parts[parts.length - 2] === 'meni' && parts[parts.length - 1] === 'ge') {
+      return parts[0]; // Return subdomain as locationId
+    }
+    
+    return undefined;
+  };
+  
+  const locationId = getLocationId();
+  
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [language, setLanguage] = useState<Language>("ka");
   const [currency, setCurrency] = useState<Currency>("GEL");
