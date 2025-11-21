@@ -36,9 +36,16 @@ export function LanguageSelector({
           className="h-9 px-3 gap-2 text-foreground hover:bg-secondary focus-visible:ring-0 focus-visible:ring-offset-0"
         >
           <Translate weight="bold" className="h-4 w-4" />
-          <span className="inline-flex items-center justify-center w-6 h-6 text-xs font-semibold bg-primary text-primary-foreground rounded-full">
-            {currentLang?.code.toUpperCase()}
-          </span>
+          {currentLang && (
+            <img
+              src={`https://flagcdn.com/w40/${currentLang.countryCode}.png`}
+              srcSet={`https://flagcdn.com/w80/${currentLang.countryCode}.png 2x`}
+              width="24"
+              height="18"
+              alt={currentLang.name}
+              className="rounded shadow-sm"
+            />
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[280px] p-0">
@@ -51,9 +58,14 @@ export function LanguageSelector({
                 onClick={() => onLanguageChange(lang.code)}
                 className="cursor-pointer gap-3"
               >
-                <span className="inline-flex items-center justify-center w-8 h-8 text-xs font-bold bg-primary text-primary-foreground rounded-full shrink-0">
-                  {lang.code.toUpperCase()}
-                </span>
+                <img
+                  src={`https://flagcdn.com/w40/${lang.countryCode}.png`}
+                  srcSet={`https://flagcdn.com/w80/${lang.countryCode}.png 2x`}
+                  width="32"
+                  height="24"
+                  alt={lang.name}
+                  className="rounded shadow-sm shrink-0"
+                />
                 <div className="flex flex-col">
                   <span className="font-bold">{lang.nativeName}</span>
                   <span className="text-xs text-muted-foreground font-bold">
@@ -72,9 +84,14 @@ export function LanguageSelector({
                 onClick={() => onLanguageChange(lang.code)}
                 className="cursor-pointer gap-3"
               >
-                <span className="inline-flex items-center justify-center w-8 h-8 text-xs font-semibold bg-secondary text-foreground rounded-full shrink-0">
-                  {lang.code.toUpperCase()}
-                </span>
+                <img
+                  src={`https://flagcdn.com/w40/${lang.countryCode}.png`}
+                  srcSet={`https://flagcdn.com/w80/${lang.countryCode}.png 2x`}
+                  width="32"
+                  height="24"
+                  alt={lang.name}
+                  className="rounded shadow-sm shrink-0"
+                />
                 <div className="flex flex-col">
                   <span
                     className={
@@ -99,9 +116,14 @@ export function LanguageSelector({
                 onClick={() => onLanguageChange(lang.code)}
                 className="cursor-pointer gap-3"
               >
-                <span className="inline-flex items-center justify-center w-8 h-8 text-xs font-semibold bg-secondary text-foreground rounded-full shrink-0">
-                  {lang.code.toUpperCase()}
-                </span>
+                <img
+                  src={`https://flagcdn.com/w40/${lang.countryCode}.png`}
+                  srcSet={`https://flagcdn.com/w80/${lang.countryCode}.png 2x`}
+                  width="32"
+                  height="24"
+                  alt={lang.name}
+                  className="rounded shadow-sm shrink-0"
+                />
                 <div className="flex flex-col">
                   <span
                     className={

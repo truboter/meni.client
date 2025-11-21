@@ -53,7 +53,7 @@ export function MenuCard({
       onClick={onClick}
       className="group cursor-pointer border-border hover:shadow-lg transition-all duration-200 hover:scale-[1.02] active:scale-100 flex flex-col relative pb-14 p-0 overflow-hidden"
     >
-      <div className="relative h-32 overflow-hidden bg-muted">
+      <div className="relative w-full aspect-4/3 overflow-hidden bg-muted">
         {!imageLoaded && (
           <div className="absolute inset-0 bg-muted animate-pulse" />
         )}

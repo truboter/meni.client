@@ -30,44 +30,46 @@ export interface LanguageInfo {
   name: string;
   nativeName: string;
   flag: string;
+  countryCode: string; // ISO 3166-1 alpha-2 country code for flag
 }
 
 export const languages: LanguageInfo[] = [
   // Main languages
-  { code: "ka", name: "Georgian", nativeName: "ქართული", flag: "🇬🇪" },
-  { code: "en", name: "English", nativeName: "English", flag: "🇺🇸" },
-  { code: "ru", name: "Russian", nativeName: "Русский", flag: "🇷🇺" },
-  { code: "tr", name: "Turkish", nativeName: "Türkçe", flag: "🇹🇷" },
+  { code: "ka", name: "Georgian", nativeName: "ქართული", flag: "🇬🇪", countryCode: "ge" },
+  { code: "en", name: "English", nativeName: "English", flag: "🇺🇸", countryCode: "us" },
+  { code: "ru", name: "Russian", nativeName: "Русский", flag: "🇷🇺", countryCode: "ru" },
+  { code: "tr", name: "Turkish", nativeName: "Türkçe", flag: "🇹🇷", countryCode: "tr" },
 
   // Top-20 world languages
-  { code: "zh", name: "Chinese", nativeName: "中文", flag: "🇨🇳" },
-  { code: "hi", name: "Hindi", nativeName: "हिन्दी", flag: "🇮🇳" },
-  { code: "es", name: "Spanish", nativeName: "Español", flag: "🇪🇸" },
-  { code: "fr", name: "French", nativeName: "Français", flag: "🇫🇷" },
-  { code: "ar", name: "Arabic", nativeName: "العربية", flag: "🇸🇦" },
-  { code: "bn", name: "Bengali", nativeName: "বাংলা", flag: "🇧🇩" },
-  { code: "pt", name: "Portuguese", nativeName: "Português", flag: "🇵🇹" },
+  { code: "zh", name: "Chinese", nativeName: "中文", flag: "🇨🇳", countryCode: "cn" },
+  { code: "hi", name: "Hindi", nativeName: "हिन्दी", flag: "🇮🇳", countryCode: "in" },
+  { code: "es", name: "Spanish", nativeName: "Español", flag: "🇪🇸", countryCode: "es" },
+  { code: "fr", name: "French", nativeName: "Français", flag: "🇫🇷", countryCode: "fr" },
+  { code: "ar", name: "Arabic", nativeName: "العربية", flag: "🇸🇦", countryCode: "sa" },
+  { code: "bn", name: "Bengali", nativeName: "বাংলা", flag: "🇧🇩", countryCode: "bd" },
+  { code: "pt", name: "Portuguese", nativeName: "Português", flag: "🇵🇹", countryCode: "pt" },
   {
     code: "id",
     name: "Indonesian",
     nativeName: "Bahasa Indonesia",
     flag: "🇮🇩",
+    countryCode: "id",
   },
-  { code: "de", name: "German", nativeName: "Deutsch", flag: "🇩🇪" },
-  { code: "ja", name: "Japanese", nativeName: "日本語", flag: "🇯🇵" },
-  { code: "ko", name: "Korean", nativeName: "한국어", flag: "🇰🇷" },
-  { code: "vi", name: "Vietnamese", nativeName: "Tiếng Việt", flag: "🇻🇳" },
-  { code: "it", name: "Italian", nativeName: "Italiano", flag: "🇮🇹" },
-  { code: "pl", name: "Polish", nativeName: "Polski", flag: "🇵🇱" },
-  { code: "uk", name: "Ukrainian", nativeName: "Українська", flag: "🇺🇦" },
-  { code: "fa", name: "Persian", nativeName: "فارسی", flag: "🇮🇷" },
+  { code: "de", name: "German", nativeName: "Deutsch", flag: "🇩🇪", countryCode: "de" },
+  { code: "ja", name: "Japanese", nativeName: "日本語", flag: "🇯🇵", countryCode: "jp" },
+  { code: "ko", name: "Korean", nativeName: "한국어", flag: "🇰🇷", countryCode: "kr" },
+  { code: "vi", name: "Vietnamese", nativeName: "Tiếng Việt", flag: "🇻🇳", countryCode: "vn" },
+  { code: "it", name: "Italian", nativeName: "Italiano", flag: "🇮🇹", countryCode: "it" },
+  { code: "pl", name: "Polish", nativeName: "Polski", flag: "🇵🇱", countryCode: "pl" },
+  { code: "uk", name: "Ukrainian", nativeName: "Українська", flag: "🇺🇦", countryCode: "ua" },
+  { code: "fa", name: "Persian", nativeName: "فارسی", flag: "🇮🇷", countryCode: "ir" },
 
   // Regional (tourist) languages
-  { code: "he", name: "Hebrew", nativeName: "עברית", flag: "🇮🇱" },
-  { code: "hy", name: "Armenian", nativeName: "Հայերեն", flag: "🇦🇲" },
-  { code: "az", name: "Azerbaijani", nativeName: "Azərbaycan", flag: "🇦🇿" },
-  { code: "kk", name: "Kazakh", nativeName: "Қазақша", flag: "🇰🇿" },
-  { code: "uz", name: "Uzbek", nativeName: "Oʻzbek", flag: "🇺🇿" },
+  { code: "he", name: "Hebrew", nativeName: "עברית", flag: "🇮🇱", countryCode: "il" },
+  { code: "hy", name: "Armenian", nativeName: "Հայերեն", flag: "🇦🇲", countryCode: "am" },
+  { code: "az", name: "Azerbaijani", nativeName: "Azərbaycan", flag: "🇦🇿", countryCode: "az" },
+  { code: "kk", name: "Kazakh", nativeName: "Қазақша", flag: "🇰🇿", countryCode: "kz" },
+  { code: "uz", name: "Uzbek", nativeName: "Oʻzbek", flag: "🇺🇿", countryCode: "uz" },
 ];
 
 export interface MenuItemTranslation {

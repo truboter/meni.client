@@ -22,48 +22,55 @@ import "./index.css";
 const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
 
 export default function App() {
-  const { locationId: urlLocationId, lang: urlLang } = useParams<{ locationId: string; lang: string }>();
+  const { locationId: urlLocationId, lang: urlLang } = useParams<{
+    locationId: string;
+    lang: string;
+  }>();
   const navigate = useNavigate();
-  
+
   // Get locationId from URL path or subdomain
   const getLocationId = (): string | undefined => {
     // First, check URL parameter
     if (urlLocationId) {
       return urlLocationId;
     }
-    
+
     // Then check subdomain (e.g., lnc2w74z.meni.ge)
     const hostname = window.location.hostname;
-    const parts = hostname.split('.');
-    
+    const parts = hostname.split(".");
+
     // Check if it's a subdomain of meni.ge
-    if (parts.length >= 3 && parts[parts.length - 2] === 'meni' && parts[parts.length - 1] === 'ge') {
+    if (
+      parts.length >= 3 &&
+      parts[parts.length - 2] === "meni" &&
+      parts[parts.length - 1] === "ge"
+    ) {
       return parts[0]; // Return subdomain as locationId
     }
-    
+
     return undefined;
   };
-  
+
   // Get language from URL path or localStorage
   const getInitialLanguage = (): Language => {
     // Check URL parameter first (e.g., /lnc2w74z/ru or just /ru)
     if (urlLang && urlLang.length === 2) {
       return urlLang as Language;
     }
-    
+
     // Check localStorage
     const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
     if (savedLanguage && savedLanguage.length === 2) {
       return savedLanguage as Language;
     }
-    
+
     // Default to Georgian
     return "ka";
   };
-  
+
   const locationId = getLocationId();
   const initialLanguage = getInitialLanguage();
-  
+
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const [currency, setCurrency] = useState<Currency>("GEL");
@@ -88,15 +95,19 @@ export default function App() {
   // Check if location is in subdomain (not in URL path)
   const isLocationInSubdomain = (): boolean => {
     const hostname = window.location.hostname;
-    const parts = hostname.split('.');
-    return parts.length >= 3 && parts[parts.length - 2] === 'meni' && parts[parts.length - 1] === 'ge';
+    const parts = hostname.split(".");
+    return (
+      parts.length >= 3 &&
+      parts[parts.length - 2] === "meni" &&
+      parts[parts.length - 1] === "ge"
+    );
   };
 
   // Update URL when language changes
   useEffect(() => {
     // Save language to localStorage
     localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-    
+
     // Update URL if language is different from URL parameter
     if (language !== urlLang) {
       // If location is in subdomain, don't include it in path
