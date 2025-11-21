@@ -49,10 +49,14 @@ export function LanguageSelector({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[280px] p-0">
-        <ScrollArea className="h-[400px]">
-          <div className="p-1">
-            {/* Main Languages - displayed with bold font weight */}
-            {mainLanguages.map((lang) => (
+        <div className="relative">
+          {/* Top fade indicator */}
+          <div className="absolute top-0 left-0 right-0 h-8 bg-linear-to-b from-background to-transparent pointer-events-none z-10" />
+          
+          <ScrollArea className="h-[400px]">
+            <div className="p-1 pt-2">
+              {/* Main Languages - displayed with bold font weight */}
+              {mainLanguages.map((lang) => (
               <DropdownMenuItem
                 key={lang.code}
                 onClick={() => onLanguageChange(lang.code)}
@@ -140,6 +144,10 @@ export function LanguageSelector({
             ))}
           </div>
         </ScrollArea>
+        
+        {/* Bottom fade indicator */}
+        <div className="absolute bottom-0 left-0 right-0 h-8 bg-linear-to-t from-background to-transparent pointer-events-none z-10" />
+      </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );
