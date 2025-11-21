@@ -32,7 +32,7 @@ export function LanguageSelector({
     const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
     if (viewport) {
       const { scrollTop, scrollHeight, clientHeight } = viewport;
-      setCanScrollUp(scrollTop > 10);
+      setCanScrollUp(scrollTop > 1);
       setCanScrollDown(scrollTop < scrollHeight - clientHeight - 1);
     }
   };
