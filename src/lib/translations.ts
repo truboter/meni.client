@@ -230,11 +230,6 @@ export const languages: LanguageInfo[] = [
     flag: "🇬🇪",
     countryCode: "ge",
   },
-    name: "Uzbek",
-    nativeName: "Oʻzbek",
-    flag: "🇺🇿",
-    countryCode: "uz",
-  },
 ];
 
 export interface MenuItemTranslation {
