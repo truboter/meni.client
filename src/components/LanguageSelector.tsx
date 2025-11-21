@@ -33,7 +33,7 @@ export function LanguageSelector({
     if (viewport) {
       const { scrollTop, scrollHeight, clientHeight } = viewport;
       setCanScrollUp(scrollTop > 10);
-      setCanScrollDown(scrollTop < scrollHeight - clientHeight - 10);
+      setCanScrollDown(scrollTop < scrollHeight - clientHeight - 1);
     }
   };
 
