@@ -1,4 +1,4 @@
-import { Translate } from "@phosphor-icons/react";
+import { Translate, CaretUp, CaretDown } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,6 +10,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Language } from "@/lib/translations";
 import { languages } from "@/lib/translations";
+import { useState, useRef, useEffect } from "react";
 
 interface LanguageSelectorProps {
   currentLanguage: Language;
@@ -21,6 +22,39 @@ export function LanguageSelector({
   onLanguageChange,
 }: LanguageSelectorProps) {
   const currentLang = languages.find((lang) => lang.code === currentLanguage);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollUp, setCanScrollUp] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(true);
+
+  // Check scroll position
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      setCanScrollUp(scrollTop > 10);
+      setCanScrollDown(scrollTop < scrollHeight - clientHeight - 10);
+    }
+  };
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', checkScroll);
+      checkScroll();
+      return () => scrollElement.removeEventListener('scroll', checkScroll);
+    }
+  }, []);
+
+  const handleScrollUp = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    scrollRef.current?.scrollBy({ top: -100, behavior: 'smooth' });
+  };
+
+  const handleScrollDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    scrollRef.current?.scrollBy({ top: 100, behavior: 'smooth' });
+  };
 
   // Group languages
   const mainLanguages = languages.slice(0, 5); // Georgian, English, Russian, Turkish, Armenian
@@ -48,13 +82,22 @@ export function LanguageSelector({
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[280px] p-0">
+      <DropdownMenuContent align="end" className="w-[280px] p-0" onPointerDownOutside={(e) => e.preventDefault()}>
         <div className="relative">
-          {/* Top fade indicator */}
-          <div className="absolute top-0 left-0 right-0 h-8 bg-linear-to-b from-background to-transparent pointer-events-none z-10" />
+          {/* Top scroll indicator */}
+          {canScrollUp && (
+            <button
+              onClick={handleScrollUp}
+              className="absolute top-0 left-0 right-0 h-8 bg-background/95 backdrop-blur-sm border-b border-border z-20 flex items-center justify-center gap-2 cursor-pointer hover:bg-secondary transition-colors"
+            >
+              <span className="text-xs text-muted-foreground">═════</span>
+              <CaretUp weight="bold" className="h-3 w-3 text-muted-foreground" />
+              <span className="text-xs text-muted-foreground">═════</span>
+            </button>
+          )}
           
-          <ScrollArea className="h-[400px]">
-            <div className="p-1 pt-2">
+          <ScrollArea className="h-[400px]" ref={scrollRef}>
+            <div className={`p-1 ${canScrollUp ? 'pt-10' : 'pt-2'} ${canScrollDown ? 'pb-10' : 'pb-2'}`}>
               {/* Main Languages - displayed with bold font weight */}
               {mainLanguages.map((lang) => (
               <DropdownMenuItem
@@ -145,8 +188,17 @@ export function LanguageSelector({
           </div>
         </ScrollArea>
         
-        {/* Bottom fade indicator */}
-        <div className="absolute bottom-0 left-0 right-0 h-8 bg-linear-to-t from-background to-transparent pointer-events-none z-10" />
+        {/* Bottom scroll indicator */}
+        {canScrollDown && (
+          <button
+            onClick={handleScrollDown}
+            className="absolute bottom-0 left-0 right-0 h-8 bg-background/95 backdrop-blur-sm border-t border-border z-20 flex items-center justify-center gap-2 cursor-pointer hover:bg-secondary transition-colors"
+          >
+            <span className="text-xs text-muted-foreground">═════</span>
+            <CaretDown weight="bold" className="h-3 w-3 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">═════</span>
+          </button>
+        )}
       </div>
       </DropdownMenuContent>
     </DropdownMenu>
