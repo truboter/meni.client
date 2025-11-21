@@ -23,9 +23,9 @@ export function LanguageSelector({
   const currentLang = languages.find((lang) => lang.code === currentLanguage);
 
   // Group languages
-  const mainLanguages = languages.slice(0, 4); // Georgian, English, Russian, Turkish
-  const topWorldLanguages = languages.slice(4, 18); // Chinese to Persian
-  const regionalLanguages = languages.slice(18); // Hebrew to Uzbek
+  const mainLanguages = languages.slice(0, 5); // Georgian, English, Russian, Turkish, Armenian
+  const topWorldLanguages = languages.slice(5, 22); // Chinese to Persian (17 languages)
+  const regionalLanguages = languages.slice(22); // Hebrew to Abkhazian (5 languages)
 
   return (
     <DropdownMenu>
