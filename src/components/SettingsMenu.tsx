@@ -1,4 +1,10 @@
-import { CurrencyCircleDollar, List, Check } from "@phosphor-icons/react";
+import {
+  CurrencyCircleDollar,
+  List,
+  Check,
+  CaretUp,
+  CaretDown,
+} from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,6 +20,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { GridViewToggle, type GridColumns } from "@/components/GridViewToggle";
 import type { Language } from "@/lib/translations";
@@ -44,8 +51,56 @@ export function SettingsMenu({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showCurrencyWarning, setShowCurrencyWarning] = useState(false);
   const [pendingCurrency, setPendingCurrency] = useState<Currency | null>(null);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
+  const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
+  const [canScrollUp, setCanScrollUp] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(true);
   const timeoutRef = useRef<number | null>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const currencyList = Object.values(currencies) as CurrencyInfo[];
+
+  // Check scroll position for currency list
+  const checkScroll = () => {
+    const viewport = scrollAreaRef.current?.querySelector(
+      "[data-radix-scroll-area-viewport]"
+    ) as HTMLDivElement;
+    if (viewport) {
+      const { scrollTop, scrollHeight, clientHeight } = viewport;
+      setCanScrollUp(scrollTop > 1);
+      setCanScrollDown(scrollTop < scrollHeight - clientHeight - 1);
+    }
+  };
+
+  useEffect(() => {
+    if (!isCurrencyOpen) return;
+
+    const viewport = scrollAreaRef.current?.querySelector(
+      "[data-radix-scroll-area-viewport]"
+    ) as HTMLDivElement;
+    if (viewport) {
+      viewport.addEventListener("scroll", checkScroll);
+      setTimeout(checkScroll, 100);
+      return () => viewport.removeEventListener("scroll", checkScroll);
+    }
+  }, [isCurrencyOpen]);
+
+  const handleScrollUp = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const viewport = scrollAreaRef.current?.querySelector(
+      "[data-radix-scroll-area-viewport]"
+    ) as HTMLDivElement;
+    viewport?.scrollBy({ top: -100, behavior: "smooth" });
+  };
+
+  const handleScrollDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const viewport = scrollAreaRef.current?.querySelector(
+      "[data-radix-scroll-area-viewport]"
+    ) as HTMLDivElement;
+    viewport?.scrollBy({ top: 100, behavior: "smooth" });
+  };
 
   // Auto-collapse after 20 seconds of inactivity
   useEffect(() => {
@@ -73,6 +128,20 @@ export function SettingsMenu({
   const handleLanguageChange = (lang: Language) => {
     onLanguageChange(lang);
     setIsMenuOpen(false);
+  };
+
+  const handleLanguageOpenChange = (open: boolean) => {
+    setIsLanguageOpen(open);
+    if (open) {
+      setIsCurrencyOpen(false);
+    }
+  };
+
+  const handleCurrencyOpenChange = (open: boolean) => {
+    setIsCurrencyOpen(open);
+    if (open) {
+      setIsLanguageOpen(false);
+    }
   };
 
   const handleCurrencyChange = (curr: Currency) => {
@@ -112,32 +181,77 @@ export function SettingsMenu({
               <LanguageSelector
                 currentLanguage={language}
                 onLanguageChange={handleLanguageChange}
+                isOpen={isLanguageOpen}
+                onOpenChange={handleLanguageOpenChange}
               />
             </div>
 
             <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
-              <DropdownMenu>
+              <DropdownMenu
+                open={isCurrencyOpen}
+                onOpenChange={handleCurrencyOpenChange}
+              >
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <CurrencyCircleDollar size={20} weight="bold" />
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="h-9 px-3 text-foreground hover:bg-secondary focus-visible:ring-0 focus-visible:ring-offset-0"
+                  >
+                    <span className="font-semibold text-lg">{currencies[currency].symbol}</span>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  {currencyList.map((curr: CurrencyInfo) => (
-                    <DropdownMenuItem
-                      key={curr.code}
-                      onClick={() => handleCurrencyChange(curr.code)}
-                    >
-                      <Check
-                        size={16}
-                        weight="bold"
-                        className={
-                          currency === curr.code ? "mr-2" : "mr-2 opacity-0"
-                        }
-                      />
-                      {curr.symbol} {curr.code}
-                    </DropdownMenuItem>
-                  ))}
+                <DropdownMenuContent align="end" className="w-[200px] p-0">
+                  <div className="relative">
+                    {/* Top scroll indicator */}
+                    {canScrollUp && (
+                      <button
+                        onClick={handleScrollUp}
+                        className="absolute top-0 left-0 right-0 h-7 bg-background/98 backdrop-blur-sm border-b border-border/50 z-20 flex items-center justify-center cursor-pointer hover:bg-accent/50 transition-all group shadow-sm"
+                      >
+                        <CaretUp
+                          weight="bold"
+                          className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors"
+                        />
+                      </button>
+                    )}
+
+                    <ScrollArea className="h-[300px]" ref={scrollAreaRef}>
+                      <div
+                        className={`p-1 ${canScrollUp ? "pt-10" : "pt-2"} ${canScrollDown ? "pb-10" : "pb-2"}`}
+                      >
+                        {currencyList.map((curr: CurrencyInfo) => (
+                          <DropdownMenuItem
+                            key={curr.code}
+                            onClick={() => handleCurrencyChange(curr.code)}
+                          >
+                            <Check
+                              size={16}
+                              weight="bold"
+                              className={
+                                currency === curr.code
+                                  ? "mr-2"
+                                  : "mr-2 opacity-0"
+                              }
+                            />
+                            {curr.symbol} {curr.code}
+                          </DropdownMenuItem>
+                        ))}
+                      </div>
+                    </ScrollArea>
+
+                    {/* Bottom scroll indicator */}
+                    {canScrollDown && (
+                      <button
+                        onClick={handleScrollDown}
+                        className="absolute bottom-0 left-0 right-0 h-7 bg-background/98 backdrop-blur-sm border-t border-border/50 z-20 flex items-center justify-center cursor-pointer hover:bg-accent/50 transition-all group shadow-sm"
+                      >
+                        <CaretDown
+                          weight="bold"
+                          className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors"
+                        />
+                      </button>
+                    )}
+                  </div>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

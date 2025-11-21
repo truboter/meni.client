@@ -15,17 +15,24 @@ import { useState, useRef, useEffect } from "react";
 interface LanguageSelectorProps {
   currentLanguage: Language;
   onLanguageChange: (language: Language) => void;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export function LanguageSelector({
   currentLanguage,
   onLanguageChange,
+  isOpen: externalIsOpen,
+  onOpenChange: externalOnOpenChange,
 }: LanguageSelectorProps) {
   const currentLang = languages.find((lang) => lang.code === currentLanguage);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(true);
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen = externalOnOpenChange || setInternalIsOpen;
 
   // Check scroll position
   const checkScroll = () => {
@@ -102,7 +109,6 @@ export function LanguageSelector({
       <DropdownMenuContent
         align="end"
         className="w-[280px] p-0"
-        onPointerDownOutside={(e) => e.preventDefault()}
       >
         <div className="relative">
           {/* Top scroll indicator */}
