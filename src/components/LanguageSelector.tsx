@@ -22,38 +22,44 @@ export function LanguageSelector({
   onLanguageChange,
 }: LanguageSelectorProps) {
   const currentLang = languages.find((lang) => lang.code === currentLanguage);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(true);
 
   // Check scroll position
   const checkScroll = () => {
-    if (scrollRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+    // Find the actual scrollable viewport inside ScrollArea
+    const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
+    if (viewport) {
+      const { scrollTop, scrollHeight, clientHeight } = viewport;
       setCanScrollUp(scrollTop > 10);
       setCanScrollDown(scrollTop < scrollHeight - clientHeight - 10);
     }
   };
 
   useEffect(() => {
-    const scrollElement = scrollRef.current;
-    if (scrollElement) {
-      scrollElement.addEventListener('scroll', checkScroll);
-      checkScroll();
-      return () => scrollElement.removeEventListener('scroll', checkScroll);
+    // Find the actual scrollable viewport inside ScrollArea
+    const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
+    if (viewport) {
+      viewport.addEventListener('scroll', checkScroll);
+      // Check initial state after a short delay to ensure content is rendered
+      setTimeout(checkScroll, 100);
+      return () => viewport.removeEventListener('scroll', checkScroll);
     }
   }, []);
 
   const handleScrollUp = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    scrollRef.current?.scrollBy({ top: -100, behavior: 'smooth' });
+    const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
+    viewport?.scrollBy({ top: -100, behavior: 'smooth' });
   };
 
   const handleScrollDown = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    scrollRef.current?.scrollBy({ top: 100, behavior: 'smooth' });
+    const viewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
+    viewport?.scrollBy({ top: 100, behavior: 'smooth' });
   };
 
   // Group languages
@@ -96,7 +102,7 @@ export function LanguageSelector({
             </button>
           )}
           
-          <ScrollArea className="h-[400px]" ref={scrollRef}>
+          <ScrollArea className="h-[400px]" ref={scrollAreaRef}>
             <div className={`p-1 ${canScrollUp ? 'pt-10' : 'pt-2'} ${canScrollDown ? 'pb-10' : 'pb-2'}`}>
               {/* Main Languages - displayed with bold font weight */}
               {mainLanguages.map((lang) => (
