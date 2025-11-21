@@ -25,6 +25,7 @@ export function LanguageSelector({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   // Check scroll position
   const checkScroll = () => {
@@ -40,6 +41,8 @@ export function LanguageSelector({
   };
 
   useEffect(() => {
+    if (!isOpen) return;
+
     // Find the actual scrollable viewport inside ScrollArea
     const viewport = scrollAreaRef.current?.querySelector(
       "[data-radix-scroll-area-viewport]"
@@ -50,7 +53,7 @@ export function LanguageSelector({
       setTimeout(checkScroll, 100);
       return () => viewport.removeEventListener("scroll", checkScroll);
     }
-  }, []);
+  }, [isOpen]);
 
   const handleScrollUp = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -76,7 +79,7 @@ export function LanguageSelector({
   const regionalLanguages = languages.slice(22); // Hebrew to Abkhazian (5 languages)
 
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
@@ -116,7 +119,9 @@ export function LanguageSelector({
           )}
 
           <ScrollArea className="h-[400px]" ref={scrollAreaRef}>
-            <div className="p-1 pt-2 pb-2">
+            <div
+              className={`p-1 ${canScrollUp ? "pt-10" : "pt-2"} ${canScrollDown ? "pb-10" : "pb-2"}`}
+            >
               {/* Main Languages - displayed with bold font weight */}
               {mainLanguages.map((lang) => (
                 <DropdownMenuItem
