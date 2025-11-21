@@ -94,11 +94,9 @@ export function LanguageSelector({
           {canScrollUp && (
             <button
               onClick={handleScrollUp}
-              className="absolute top-0 left-0 right-0 h-8 bg-background/95 backdrop-blur-sm border-b border-border z-20 flex items-center justify-center gap-2 cursor-pointer hover:bg-secondary transition-colors"
+              className="absolute top-0 left-0 right-0 h-7 bg-background/98 backdrop-blur-sm border-b border-border/50 z-20 flex items-center justify-center cursor-pointer hover:bg-accent/50 transition-all group shadow-sm"
             >
-              <span className="text-xs text-muted-foreground">═════</span>
-              <CaretUp weight="bold" className="h-3 w-3 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">═════</span>
+              <CaretUp weight="bold" className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
             </button>
           )}
           
@@ -198,11 +196,9 @@ export function LanguageSelector({
         {canScrollDown && (
           <button
             onClick={handleScrollDown}
-            className="absolute bottom-0 left-0 right-0 h-8 bg-background/95 backdrop-blur-sm border-t border-border z-20 flex items-center justify-center gap-2 cursor-pointer hover:bg-secondary transition-colors"
+            className="absolute bottom-0 left-0 right-0 h-7 bg-background/98 backdrop-blur-sm border-t border-border/50 z-20 flex items-center justify-center cursor-pointer hover:bg-accent/50 transition-all group shadow-sm"
           >
-            <span className="text-xs text-muted-foreground">═════</span>
-            <CaretDown weight="bold" className="h-3 w-3 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">═════</span>
+            <CaretDown weight="bold" className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
           </button>
         )}
       </div>
