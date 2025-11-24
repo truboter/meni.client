@@ -5,7 +5,7 @@ const CDN_BASE_URL = "https://cdn.meni.ge/locations";
 
 /**
  * Fetch location data from CDN
- * @param locationId - The location ID (e.g., "lnc2w74z")
+ * @param locationId - The location ID (e.g., "demo")
  * @param languageCode - The language code (e.g., "ru", "en", "ka")
  * @returns Location data with categories and menu items
  */
@@ -13,7 +13,7 @@ export async function fetchLocationData(
   locationId: string,
   languageCode: Language
 ): Promise<LocationData> {
-  const url = `${CDN_BASE_URL}/loc-${locationId}/${languageCode}.json`;
+  const url = `${CDN_BASE_URL}/${locationId}/profile.json`;
 
   console.log(`[LocationService] Fetching data from: ${url}`);
 
