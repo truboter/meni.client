@@ -13,7 +13,7 @@ export async function fetchLocationData(
   locationId: string,
   languageCode: Language
 ): Promise<LocationData> {
-  const url = `${CDN_BASE_URL}/${locationId}/profile.json`;
+  const url = `${CDN_BASE_URL}/${locationId}/${languageCode}.json`;
 
   console.log(`[LocationService] Fetching data from: ${url}`);
 
