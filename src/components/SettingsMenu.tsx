@@ -159,40 +159,35 @@ export function SettingsMenu({
 
   return (
     <>
-      <div className="flex items-center gap-2">
-        <Button
-          variant="secondary"
-          size="icon"
-          className="rounded-full bg-white hover:bg-white/90 shadow-lg border-2 border-neutral-200"
-          onClick={handleMenuButtonClick}
-        >
-          <List size={24} weight="bold" className="text-neutral-800" />
-        </Button>
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="secondary"
+            size="icon"
+            className="rounded-full bg-white hover:bg-white/90 shadow-lg border-2 border-neutral-200"
+            onClick={handleMenuButtonClick}
+          >
+            <List size={24} weight="bold" className="text-neutral-800" />
+          </Button>
 
-        <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
-          <LanguageSelector
-            currentLanguage={language}
-            onLanguageChange={handleLanguageChange}
-            isOpen={isLanguageOpen}
-            onOpenChange={handleLanguageOpenChange}
-          />
-        </div>
-
-        {isMenuOpen && (
-          <div className="flex items-center gap-2">
-            <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
-              <DropdownMenu
-                open={isCurrencyOpen}
-                onOpenChange={handleCurrencyOpenChange}
-              >
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-9 px-3 text-foreground hover:bg-secondary focus-visible:ring-0 focus-visible:ring-offset-0"
-                  >
-                    <span className="font-semibold text-lg">
-                      {currencies[currency].symbol}
+          {isMenuOpen && (
+            <div className="flex items-center gap-2">
+              <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
+                <DropdownMenu
+                  open={isCurrencyOpen}
+                  onOpenChange={handleCurrencyOpenChange}
+                >
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-9 px-3 text-foreground hover:bg-secondary focus-visible:ring-0 focus-visible:ring-offset-0"
+                    >
+                      <span className="font-semibold text-lg">
+                        {currencies[currency].symbol}
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
                     </span>
                   </Button>
                 </DropdownMenuTrigger>
@@ -260,6 +255,16 @@ export function SettingsMenu({
             </div>
           </div>
         )}
+        </div>
+
+        <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
+          <LanguageSelector
+            currentLanguage={language}
+            onLanguageChange={handleLanguageChange}
+            isOpen={isLanguageOpen}
+            onOpenChange={handleLanguageOpenChange}
+          />
+        </div>
       </div>
 
       <Dialog open={showCurrencyWarning} onOpenChange={setShowCurrencyWarning}>
