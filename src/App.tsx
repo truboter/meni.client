@@ -20,6 +20,35 @@ import {
 import "./index.css";
 
 const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
+const GRID_COLUMNS_STORAGE_KEY = "meni_grid_columns";
+
+// Determine optimal grid columns based on screen width
+const getOptimalGridColumns = (): GridColumns => {
+  // Check localStorage first
+  const savedColumns = localStorage.getItem(GRID_COLUMNS_STORAGE_KEY);
+  if (savedColumns) {
+    const parsed = parseInt(savedColumns, 10);
+    if ([1, 2, 3].includes(parsed)) {
+      return parsed as GridColumns;
+    }
+  }
+
+  // Determine based on screen width
+  const width = window.innerWidth;
+  
+  // Mobile devices (< 640px) - 1 column
+  if (width < 640) {
+    return 1;
+  }
+  // Tablets and small laptops (640px - 1024px) - 2 columns
+  else if (width < 1024) {
+    return 2;
+  }
+  // Desktop and larger (>= 1024px) - 3 columns
+  else {
+    return 3;
+  }
+};
 
 export default function App() {
   const { locationId: urlLocationId, lang: urlLang } = useParams<{
@@ -75,7 +104,7 @@ export default function App() {
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const [currency, setCurrency] = useState<Currency>("GEL");
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [gridColumns, setGridColumns] = useState<GridColumns>(3);
+  const [gridColumns, setGridColumns] = useState<GridColumns>(getOptimalGridColumns());
   const [convertPrices, setConvertPrices] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -296,6 +325,11 @@ export default function App() {
     setAnimatingElement(null);
   };
 
+  const handleGridColumnsChange = (columns: GridColumns) => {
+    setGridColumns(columns);
+    localStorage.setItem(GRID_COLUMNS_STORAGE_KEY, columns.toString());
+  };
+
   const handleUpdateCart = (updatedCart: CartItem[]) => {
     setCart(updatedCart);
   };
@@ -359,7 +393,7 @@ export default function App() {
           currentLanguage={language}
           onLanguageChange={setLanguage}
           gridColumns={gridColumns}
-          onGridColumnsChange={setGridColumns}
+          onGridColumnsChange={handleGridColumnsChange}
           currency={currency}
           onCurrencyChange={setCurrency}
           convertPrices={convertPrices}

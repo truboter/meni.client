@@ -188,70 +188,70 @@ export function SettingsMenu({
                       </span>
                     </Button>
                   </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-[200px] p-0">
-                  <div className="relative">
-                    {/* Top scroll indicator */}
-                    {canScrollUp && (
-                      <button
-                        onClick={handleScrollUp}
-                        className="absolute top-0 left-0 right-0 h-7 bg-background/98 backdrop-blur-sm border-b border-border/50 z-20 flex items-center justify-center cursor-pointer hover:bg-accent/50 transition-all group shadow-sm"
-                      >
-                        <CaretUp
-                          weight="bold"
-                          className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors"
-                        />
-                      </button>
-                    )}
+                  <DropdownMenuContent align="end" className="w-[200px] p-0">
+                    <div className="relative">
+                      {/* Top scroll indicator */}
+                      {canScrollUp && (
+                        <button
+                          onClick={handleScrollUp}
+                          className="absolute top-0 left-0 right-0 h-7 bg-background/98 backdrop-blur-sm border-b border-border/50 z-20 flex items-center justify-center cursor-pointer hover:bg-accent/50 transition-all group shadow-sm"
+                        >
+                          <CaretUp
+                            weight="bold"
+                            className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors"
+                          />
+                        </button>
+                      )}
 
-                    <ScrollArea className="h-[300px]" ref={scrollAreaRef}>
-                      <div
-                        className={`p-1 ${canScrollUp ? "pt-10" : "pt-2"} ${canScrollDown ? "pb-10" : "pb-2"}`}
-                      >
-                        {currencyList.map((curr: CurrencyInfo) => (
-                          <DropdownMenuItem
-                            key={curr.code}
-                            onClick={() => handleCurrencyChange(curr.code)}
-                          >
-                            <Check
-                              size={16}
-                              weight="bold"
-                              className={
-                                currency === curr.code
-                                  ? "mr-2"
-                                  : "mr-2 opacity-0"
-                              }
-                            />
-                            {curr.symbol} {curr.code}
-                          </DropdownMenuItem>
-                        ))}
-                      </div>
-                    </ScrollArea>
+                      <ScrollArea className="h-[300px]" ref={scrollAreaRef}>
+                        <div
+                          className={`p-1 ${canScrollUp ? "pt-10" : "pt-2"} ${canScrollDown ? "pb-10" : "pb-2"}`}
+                        >
+                          {currencyList.map((curr: CurrencyInfo) => (
+                            <DropdownMenuItem
+                              key={curr.code}
+                              onClick={() => handleCurrencyChange(curr.code)}
+                            >
+                              <Check
+                                size={16}
+                                weight="bold"
+                                className={
+                                  currency === curr.code
+                                    ? "mr-2"
+                                    : "mr-2 opacity-0"
+                                }
+                              />
+                              {curr.symbol} {curr.code}
+                            </DropdownMenuItem>
+                          ))}
+                        </div>
+                      </ScrollArea>
 
-                    {/* Bottom scroll indicator */}
-                    {canScrollDown && (
-                      <button
-                        onClick={handleScrollDown}
-                        className="absolute bottom-0 left-0 right-0 h-7 bg-background/98 backdrop-blur-sm border-t border-border/50 z-20 flex items-center justify-center cursor-pointer hover:bg-accent/50 transition-all group shadow-sm"
-                      >
-                        <CaretDown
-                          weight="bold"
-                          className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors"
-                        />
-                      </button>
-                    )}
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                      {/* Bottom scroll indicator */}
+                      {canScrollDown && (
+                        <button
+                          onClick={handleScrollDown}
+                          className="absolute bottom-0 left-0 right-0 h-7 bg-background/98 backdrop-blur-sm border-t border-border/50 z-20 flex items-center justify-center cursor-pointer hover:bg-accent/50 transition-all group shadow-sm"
+                        >
+                          <CaretDown
+                            weight="bold"
+                            className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors"
+                          />
+                        </button>
+                      )}
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              <div className="bg-white backdrop-blur-sm rounded-full shadow-sm px-2">
+                <GridViewToggle
+                  value={gridColumns}
+                  onChange={handleGridColumnsChange}
+                />
+              </div>
             </div>
-
-            <div className="bg-white backdrop-blur-sm rounded-full shadow-sm px-2">
-              <GridViewToggle
-                value={gridColumns}
-                onChange={handleGridColumnsChange}
-              />
-            </div>
-          </div>
-        )}
+          )}
         </div>
 
         <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
