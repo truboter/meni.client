@@ -164,7 +164,7 @@ export function SettingsMenu({
 
   return (
     <>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col items-center gap-2">
         <Button
           variant="secondary"
           size="icon"
@@ -174,17 +174,17 @@ export function SettingsMenu({
           <List size={24} weight="bold" className="text-neutral-800" />
         </Button>
 
+        <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
+          <LanguageSelector
+            currentLanguage={language}
+            onLanguageChange={handleLanguageChange}
+            isOpen={isLanguageOpen}
+            onOpenChange={handleLanguageOpenChange}
+          />
+        </div>
+
         {isMenuOpen && (
           <div className="flex items-center gap-2">
-            <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
-              <LanguageSelector
-                currentLanguage={language}
-                onLanguageChange={handleLanguageChange}
-                isOpen={isLanguageOpen}
-                onOpenChange={handleLanguageOpenChange}
-              />
-            </div>
-
             <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
               <DropdownMenu
                 open={isCurrencyOpen}
