@@ -106,10 +106,7 @@ export function LanguageSelector({
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className="w-[280px] p-0"
-      >
+      <DropdownMenuContent align="end" className="w-[280px] p-0">
         <div className="relative">
           {/* Top scroll indicator */}
           {canScrollUp && (

@@ -1,9 +1,4 @@
-import {
-  List,
-  Check,
-  CaretUp,
-  CaretDown,
-} from "@phosphor-icons/react";
+import { List, Check, CaretUp, CaretDown } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -191,12 +186,14 @@ export function SettingsMenu({
                 onOpenChange={handleCurrencyOpenChange}
               >
                 <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     size="sm"
                     className="h-9 px-3 text-foreground hover:bg-secondary focus-visible:ring-0 focus-visible:ring-offset-0"
                   >
-                    <span className="font-semibold text-lg">{currencies[currency].symbol}</span>
+                    <span className="font-semibold text-lg">
+                      {currencies[currency].symbol}
+                    </span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[200px] p-0">
