@@ -1,5 +1,4 @@
 import {
-  CurrencyCircleDollar,
   List,
   Check,
   CaretUp,
