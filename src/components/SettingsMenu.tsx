@@ -188,9 +188,6 @@ export function SettingsMenu({
                       </span>
                     </Button>
                   </DropdownMenuTrigger>
-                    </span>
-                  </Button>
-                </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-[200px] p-0">
                   <div className="relative">
                     {/* Top scroll indicator */}
