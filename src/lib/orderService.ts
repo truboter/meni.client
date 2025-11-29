@@ -27,6 +27,28 @@ const S3_BUCKET_URL = 'https://s3.eu-central-1.amazonaws.com/cdn.meni';
 const ORDERS_PREFIX = 'orders';
 
 /**
+ * Encode URL path as safe directory name
+ */
+function encodeLocationPath(): string {
+  // Get current URL path (e.g., "/demo/ru" or "/ru")
+  const path = window.location.pathname;
+  
+  // Remove leading/trailing slashes and replace remaining slashes with underscores
+  const encoded = path.replace(/^\/+|\/+$/g, '').replace(/\//g, '_');
+  
+  // If empty (homepage), use "home"
+  return encoded || 'home';
+}
+
+/**
+ * Get S3 path for order file
+ */
+function getOrderPath(orderId: string): string {
+  const locationPath = encodeLocationPath();
+  return `${ORDERS_PREFIX}/${locationPath}/${orderId}.json`;
+}
+
+/**
  * Convert CartItem to compact format (only IDs and selections)
  */
 function toCompactItem(cartItem: CartItem): OrderItemCompact {
@@ -66,7 +88,8 @@ export async function saveOrder(orderId: string, items: CartItem[]): Promise<voi
 
   // Try to sync compact order to S3 (will fail if CORS not configured)
   try {
-    const response = await fetch(`${S3_BUCKET_URL}/${ORDERS_PREFIX}/${orderId}.json`, {
+    const orderPath = getOrderPath(orderId);
+    const response = await fetch(`${S3_BUCKET_URL}/${orderPath}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -75,7 +98,7 @@ export async function saveOrder(orderId: string, items: CartItem[]): Promise<voi
     });
 
     if (response.ok) {
-      console.log('Order synced to S3 successfully');
+      console.log('Order synced to S3 successfully:', orderPath);
     } else {
       console.warn(`S3 sync failed (${response.status}): CORS might not be configured yet. Order saved locally.`);
     }
@@ -102,7 +125,8 @@ export async function loadOrder(orderId: string): Promise<Order | null> {
 
   // Try S3 as fallback
   try {
-    const response = await fetch(`${S3_BUCKET_URL}/${ORDERS_PREFIX}/${orderId}.json`);
+    const orderPath = getOrderPath(orderId);
+    const response = await fetch(`${S3_BUCKET_URL}/${orderPath}`);
     
     if (response.ok) {
       const order = await response.json() as Order;
@@ -122,5 +146,6 @@ export async function loadOrder(orderId: string): Promise<Order | null> {
  * Get public URL for order (for sharing)
  */
 export function getOrderUrl(orderId: string): string {
-  return `${S3_BUCKET_URL}/${ORDERS_PREFIX}/${orderId}.json`;
+  const orderPath = getOrderPath(orderId);
+  return `${S3_BUCKET_URL}/${orderPath}`;
 }
