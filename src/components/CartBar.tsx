@@ -6,9 +6,16 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, Plus, Minus, Trash, QrCode } from "@phosphor-icons/react";
+import { ShoppingCart, Plus, Minus, Trash, QrCode, X } from "@phosphor-icons/react";
+import { QRCodeSVG } from "qrcode.react";
 import type { CartItem } from "@/lib/types";
 import type { Language } from "@/lib/translations";
 import type { Currency } from "@/lib/currency";
@@ -36,6 +43,7 @@ export function CartBar({
 }: CartBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
+  const [showQrCode, setShowQrCode] = useState(false);
   const timeoutRef = useRef<number | null>(null);
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -193,7 +201,13 @@ export function CartBar({
           <SheetHeader>
             <SheetTitle className="text-2xl flex items-center gap-2">
               {getUITranslation("yourOrder", language)}
-              <QrCode size={24} weight="duotone" className="text-blue-600" title={orderId} />
+              <button
+                onClick={() => setShowQrCode(true)}
+                className="p-1 hover:bg-blue-50 rounded-lg transition-colors"
+                aria-label="Show QR Code"
+              >
+                <QrCode size={24} weight="duotone" className="text-blue-600" />
+              </button>
             </SheetTitle>
           </SheetHeader>
 
@@ -301,6 +315,37 @@ export function CartBar({
           </div>
         </SheetContent>
       </Sheet>
+
+      <Dialog open={showQrCode} onOpenChange={setShowQrCode}>
+        <DialogContent className="max-w-full w-screen h-screen max-h-screen p-0 flex flex-col items-center justify-center bg-white">
+          <DialogHeader className="absolute top-4 right-4 z-10">
+            <button
+              onClick={() => setShowQrCode(false)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="Close"
+            >
+              <X size={32} weight="bold" />
+            </button>
+          </DialogHeader>
+          <div className="flex flex-col items-center justify-center gap-8 p-8">
+            <DialogTitle className="text-3xl font-bold text-center">
+              {getUITranslation("yourOrder", language)}
+            </DialogTitle>
+            <div className="bg-white p-8 rounded-2xl shadow-2xl">
+              <QRCodeSVG
+                value={orderId}
+                size={Math.min(window.innerWidth - 100, window.innerHeight - 250, 400)}
+                level="H"
+                includeMargin={true}
+              />
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-500 mb-2">{getUITranslation("orderId", language) || "Order ID"}</p>
+              <p className="font-mono text-lg font-semibold text-gray-800">{orderId}</p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
