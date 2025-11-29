@@ -322,6 +322,8 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       currencyWarningMessage:
         "თუ თქვენ აირჩევთ ვალუტას, რომელიც განსხვავდება დაწესებულების ვალუტისგან, ნაჩვენები ფასები გამოითვლება მიმდინარე კურსით, მაგრამ გადახდას მაინც დაწესებულების ვალუტაში განახორციელებთ!",
       ok: "კარგი",
+      close: "დახურვა",
+      orderId: "შეკვეთის ID",
     },
     en: {
       search: "Search menu...",
@@ -338,6 +340,8 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       addedToOrder: "Added to order",
       items: "items",
       item: "item",
+      close: "Close",
+      orderId: "Order ID",
       required: "Required",
       currencyWarningTitle: "Attention!",
       currencyWarningMessage:
@@ -364,6 +368,8 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       currencyWarningMessage:
         "Если Вы выбираете валюту отличную от валюты заведения, показываемые Вам цены будут рассчитаны по текущему курсу, но оплату Вы будете производить всё равно в валюте заведения!",
       ok: "ОК",
+      close: "Закрыть",
+      orderId: "ID заказа",
     },
   };
 

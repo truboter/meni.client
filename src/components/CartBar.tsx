@@ -15,13 +15,20 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, Plus, Minus, Trash, QrCode } from "@phosphor-icons/react";
+import {
+  ShoppingCart,
+  Plus,
+  Minus,
+  Trash,
+  QrCode,
+} from "@phosphor-icons/react";
 import { QRCodeSVG } from "qrcode.react";
 import type { CartItem } from "@/lib/types";
 import type { Language } from "@/lib/translations";
 import type { Currency } from "@/lib/currency";
 import { formatPrice } from "@/lib/currency";
 import { getUITranslation } from "@/lib/translations";
+import { checkOrderUpdate } from "@/lib/orderService";
 
 interface CartBarProps {
   items: CartItem[];
@@ -31,6 +38,8 @@ interface CartBarProps {
   convertPrices: boolean;
   onItemClick?: (cartItem: CartItem) => void;
   orderId: string;
+  menuItems: any[];
+  readOnly?: boolean;
 }
 
 export function CartBar({
@@ -41,15 +50,76 @@ export function CartBar({
   convertPrices,
   onItemClick,
   orderId,
+  menuItems,
+  readOnly = false,
 }: CartBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
   const [showQrCode, setShowQrCode] = useState(false);
+  const [lastUpdatedAt, setLastUpdatedAt] = useState<string>("");
   const timeoutRef = useRef<number | null>(null);
+  const pollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+    null
+  );
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce((sum, item) => sum + item.totalPrice, 0);
   const isEmpty = items.length === 0;
+
+  // Function to check for order updates
+  const checkForUpdates = async () => {
+    if (!lastUpdatedAt || items.length === 0) return;
+
+    const updatedOrder = await checkOrderUpdate(orderId, lastUpdatedAt);
+    if (updatedOrder) {
+      // Reconstruct cart items from compact order
+      const updatedCart: CartItem[] = updatedOrder.items
+        .map((compactItem) => {
+          const menuItem = menuItems.find((m) => m.id === compactItem.itemId);
+          if (!menuItem) return null;
+
+          const totalPrice = menuItem.price * compactItem.quantity;
+          return {
+            menuItem,
+            quantity: compactItem.quantity,
+            selectedModifiers: compactItem.modifiers,
+            totalPrice,
+          };
+        })
+        .filter((item): item is CartItem => item !== null);
+
+      onUpdateCart(updatedCart);
+      setLastUpdatedAt(updatedOrder.updatedAt);
+      console.log("Cart updated from S3");
+    }
+  };
+
+  // Update lastUpdatedAt when items change locally
+  useEffect(() => {
+    if (items.length > 0) {
+      setLastUpdatedAt(new Date().toISOString());
+    }
+  }, [items]);
+
+  // Check for updates when cart opens
+  useEffect(() => {
+    if (isOpen) {
+      checkForUpdates();
+    }
+  }, [isOpen]);
+
+  // Poll for updates every 30 seconds when cart is open
+  useEffect(() => {
+    if (isOpen && items.length > 0) {
+      pollingIntervalRef.current = setInterval(checkForUpdates, 30000);
+
+      return () => {
+        if (pollingIntervalRef.current) {
+          clearInterval(pollingIntervalRef.current);
+        }
+      };
+    }
+  }, [isOpen, items.length, lastUpdatedAt]);
 
   // Auto-collapse after 3 seconds of inactivity
   useEffect(() => {
@@ -318,14 +388,15 @@ export function CartBar({
       </Sheet>
 
       <Dialog open={showQrCode} onOpenChange={setShowQrCode}>
-        <DialogContent 
-          className="max-w-full w-screen h-screen max-h-screen p-0 flex flex-col items-center justify-center bg-white [&>button]:hidden"
-        >
+        <DialogContent className="max-w-full w-screen h-screen max-h-screen p-0 flex flex-col items-center justify-center bg-white [&>button]:hidden">
           <div className="flex flex-col items-center justify-center gap-8 p-8">
             <DialogHeader className="sr-only">
-              <DialogTitle>{getUITranslation("yourOrder", language)}</DialogTitle>
+              <DialogTitle>
+                {getUITranslation("yourOrder", language)}
+              </DialogTitle>
               <DialogDescription>
-                {getUITranslation("scanQrCode", language) || "Scan this QR code to view your order"}
+                {getUITranslation("scanQrCode", language) ||
+                  "Scan this QR code to view your order"}
               </DialogDescription>
             </DialogHeader>
             <h2 className="text-3xl font-bold text-center">
@@ -333,19 +404,27 @@ export function CartBar({
             </h2>
             <div className="bg-white p-8 rounded-2xl shadow-2xl">
               <QRCodeSVG
-                value={orderId}
-                size={Math.min(window.innerWidth - 100, window.innerHeight - 250, 400)}
+                value={`${window.location.origin}${window.location.pathname}/${orderId}`}
+                size={Math.min(
+                  window.innerWidth - 100,
+                  window.innerHeight - 250,
+                  400
+                )}
                 level="H"
                 includeMargin={true}
               />
             </div>
             <div className="text-center">
-              <p className="text-sm text-gray-500 mb-2">{getUITranslation("orderId", language) || "Order ID"}</p>
-              <p className="font-mono text-lg font-semibold text-gray-800">{orderId}</p>
+              <p className="text-sm text-gray-500 mb-2">
+                {getUITranslation("orderId", language) || "Order ID"}
+              </p>
+              <p className="font-mono text-lg font-semibold text-gray-800">
+                {orderId}
+              </p>
             </div>
             <Button
               onClick={() => setShowQrCode(false)}
-              className="mt-4 px-8 py-6 text-lg"
+              className="mt-4 px-8 py-6 text-lg bg-sky-500 hover:bg-sky-600 text-white"
               size="lg"
             >
               {getUITranslation("close", language)}

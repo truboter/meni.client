@@ -37,7 +37,7 @@ const getOrderId = (): string => {
   if (existingOrderId) {
     return existingOrderId;
   }
-  
+
   const newOrderId = generateOrderId();
   localStorage.setItem(ORDER_ID_STORAGE_KEY, newOrderId);
   return newOrderId;
@@ -56,7 +56,7 @@ const getOptimalGridColumns = (): GridColumns => {
 
   // Determine based on screen width
   const width = window.innerWidth;
-  
+
   // Mobile devices (< 640px) - 1 column
   if (width < 640) {
     return 1;
@@ -126,7 +126,9 @@ export default function App() {
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const [currency, setCurrency] = useState<Currency>("GEL");
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [gridColumns, setGridColumns] = useState<GridColumns>(getOptimalGridColumns());
+  const [gridColumns, setGridColumns] = useState<GridColumns>(
+    getOptimalGridColumns()
+  );
   const [convertPrices, setConvertPrices] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -157,23 +159,29 @@ export default function App() {
   // Initialize order ID on app load and restore cart
   useEffect(() => {
     console.log("Order ID:", orderId);
-    
+
     // Load saved order from S3/localStorage
-    loadOrder(orderId).then(savedOrder => {
-      if (savedOrder && savedOrder.items.length > 0) {
-        setCart(savedOrder.items);
-        console.log("Order restored from storage:", savedOrder.items.length, "items");
-      }
-    }).catch(error => {
-      console.error("Failed to load saved order:", error);
-    });
+    loadOrder(orderId)
+      .then((savedOrder) => {
+        if (savedOrder && savedOrder.items.length > 0) {
+          setCart(savedOrder.items);
+          console.log(
+            "Order restored from storage:",
+            savedOrder.items.length,
+            "items"
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to load saved order:", error);
+      });
   }, [orderId]);
 
   // Save cart to S3 when it changes
   useEffect(() => {
     if (cart.length > 0) {
-      saveOrder(orderId, cart).catch(error => {
-        console.error('Failed to save order to S3:', error);
+      saveOrder(orderId, cart).catch((error) => {
+        console.error("Failed to save order to S3:", error);
       });
     }
   }, [cart, orderId]);
@@ -501,6 +509,7 @@ export default function App() {
         currency={currency}
         convertPrices={convertPrices}
         orderId={orderId}
+        menuItems={menuItems}
       />
 
       {animatingElement && (

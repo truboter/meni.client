@@ -1,4 +1,4 @@
-import type { CartItem } from './types';
+import type { CartItem } from "./types";
 
 // Simplified order item for S3 storage (only IDs and selections)
 export interface OrderItemCompact {
@@ -23,21 +23,25 @@ export interface OrderCompact {
   updatedAt: string;
 }
 
-const S3_BUCKET_URL = 'https://s3.eu-central-1.amazonaws.com/cdn.meni';
-const ORDERS_PREFIX = 'orders';
+const S3_BUCKET_URL = "https://s3.eu-central-1.amazonaws.com/cdn.meni";
+const ORDERS_PREFIX = "orders";
 
 /**
- * Encode URL path as safe directory name
+ * Encode URL path and domain as safe directory name
  */
 function encodeLocationPath(): string {
+  // Get domain (e.g., "meni.ge" or "localhost:7003")
+  const domain = window.location.host.replace(/:/g, "_");
+
   // Get current URL path (e.g., "/demo/ru" or "/ru")
   const path = window.location.pathname;
-  
+
   // Remove leading/trailing slashes and replace remaining slashes with underscores
-  const encoded = path.replace(/^\/+|\/+$/g, '').replace(/\//g, '_');
-  
-  // If empty (homepage), use "home"
-  return encoded || 'home';
+  const encodedPath = path.replace(/^\/+|\/+$/g, "").replace(/\//g, "_");
+
+  // Combine domain and path
+  const locationPart = encodedPath || "home";
+  return `${domain}/${locationPart}`;
 }
 
 /**
@@ -62,7 +66,10 @@ function toCompactItem(cartItem: CartItem): OrderItemCompact {
 /**
  * Save order to localStorage and attempt S3 sync
  */
-export async function saveOrder(orderId: string, items: CartItem[]): Promise<void> {
+export async function saveOrder(
+  orderId: string,
+  items: CartItem[]
+): Promise<void> {
   const order: Order = {
     orderId,
     items,
@@ -73,9 +80,9 @@ export async function saveOrder(orderId: string, items: CartItem[]): Promise<voi
   // Always save full order to localStorage first
   try {
     localStorage.setItem(`meni_order_${orderId}`, JSON.stringify(order));
-    console.log('Order saved to localStorage');
+    console.log("Order saved to localStorage");
   } catch (error) {
-    console.error('Error saving to localStorage:', error);
+    console.error("Error saving to localStorage:", error);
   }
 
   // Create compact version for S3
@@ -90,20 +97,25 @@ export async function saveOrder(orderId: string, items: CartItem[]): Promise<voi
   try {
     const orderPath = getOrderPath(orderId);
     const response = await fetch(`${S3_BUCKET_URL}/${orderPath}`, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(compactOrder),
     });
 
     if (response.ok) {
-      console.log('Order synced to S3 successfully:', orderPath);
+      console.log("Order synced to S3 successfully:", orderPath);
     } else {
-      console.warn(`S3 sync failed (${response.status}): CORS might not be configured yet. Order saved locally.`);
+      console.warn(
+        `S3 sync failed (${response.status}): CORS might not be configured yet. Order saved locally.`
+      );
     }
   } catch (error) {
-    console.warn('S3 sync failed: CORS not configured. Order saved locally only.', error);
+    console.warn(
+      "S3 sync failed: CORS not configured. Order saved locally only.",
+      error
+    );
   }
 }
 
@@ -116,27 +128,27 @@ export async function loadOrder(orderId: string): Promise<Order | null> {
     const localData = localStorage.getItem(`meni_order_${orderId}`);
     if (localData) {
       const order = JSON.parse(localData) as Order;
-      console.log('Order loaded from localStorage:', order);
+      console.log("Order loaded from localStorage:", order);
       return order;
     }
   } catch (error) {
-    console.error('Error loading from localStorage:', error);
+    console.error("Error loading from localStorage:", error);
   }
 
   // Try S3 as fallback
   try {
     const orderPath = getOrderPath(orderId);
     const response = await fetch(`${S3_BUCKET_URL}/${orderPath}`);
-    
+
     if (response.ok) {
-      const order = await response.json() as Order;
-      console.log('Order loaded from S3:', order);
+      const order = (await response.json()) as Order;
+      console.log("Order loaded from S3:", order);
       // Save to localStorage for faster future access
       localStorage.setItem(`meni_order_${orderId}`, JSON.stringify(order));
       return order;
     }
   } catch (error) {
-    console.error('Error loading from S3:', error);
+    console.error("Error loading from S3:", error);
   }
 
   return null;
@@ -148,4 +160,36 @@ export async function loadOrder(orderId: string): Promise<Order | null> {
 export function getOrderUrl(orderId: string): string {
   const orderPath = getOrderPath(orderId);
   return `${S3_BUCKET_URL}/${orderPath}`;
+}
+
+/**
+ * Check if order has been updated in S3 (returns compact order if updated)
+ */
+export async function checkOrderUpdate(
+  orderId: string,
+  currentUpdatedAt: string
+): Promise<OrderCompact | null> {
+  try {
+    const orderPath = getOrderPath(orderId);
+    const response = await fetch(`${S3_BUCKET_URL}/${orderPath}`, {
+      method: "GET",
+      headers: {
+        "Cache-Control": "no-cache",
+      },
+    });
+
+    if (response.ok) {
+      const compactOrder = (await response.json()) as OrderCompact;
+
+      // Check if order has been updated
+      if (compactOrder.updatedAt !== currentUpdatedAt) {
+        console.log("Order updated in S3:", compactOrder.updatedAt);
+        return compactOrder;
+      }
+    }
+  } catch (error) {
+    console.error("Error checking order update:", error);
+  }
+
+  return null;
 }
