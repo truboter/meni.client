@@ -1,30 +1,33 @@
-# S3 CORS Configuration for data.meni bucket
+# S3 CORS Configuration for cdn.meni bucket
 
-To allow the client to save orders to the `data.meni` S3 bucket, you need to configure CORS policy.
+✅ **CONFIGURATION COMPLETE** - Orders are now saving to S3!
 
-## CORS Configuration
+The `cdn.meni` bucket has been configured to accept order uploads from the client application.
 
-Add this CORS configuration to the `data.meni` S3 bucket:
+## Applied Configuration
+
+### CORS Configuration (✅ Applied)
 
 ```json
-[
-  {
-    "AllowedHeaders": ["*"],
-    "AllowedMethods": ["GET", "PUT"],
-    "AllowedOrigins": [
-      "https://demo.meni.ge",
-      "https://*.meni.ge",
-      "http://localhost:*"
-    ],
-    "ExposeHeaders": ["ETag"],
-    "MaxAgeSeconds": 3600
-  }
-]
+{
+  "CORSRules": [
+    {
+      "AllowedHeaders": ["*"],
+      "AllowedMethods": ["GET", "PUT"],
+      "AllowedOrigins": [
+        "https://demo.meni.ge",
+        "https://*.meni.ge",
+        "http://localhost:7003",
+        "http://localhost:*"
+      ],
+      "ExposeHeaders": ["ETag"],
+      "MaxAgeSeconds": 3600
+    }
+  ]
+}
 ```
 
-## S3 Bucket Policy (Optional - for public write access to orders/)
-
-If you want to allow public write access to the `orders/` folder without authentication:
+### Bucket Policy (✅ Applied)
 
 ```json
 {
@@ -35,36 +38,39 @@ If you want to allow public write access to the `orders/` folder without authent
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::data.meni/*"
+      "Resource": "arn:aws:s3:::cdn.meni/*"
     },
     {
       "Sid": "PublicWriteOrders",
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:PutObject",
-      "Resource": "arn:aws:s3:::data.meni/orders/*"
+      "Resource": "arn:aws:s3:::cdn.meni/orders/*"
     }
   ]
 }
 ```
 
-## AWS CLI Commands
+### Public Access Block (✅ Applied)
 
-```bash
-# Set CORS configuration
-aws s3api put-bucket-cors \
-  --bucket data.meni \
-  --cors-configuration file://cors-config.json
-
-# Set bucket policy
-aws s3api put-bucket-policy \
-  --bucket data.meni \
-  --policy file://bucket-policy.json
 ```
+BlockPublicAcls: true
+IgnorePublicAcls: true
+BlockPublicPolicy: false  ← Changed to allow bucket policy
+RestrictPublicBuckets: false  ← Changed to allow public access
+```
+
+## How It Works
+
+1. **Order Creation**: Client generates unique order ID and saves cart
+2. **localStorage**: Order saved locally first (instant, offline-capable)
+3. **S3 Sync**: Order automatically synced to `s3://cdn.meni/orders/{orderId}.json`
+4. **Access**: Orders can be accessed via `https://s3.eu-central-1.amazonaws.com/cdn.meni/orders/{orderId}.json`
 
 ## Security Notes
 
-- Orders can only be written to `orders/` folder
-- Users can read any order if they know the exact orderId
-- Users cannot list all orders (no ListBucket permission)
-- Each order is identified by unique UID, making it hard to guess
+- ✅ Only `orders/*` folder allows public write
+- ✅ Rest of bucket remains read-only
+- ✅ Each order identified by unique UID (hard to guess)
+- ✅ No ListBucket permission (cannot list all orders)
+- ⚠️ Anyone with order ID can read the order (share with care)
