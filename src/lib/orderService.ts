@@ -1,5 +1,13 @@
 import type { CartItem } from './types';
 
+// Simplified order item for S3 storage (only IDs and selections)
+export interface OrderItemCompact {
+  itemId: string;
+  quantity: number;
+  modifiers: Record<string, string[]>;
+}
+
+// Full order with cart items (for localStorage)
 export interface Order {
   orderId: string;
   items: CartItem[];
@@ -7,9 +15,27 @@ export interface Order {
   updatedAt: string;
 }
 
+// Compact order for S3 (minimal data)
+export interface OrderCompact {
+  orderId: string;
+  items: OrderItemCompact[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 const S3_BUCKET_URL = 'https://s3.eu-central-1.amazonaws.com/cdn.meni';
 const ORDERS_PREFIX = 'orders';
-const LOCAL_STORAGE_KEY = 'meni_pending_orders';
+
+/**
+ * Convert CartItem to compact format (only IDs and selections)
+ */
+function toCompactItem(cartItem: CartItem): OrderItemCompact {
+  return {
+    itemId: cartItem.menuItem.id,
+    quantity: cartItem.quantity,
+    modifiers: cartItem.selectedModifiers,
+  };
+}
 
 /**
  * Save order to localStorage and attempt S3 sync
@@ -22,7 +48,7 @@ export async function saveOrder(orderId: string, items: CartItem[]): Promise<voi
     updatedAt: new Date().toISOString(),
   };
 
-  // Always save to localStorage first
+  // Always save full order to localStorage first
   try {
     localStorage.setItem(`meni_order_${orderId}`, JSON.stringify(order));
     console.log('Order saved to localStorage');
@@ -30,14 +56,22 @@ export async function saveOrder(orderId: string, items: CartItem[]): Promise<voi
     console.error('Error saving to localStorage:', error);
   }
 
-  // Try to sync to S3 (will fail if CORS not configured)
+  // Create compact version for S3
+  const compactOrder: OrderCompact = {
+    orderId,
+    items: items.map(toCompactItem),
+    createdAt: order.createdAt,
+    updatedAt: order.updatedAt,
+  };
+
+  // Try to sync compact order to S3 (will fail if CORS not configured)
   try {
     const response = await fetch(`${S3_BUCKET_URL}/${ORDERS_PREFIX}/${orderId}.json`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(order),
+      body: JSON.stringify(compactOrder),
     });
 
     if (response.ok) {
