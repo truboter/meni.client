@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
@@ -321,9 +322,15 @@ export function CartBar({
           className="max-w-full w-screen h-screen max-h-screen p-0 flex flex-col items-center justify-center bg-white [&>button]:hidden"
         >
           <div className="flex flex-col items-center justify-center gap-8 p-8">
-            <DialogTitle className="text-3xl font-bold text-center">
+            <DialogHeader className="sr-only">
+              <DialogTitle>{getUITranslation("yourOrder", language)}</DialogTitle>
+              <DialogDescription>
+                {getUITranslation("scanQrCode", language) || "Scan this QR code to view your order"}
+              </DialogDescription>
+            </DialogHeader>
+            <h2 className="text-3xl font-bold text-center">
               {getUITranslation("yourOrder", language)}
-            </DialogTitle>
+            </h2>
             <div className="bg-white p-8 rounded-2xl shadow-2xl">
               <QRCodeSVG
                 value={orderId}
