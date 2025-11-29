@@ -7,7 +7,7 @@ export interface Order {
   updatedAt: string;
 }
 
-const S3_BUCKET_URL = 'https://s3.eu-central-1.amazonaws.com/data.meni';
+const S3_BUCKET_URL = 'https://s3.eu-central-1.amazonaws.com/cdn.meni';
 const ORDERS_PREFIX = 'orders';
 const LOCAL_STORAGE_KEY = 'meni_pending_orders';
 
