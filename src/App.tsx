@@ -21,6 +21,26 @@ import "./index.css";
 
 const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
 const GRID_COLUMNS_STORAGE_KEY = "meni_grid_columns";
+const ORDER_ID_STORAGE_KEY = "meni_order_id";
+
+// Generate a unique order ID
+const generateOrderId = (): string => {
+  const timestamp = Date.now().toString(36);
+  const randomPart = Math.random().toString(36).substring(2, 15);
+  return `${timestamp}-${randomPart}`;
+};
+
+// Get or create order ID
+const getOrderId = (): string => {
+  const existingOrderId = localStorage.getItem(ORDER_ID_STORAGE_KEY);
+  if (existingOrderId) {
+    return existingOrderId;
+  }
+  
+  const newOrderId = generateOrderId();
+  localStorage.setItem(ORDER_ID_STORAGE_KEY, newOrderId);
+  return newOrderId;
+};
 
 // Determine optimal grid columns based on screen width
 const getOptimalGridColumns = (): GridColumns => {
@@ -100,6 +120,7 @@ export default function App() {
   const locationId = getLocationId();
   const initialLanguage = getInitialLanguage();
 
+  const [orderId] = useState<string>(() => getOrderId());
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const [currency, setCurrency] = useState<Currency>("GEL");
@@ -131,6 +152,11 @@ export default function App() {
       parts[parts.length - 1] === "ge"
     );
   };
+
+  // Initialize order ID on app load
+  useEffect(() => {
+    console.log("Order ID:", orderId);
+  }, [orderId]);
 
   // Update URL when language changes
   useEffect(() => {
