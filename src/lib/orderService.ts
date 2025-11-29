@@ -1,4 +1,3 @@
-import { uploadData, getUrl, downloadData } from 'aws-amplify/storage';
 import type { CartItem } from './types';
 
 export interface Order {
@@ -8,8 +7,11 @@ export interface Order {
   updatedAt: string;
 }
 
+const S3_BUCKET_URL = 'https://s3.eu-central-1.amazonaws.com/data.meni';
+const ORDERS_PREFIX = 'orders';
+
 /**
- * Save order to S3
+ * Save order to S3 bucket data.meni
  */
 export async function saveOrder(orderId: string, items: CartItem[]): Promise<void> {
   try {
@@ -20,15 +22,19 @@ export async function saveOrder(orderId: string, items: CartItem[]): Promise<voi
       updatedAt: new Date().toISOString(),
     };
 
-    const result = await uploadData({
-      path: `orders/${orderId}.json`,
-      data: JSON.stringify(order),
-      options: {
-        contentType: 'application/json',
-      }
-    }).result;
+    const response = await fetch(`${S3_BUCKET_URL}/${ORDERS_PREFIX}/${orderId}.json`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(order),
+    });
 
-    console.log('Order saved successfully:', result);
+    if (!response.ok) {
+      throw new Error(`Failed to save order: ${response.statusText}`);
+    }
+
+    console.log('Order saved successfully to data.meni bucket');
   } catch (error) {
     console.error('Error saving order:', error);
     throw error;
@@ -36,18 +42,22 @@ export async function saveOrder(orderId: string, items: CartItem[]): Promise<voi
 }
 
 /**
- * Load order from S3
+ * Load order from S3 bucket data.meni
  */
 export async function loadOrder(orderId: string): Promise<Order | null> {
   try {
-    const downloadResult = await downloadData({
-      path: `orders/${orderId}.json`,
-    }).result;
-
-    const text = await downloadResult.body.text();
-    const order = JSON.parse(text) as Order;
+    const response = await fetch(`${S3_BUCKET_URL}/${ORDERS_PREFIX}/${orderId}.json`);
     
-    console.log('Order loaded successfully:', order);
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.log('Order not found');
+        return null;
+      }
+      throw new Error(`Failed to load order: ${response.statusText}`);
+    }
+
+    const order = await response.json() as Order;
+    console.log('Order loaded successfully from data.meni bucket:', order);
     return order;
   } catch (error) {
     console.error('Error loading order:', error);
@@ -58,18 +68,6 @@ export async function loadOrder(orderId: string): Promise<Order | null> {
 /**
  * Get public URL for order (for sharing)
  */
-export async function getOrderUrl(orderId: string): Promise<string | null> {
-  try {
-    const result = await getUrl({
-      path: `orders/${orderId}.json`,
-      options: {
-        expiresIn: 3600, // 1 hour
-      }
-    });
-
-    return result.url.toString();
-  } catch (error) {
-    console.error('Error getting order URL:', error);
-    return null;
-  }
+export function getOrderUrl(orderId: string): string {
+  return `${S3_BUCKET_URL}/${ORDERS_PREFIX}/${orderId}.json`;
 }
