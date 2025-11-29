@@ -9,19 +9,29 @@ export interface Order {
 
 const S3_BUCKET_URL = 'https://s3.eu-central-1.amazonaws.com/data.meni';
 const ORDERS_PREFIX = 'orders';
+const LOCAL_STORAGE_KEY = 'meni_pending_orders';
 
 /**
- * Save order to S3 bucket data.meni
+ * Save order to localStorage and attempt S3 sync
  */
 export async function saveOrder(orderId: string, items: CartItem[]): Promise<void> {
-  try {
-    const order: Order = {
-      orderId,
-      items,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+  const order: Order = {
+    orderId,
+    items,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
 
+  // Always save to localStorage first
+  try {
+    localStorage.setItem(`meni_order_${orderId}`, JSON.stringify(order));
+    console.log('Order saved to localStorage');
+  } catch (error) {
+    console.error('Error saving to localStorage:', error);
+  }
+
+  // Try to sync to S3 (will fail if CORS not configured)
+  try {
     const response = await fetch(`${S3_BUCKET_URL}/${ORDERS_PREFIX}/${orderId}.json`, {
       method: 'PUT',
       headers: {
@@ -30,39 +40,48 @@ export async function saveOrder(orderId: string, items: CartItem[]): Promise<voi
       body: JSON.stringify(order),
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to save order: ${response.statusText}`);
+    if (response.ok) {
+      console.log('Order synced to S3 successfully');
+    } else {
+      console.warn(`S3 sync failed (${response.status}): CORS might not be configured yet. Order saved locally.`);
     }
-
-    console.log('Order saved successfully to data.meni bucket');
   } catch (error) {
-    console.error('Error saving order:', error);
-    throw error;
+    console.warn('S3 sync failed: CORS not configured. Order saved locally only.', error);
   }
 }
 
 /**
- * Load order from S3 bucket data.meni
+ * Load order from localStorage or S3
  */
 export async function loadOrder(orderId: string): Promise<Order | null> {
+  // Try localStorage first
+  try {
+    const localData = localStorage.getItem(`meni_order_${orderId}`);
+    if (localData) {
+      const order = JSON.parse(localData) as Order;
+      console.log('Order loaded from localStorage:', order);
+      return order;
+    }
+  } catch (error) {
+    console.error('Error loading from localStorage:', error);
+  }
+
+  // Try S3 as fallback
   try {
     const response = await fetch(`${S3_BUCKET_URL}/${ORDERS_PREFIX}/${orderId}.json`);
     
-    if (!response.ok) {
-      if (response.status === 404) {
-        console.log('Order not found');
-        return null;
-      }
-      throw new Error(`Failed to load order: ${response.statusText}`);
+    if (response.ok) {
+      const order = await response.json() as Order;
+      console.log('Order loaded from S3:', order);
+      // Save to localStorage for faster future access
+      localStorage.setItem(`meni_order_${orderId}`, JSON.stringify(order));
+      return order;
     }
-
-    const order = await response.json() as Order;
-    console.log('Order loaded successfully from data.meni bucket:', order);
-    return order;
   } catch (error) {
-    console.error('Error loading order:', error);
-    return null;
+    console.error('Error loading from S3:', error);
   }
+
+  return null;
 }
 
 /**
