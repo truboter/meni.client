@@ -343,14 +343,16 @@ export function CartBar({
                                 convertPrices
                               )}
                             </span>
-                            <Button
-                              size="icon"
-                              variant="ghost"
-                              className="h-8 w-8 text-destructive hover:text-destructive"
-                              onClick={() => handleRemoveItem(index)}
-                            >
-                              <Trash size={18} />
-                            </Button>
+                            {!readOnly && (
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-8 w-8 text-destructive hover:text-destructive"
+                                onClick={() => handleRemoveItem(index)}
+                              >
+                                <Trash size={18} />
+                              </Button>
+                            )}
                           </div>
                         </div>
                       </div>

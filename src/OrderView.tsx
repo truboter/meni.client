@@ -17,7 +17,11 @@ import "./index.css";
 const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
 
 export default function OrderView() {
-  const { locationId: urlLocationId, lang: urlLang, orderId } = useParams<{
+  const {
+    locationId: urlLocationId,
+    lang: urlLang,
+    orderId,
+  } = useParams<{
     locationId: string;
     lang: string;
     orderId: string;
@@ -49,7 +53,10 @@ export default function OrderView() {
         setIsLoading(true);
 
         // Load location data to get menu items
-        const locationData = await fetchLocationData(urlLocationId, urlLang as Language);
+        const locationData = await fetchLocationData(
+          urlLocationId,
+          urlLang as Language
+        );
         const items = convertLocationDataToMenuItems(locationData);
         setMenuItems(items);
 
