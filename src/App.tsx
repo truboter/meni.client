@@ -17,6 +17,7 @@ import {
   convertLocationDataToMenuItems,
   extractCategories,
 } from "./lib/locationService";
+import { saveOrder } from "./lib/orderService";
 import "./index.css";
 
 const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
@@ -157,6 +158,15 @@ export default function App() {
   useEffect(() => {
     console.log("Order ID:", orderId);
   }, [orderId]);
+
+  // Save cart to S3 when it changes
+  useEffect(() => {
+    if (cart.length > 0) {
+      saveOrder(orderId, cart).catch(error => {
+        console.error('Failed to save order to S3:', error);
+      });
+    }
+  }, [cart, orderId]);
 
   // Update URL when language changes
   useEffect(() => {
