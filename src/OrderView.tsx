@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { VenueHeader } from "./components/VenueHeader";
-import { CartBar } from "./components/CartBar";
-import { type Language } from "./lib/translations";
+import { LanguageSelector } from "./components/LanguageSelector";
+import { type Language, getTranslatedMenuItem } from "./lib/translations";
 import { type Currency } from "./lib/currency";
 import { Toaster } from "./components/ui/sonner";
 import type { CartItem, MenuItem } from "./lib/types";
@@ -11,10 +10,9 @@ import {
   fetchLocationData,
   convertLocationDataToMenuItems,
 } from "./lib/locationService";
-import { venueInfo } from "./lib/data";
 import "./index.css";
 
-const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
+const ORDER_VIEW_LANGUAGE_STORAGE_KEY = "meni_order_view_language";
 
 export default function OrderView() {
   const {
@@ -28,7 +26,7 @@ export default function OrderView() {
   }>();
 
   const [language, setLanguage] = useState<Language>(() => {
-    const savedLang = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    const savedLang = localStorage.getItem(ORDER_VIEW_LANGUAGE_STORAGE_KEY);
     if (savedLang && ["ka", "en", "ru"].includes(savedLang)) {
       return savedLang as Language;
     }
@@ -36,7 +34,6 @@ export default function OrderView() {
   });
 
   const [currency] = useState<Currency>("GEL");
-  const [convertPrices] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,7 +52,7 @@ export default function OrderView() {
         // Load location data to get menu items
         const locationData = await fetchLocationData(
           urlLocationId,
-          urlLang as Language
+          language as Language
         );
         const items = convertLocationDataToMenuItems(locationData);
         setMenuItems(items);
@@ -73,16 +70,25 @@ export default function OrderView() {
     };
 
     loadOrderData();
-  }, [orderId, urlLocationId, urlLang]);
+  }, [orderId, urlLocationId, urlLang, language]);
 
   // Save language preference
   useEffect(() => {
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    localStorage.setItem(ORDER_VIEW_LANGUAGE_STORAGE_KEY, language);
   }, [language]);
 
   const handleLanguageChange = (newLang: Language) => {
     setLanguage(newLang);
   };
+
+  // Get translated menu item name
+  const getItemName = (item: CartItem) => {
+    const translation = getTranslatedMenuItem(item.menuItem.id, language);
+    return translation?.name || item.menuItem.name;
+  };
+
+  // Suppress unused warning - menuItems loaded for future use
+  void menuItems;
 
   if (isLoading) {
     return (
@@ -97,28 +103,25 @@ export default function OrderView() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <VenueHeader
-        venue={venueInfo}
-        currentLanguage={language}
-        onLanguageChange={handleLanguageChange}
-        currency={currency}
-        onCurrencyChange={() => {}} // Read-only
-        gridColumns={2}
-        onGridColumnsChange={() => {}} // Not needed for order view
-        convertPrices={false}
-        onConvertPricesChange={() => {}}
-        hideSettings={true} // Hide currency and grid settings
-      />
-
-      <div className="container mx-auto px-4 py-8 pb-32">
-        <div className="max-w-2xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
+      {/* Simple header with only language selector */}
+      <div className="bg-white shadow-sm py-4 px-4 md:px-6">
+        <div className="container mx-auto flex justify-between items-center">
+          <h1 className="text-xl font-bold text-gray-800">
             {language === "ru"
               ? "Просмотр заказа"
               : language === "ka"
                 ? "შეკვეთის ნახვა"
                 : "Order View"}
           </h1>
+          <LanguageSelector
+            currentLanguage={language}
+            onLanguageChange={handleLanguageChange}
+          />
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-8 pb-32">
+        <div className="max-w-2xl mx-auto">
           <p className="text-gray-600 mb-4">
             {language === "ru"
               ? "ID заказа:"
@@ -147,7 +150,7 @@ export default function OrderView() {
                 >
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-800">
-                      {item.menuItem.name}
+                      {getItemName(item)}
                     </h3>
                     {Object.entries(item.selectedModifiers).map(
                       ([group, selections]) =>
@@ -193,18 +196,6 @@ export default function OrderView() {
           )}
         </div>
       </div>
-
-      <CartBar
-        items={cart}
-        onUpdateCart={() => {}} // Read-only
-        onItemClick={() => {}} // Read-only
-        language={language}
-        currency={currency}
-        convertPrices={convertPrices}
-        orderId={orderId || ""}
-        menuItems={menuItems}
-        readOnly={true}
-      />
 
       <Toaster position="top-center" />
     </div>

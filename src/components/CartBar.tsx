@@ -361,6 +361,23 @@ export function CartBar({
                   </div>
                 );
               })}
+
+              {/* QR Code Section */}
+              <div className="mt-6 pb-4 flex flex-col items-center">
+                <div className="bg-white p-6 rounded-2xl shadow-lg">
+                  <QRCodeSVG
+                    value={`${window.location.origin}${window.location.pathname}/${orderId}`}
+                    size={200}
+                    level="H"
+                    includeMargin={true}
+                  />
+                </div>
+                <div className="text-center mt-4">
+                  <p className="text-sm text-gray-600 font-medium">
+                    {getUITranslation("cartCode", language) || "Cart Code"}
+                  </p>
+                </div>
+              </div>
             </div>
           </ScrollArea>
 
