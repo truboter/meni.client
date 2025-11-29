@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, Plus, Minus, Trash } from "@phosphor-icons/react";
+import { ShoppingCart, Plus, Minus, Trash, QrCode } from "@phosphor-icons/react";
 import type { CartItem } from "@/lib/types";
 import type { Language } from "@/lib/translations";
 import type { Currency } from "@/lib/currency";
@@ -22,6 +22,7 @@ interface CartBarProps {
   currency: Currency;
   convertPrices: boolean;
   onItemClick?: (cartItem: CartItem) => void;
+  orderId: string;
 }
 
 export function CartBar({
@@ -31,6 +32,7 @@ export function CartBar({
   currency,
   convertPrices,
   onItemClick,
+  orderId,
 }: CartBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -189,8 +191,9 @@ export function CartBar({
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent side="bottom" className="h-[85vh] !bg-white">
           <SheetHeader>
-            <SheetTitle className="text-2xl">
+            <SheetTitle className="text-2xl flex items-center gap-2">
               {getUITranslation("yourOrder", language)}
+              <QrCode size={24} weight="duotone" className="text-blue-600" title={orderId} />
             </SheetTitle>
           </SheetHeader>
 
