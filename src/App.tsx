@@ -17,7 +17,7 @@ import {
   convertLocationDataToMenuItems,
   extractCategories,
 } from "./lib/locationService";
-import { saveOrder } from "./lib/orderService";
+import { saveOrder, loadOrder } from "./lib/orderService";
 import "./index.css";
 
 const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
@@ -154,9 +154,19 @@ export default function App() {
     );
   };
 
-  // Initialize order ID on app load
+  // Initialize order ID on app load and restore cart
   useEffect(() => {
     console.log("Order ID:", orderId);
+    
+    // Load saved order from S3/localStorage
+    loadOrder(orderId).then(savedOrder => {
+      if (savedOrder && savedOrder.items.length > 0) {
+        setCart(savedOrder.items);
+        console.log("Order restored from storage:", savedOrder.items.length, "items");
+      }
+    }).catch(error => {
+      console.error("Failed to load saved order:", error);
+    });
   }, [orderId]);
 
   // Save cart to S3 when it changes
