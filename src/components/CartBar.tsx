@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { ShoppingCart, Plus, Minus, Trash, QrCode, X } from "@phosphor-icons/react";
+import { ShoppingCart, Plus, Minus, Trash, QrCode } from "@phosphor-icons/react";
 import { QRCodeSVG } from "qrcode.react";
 import type { CartItem } from "@/lib/types";
 import type { Language } from "@/lib/translations";
@@ -317,16 +317,9 @@ export function CartBar({
       </Sheet>
 
       <Dialog open={showQrCode} onOpenChange={setShowQrCode}>
-        <DialogContent className="max-w-full w-screen h-screen max-h-screen p-0 flex flex-col items-center justify-center bg-white">
-          <DialogHeader className="absolute top-4 right-4 z-10">
-            <button
-              onClick={() => setShowQrCode(false)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              aria-label="Close"
-            >
-              <X size={32} weight="bold" />
-            </button>
-          </DialogHeader>
+        <DialogContent 
+          className="max-w-full w-screen h-screen max-h-screen p-0 flex flex-col items-center justify-center bg-white [&>button]:hidden"
+        >
           <div className="flex flex-col items-center justify-center gap-8 p-8">
             <DialogTitle className="text-3xl font-bold text-center">
               {getUITranslation("yourOrder", language)}
@@ -343,6 +336,13 @@ export function CartBar({
               <p className="text-sm text-gray-500 mb-2">{getUITranslation("orderId", language) || "Order ID"}</p>
               <p className="font-mono text-lg font-semibold text-gray-800">{orderId}</p>
             </div>
+            <Button
+              onClick={() => setShowQrCode(false)}
+              className="mt-4 px-8 py-6 text-lg"
+              size="lg"
+            >
+              {getUITranslation("close", language)}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
