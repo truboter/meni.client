@@ -16,8 +16,8 @@ interface GridViewToggleProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export function GridViewToggle({ 
-  value, 
+export function GridViewToggle({
+  value,
   onChange,
   isOpen,
   onOpenChange,

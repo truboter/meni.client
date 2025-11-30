@@ -7,7 +7,7 @@ import { CartBar } from "./components/CartBar";
 import { MenuItemDialog } from "./components/MenuItemDialog";
 import { FlyToCartAnimation } from "./components/FlyToCartAnimation";
 import { restaurantData, venueInfo } from "./lib/data";
-import { type Language } from "./lib/translations";
+import { type Language, getUITranslation } from "./lib/translations";
 import { type Currency } from "./lib/currency";
 import { Toaster } from "./components/ui/sonner";
 import type { CartItem, MenuItem, LocationData } from "./lib/types";
