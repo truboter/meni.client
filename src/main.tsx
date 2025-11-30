@@ -1,19 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import App from "./App.tsx";
-import OrderView from "./OrderView.tsx";
+import { RouteHandler } from "./RouteHandler.tsx";
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/:lang" element={<App />} />
-        <Route path="/:locationId/:lang" element={<App />} />
-        <Route path="/:lang/:orderId" element={<OrderView />} />
-        <Route path="/:locationId/:lang/:orderId" element={<OrderView />} />
+        <Route path="/" element={<RouteHandler />} />
+        <Route path="/:param1" element={<RouteHandler />} />
+        <Route path="/:param1/:param2" element={<RouteHandler />} />
+        <Route path="/:param1/:param2/:param3" element={<RouteHandler />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

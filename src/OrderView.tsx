@@ -15,15 +15,42 @@ import "./index.css";
 const ORDER_VIEW_LANGUAGE_STORAGE_KEY = "meni_order_view_language";
 
 export default function OrderView() {
-  const {
-    locationId: urlLocationId,
-    lang: urlLang,
-    orderId,
-  } = useParams<{
-    locationId: string;
-    lang: string;
-    orderId: string;
+  const params = useParams<{
+    param1?: string;
+    param2?: string;
+    param3?: string;
   }>();
+
+  // Determine which params are which
+  // Three params: /:locationId/:lang/:orderId
+  // Two params: /:lang/:orderId (when lang is valid 2-letter code and param2 has dash)
+  const getParams = () => {
+    const { param1, param2, param3 } = params;
+
+    if (param3) {
+      // /:locationId/:lang/:orderId
+      return {
+        locationId: param1,
+        lang: param2,
+        orderId: param3,
+      };
+    } else if (param1 && param2) {
+      // /:lang/:orderId
+      return {
+        locationId: undefined,
+        lang: param1,
+        orderId: param2,
+      };
+    }
+
+    return {
+      locationId: undefined,
+      lang: undefined,
+      orderId: undefined,
+    };
+  };
+
+  const { locationId: urlLocationId, lang: urlLang, orderId } = getParams();
 
   const [language, setLanguage] = useState<Language>(() => {
     const savedLang = localStorage.getItem(ORDER_VIEW_LANGUAGE_STORAGE_KEY);
@@ -44,18 +71,38 @@ export default function OrderView() {
   // Load order data
   useEffect(() => {
     const loadOrderData = async () => {
-      if (!orderId || !urlLocationId || !urlLang) return;
+      if (!orderId) return;
 
       try {
         setIsLoading(true);
 
-        // Load location data to get menu items
-        const locationData = await fetchLocationData(
-          urlLocationId,
-          language as Language
-        );
-        const items = convertLocationDataToMenuItems(locationData);
-        setMenuItems(items);
+        // Get locationId from subdomain if not in URL
+        const getLocationId = (): string | undefined => {
+          if (urlLocationId) return urlLocationId;
+
+          const hostname = window.location.hostname;
+          const parts = hostname.split(".");
+          if (
+            parts.length >= 3 &&
+            parts[parts.length - 2] === "meni" &&
+            parts[parts.length - 1] === "ge"
+          ) {
+            return parts[0];
+          }
+          return undefined;
+        };
+
+        const locationId = getLocationId();
+
+        if (locationId) {
+          // Load location data to get menu items
+          const locationData = await fetchLocationData(
+            locationId,
+            language as Language
+          );
+          const items = convertLocationDataToMenuItems(locationData);
+          setMenuItems(items);
+        }
 
         // Load order from S3/localStorage
         const order = await loadOrder(orderId);
@@ -70,7 +117,7 @@ export default function OrderView() {
     };
 
     loadOrderData();
-  }, [orderId, urlLocationId, urlLang, language]);
+  }, [orderId, urlLocationId, language]);
 
   // Save language preference
   useEffect(() => {
