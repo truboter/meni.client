@@ -530,6 +530,23 @@ export default function App() {
           },
         }}
       />
+
+      {/* Footer */}
+      <footer className="pb-24 pt-8 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-sm text-gray-500">
+            Powered by{" "}
+            <a
+              href="https://meni.ge"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sky-600 hover:text-sky-700 font-medium transition-colors"
+            >
+              meni.ge
+            </a>
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
