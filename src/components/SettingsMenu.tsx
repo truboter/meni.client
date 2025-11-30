@@ -49,8 +49,13 @@ export function SettingsMenu({
   const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(true);
+  const [languageButtonState, setLanguageButtonState] = useState<
+    "visible" | "semi-transparent" | "hidden"
+  >("visible");
   const timeoutRef = useRef<number | null>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const languageTimeout1 = useRef<number | null>(null);
+  const languageTimeout2 = useRef<number | null>(null);
   const currencyList = Object.values(currencies) as CurrencyInfo[];
 
   // Check scroll position for currency list
@@ -77,6 +82,28 @@ export function SettingsMenu({
       return () => viewport.removeEventListener("scroll", checkScroll);
     }
   }, [isCurrencyOpen]);
+
+  // Language button animation timeline
+  useEffect(() => {
+    // Reset state on component mount (page load)
+    setLanguageButtonState("visible");
+
+    // After 15 seconds, make semi-transparent
+    languageTimeout1.current = window.setTimeout(() => {
+      setLanguageButtonState("semi-transparent");
+    }, 15000);
+
+    // After 45 seconds total (15 + 30), hide completely
+    languageTimeout2.current = window.setTimeout(() => {
+      setLanguageButtonState("hidden");
+    }, 45000);
+
+    // Cleanup on unmount
+    return () => {
+      if (languageTimeout1.current) clearTimeout(languageTimeout1.current);
+      if (languageTimeout2.current) clearTimeout(languageTimeout2.current);
+    };
+  }, []); // Empty dependency array - only run on mount
 
   const handleScrollUp = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -256,14 +283,33 @@ export function SettingsMenu({
             </div>
           )}
 
-          <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
-            <LanguageSelector
-              currentLanguage={language}
-              onLanguageChange={handleLanguageChange}
-              isOpen={isLanguageOpen}
-              onOpenChange={handleLanguageOpenChange}
-            />
-          </div>
+          {languageButtonState !== "hidden" && (
+            <div
+              className={`bg-white backdrop-blur-sm rounded-full shadow-sm transition-opacity duration-500 ${
+                languageButtonState === "semi-transparent"
+                  ? "opacity-50"
+                  : "opacity-100"
+              }`}
+            >
+              <LanguageSelector
+                currentLanguage={language}
+                onLanguageChange={handleLanguageChange}
+                isOpen={isLanguageOpen}
+                onOpenChange={handleLanguageOpenChange}
+              />
+            </div>
+          )}
+
+          {languageButtonState === "hidden" && isMenuOpen && (
+            <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
+              <LanguageSelector
+                currentLanguage={language}
+                onLanguageChange={handleLanguageChange}
+                isOpen={isLanguageOpen}
+                onOpenChange={handleLanguageOpenChange}
+              />
+            </div>
+          )}
         </div>
       </div>
 
