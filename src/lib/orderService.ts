@@ -25,6 +25,27 @@ export interface OrderCompact {
 
 const S3_BUCKET_URL = "https://s3.eu-central-1.amazonaws.com/cdn.meni";
 const ORDERS_PREFIX = "orders";
+const ORDER_PATH_STORAGE_KEY = "meni_order_path_";
+
+/**
+ * Get or create the location path for an order
+ * Once created, it's saved in localStorage to prevent path changes when language changes
+ */
+function getOrderLocationPath(orderId: string): string {
+  // Try to get saved path first
+  const savedPath = localStorage.getItem(`${ORDER_PATH_STORAGE_KEY}${orderId}`);
+  if (savedPath) {
+    return savedPath;
+  }
+
+  // Create new path based on current URL
+  const locationPath = encodeLocationPath();
+  
+  // Save it for future use
+  localStorage.setItem(`${ORDER_PATH_STORAGE_KEY}${orderId}`, locationPath);
+  
+  return locationPath;
+}
 
 /**
  * Encode URL path and domain as safe directory name
@@ -61,7 +82,7 @@ function encodeLocationPath(): string {
  * Get S3 path for order file
  */
 function getOrderPath(orderId: string): string {
-  const locationPath = encodeLocationPath();
+  const locationPath = getOrderLocationPath(orderId);
   return `${ORDERS_PREFIX}/${locationPath}/${orderId}.json`;
 }
 
@@ -215,7 +236,7 @@ export async function callWaiter(
   language: string
 ): Promise<boolean> {
   try {
-    const locationPath = encodeLocationPath();
+    const locationPath = getOrderLocationPath(orderId);
     const callPath = `${ORDERS_PREFIX}/${locationPath}/${orderId}.call`;
 
     const response = await fetch(`${S3_BUCKET_URL}/${callPath}`, {
