@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LanguageSelector } from "./components/LanguageSelector";
-import { type Language, getTranslatedMenuItem } from "./lib/translations";
+import { type Language } from "./lib/translations";
 import { type Currency } from "./lib/currency";
 import { Toaster } from "./components/ui/sonner";
 import type { CartItem, MenuItem } from "./lib/types";
@@ -83,12 +83,15 @@ export default function OrderView() {
 
   // Get translated menu item name
   const getItemName = (item: CartItem) => {
-    const translation = getTranslatedMenuItem(item.menuItem.id, language);
-    return translation?.name || item.menuItem.name;
-  };
+    // Try to find the item in the loaded menuItems (which are in the selected language)
+    const translatedItem = menuItems.find((mi) => mi.id === item.menuItem.id);
+    if (translatedItem) {
+      return translatedItem.name;
+    }
 
-  // Suppress unused warning - menuItems loaded for future use
-  void menuItems;
+    // Fallback to original name
+    return item.menuItem.name;
+  };
 
   if (isLoading) {
     return (

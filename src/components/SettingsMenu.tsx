@@ -190,7 +190,7 @@ export function SettingsMenu({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="end"
-                    className="w-[200px] p-0 z-[100]"
+                    className="w-[200px] p-0 z-50"
                   >
                     <div className="relative">
                       {/* Top scroll indicator */}
@@ -255,15 +255,15 @@ export function SettingsMenu({
               </div>
             </div>
           )}
-        </div>
 
-        <div className="bg-white backdrop-blur-sm rounded-full shadow-sm relative z-10">
-          <LanguageSelector
-            currentLanguage={language}
-            onLanguageChange={handleLanguageChange}
-            isOpen={isLanguageOpen}
-            onOpenChange={handleLanguageOpenChange}
-          />
+          <div className="bg-white backdrop-blur-sm rounded-full shadow-sm">
+            <LanguageSelector
+              currentLanguage={language}
+              onLanguageChange={handleLanguageChange}
+              isOpen={isLanguageOpen}
+              onOpenChange={handleLanguageOpenChange}
+            />
+          </div>
         </div>
       </div>
 
