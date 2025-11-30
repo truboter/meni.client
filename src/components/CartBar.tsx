@@ -366,7 +366,7 @@ export function CartBar({
               <div className="mt-6 pb-4 flex flex-col items-center">
                 <div className="bg-white p-6 rounded-2xl shadow-lg">
                   <QRCodeSVG
-                    value={`${window.location.origin}${window.location.pathname}/${orderId}`}
+                    value={`${window.location.origin}/${orderId}`}
                     size={200}
                     level="H"
                     includeMargin={true}
@@ -423,7 +423,7 @@ export function CartBar({
             </h2>
             <div className="bg-white p-8 rounded-2xl shadow-2xl">
               <QRCodeSVG
-                value={`${window.location.origin}${window.location.pathname}/${orderId}`}
+                value={`${window.location.origin}/${orderId}`}
                 size={Math.min(
                   window.innerWidth - 100,
                   window.innerHeight - 250,
