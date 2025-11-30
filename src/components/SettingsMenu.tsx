@@ -157,6 +157,10 @@ export function SettingsMenu({
     if (open) {
       setIsCurrencyOpen(false);
       setIsGridOpen(false);
+      // Make button fully opaque when opened
+      if (languageButtonState === "semi-transparent") {
+        setLanguageButtonState("visible");
+      }
     }
   };
 
