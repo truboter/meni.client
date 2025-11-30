@@ -47,6 +47,7 @@ export function SettingsMenu({
   const [pendingCurrency, setPendingCurrency] = useState<Currency | null>(null);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
+  const [isGridOpen, setIsGridOpen] = useState(false);
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(true);
   const [languageButtonState, setLanguageButtonState] = useState<
@@ -155,6 +156,7 @@ export function SettingsMenu({
     setIsLanguageOpen(open);
     if (open) {
       setIsCurrencyOpen(false);
+      setIsGridOpen(false);
     }
   };
 
@@ -162,6 +164,15 @@ export function SettingsMenu({
     setIsCurrencyOpen(open);
     if (open) {
       setIsLanguageOpen(false);
+      setIsGridOpen(false);
+    }
+  };
+
+  const handleGridOpenChange = (open: boolean) => {
+    setIsGridOpen(open);
+    if (open) {
+      setIsLanguageOpen(false);
+      setIsCurrencyOpen(false);
     }
   };
 
@@ -278,6 +289,8 @@ export function SettingsMenu({
                 <GridViewToggle
                   value={gridColumns}
                   onChange={handleGridColumnsChange}
+                  isOpen={isGridOpen}
+                  onOpenChange={handleGridOpenChange}
                 />
               </div>
             </div>

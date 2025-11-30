@@ -12,11 +12,18 @@ export type GridColumns = 1 | 2 | 3;
 interface GridViewToggleProps {
   value: GridColumns;
   onChange: (value: GridColumns) => void;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function GridViewToggle({ value, onChange }: GridViewToggleProps) {
+export function GridViewToggle({ 
+  value, 
+  onChange,
+  isOpen,
+  onOpenChange,
+}: GridViewToggleProps) {
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full">
           <SquaresFour size={20} weight="bold" />
