@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -21,6 +22,7 @@ import {
   Minus,
   Trash,
   QrCode,
+  Bell,
 } from "@phosphor-icons/react";
 import { QRCodeSVG } from "qrcode.react";
 import type { CartItem } from "@/lib/types";
@@ -28,7 +30,7 @@ import type { Language } from "@/lib/translations";
 import type { Currency } from "@/lib/currency";
 import { formatPrice } from "@/lib/currency";
 import { getUITranslation } from "@/lib/translations";
-import { checkOrderUpdate } from "@/lib/orderService";
+import { checkOrderUpdate, callWaiter } from "@/lib/orderService";
 
 interface CartBarProps {
   items: CartItem[];
@@ -56,6 +58,7 @@ export function CartBar({
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
   const [showQrCode, setShowQrCode] = useState(false);
+  const [isCallingWaiter, setIsCallingWaiter] = useState(false);
   const [lastUpdatedAt, setLastUpdatedAt] = useState<string>("");
   const timeoutRef = useRef<number | null>(null);
   const pollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
@@ -175,6 +178,41 @@ export function CartBar({
     onUpdateCart(updatedCart);
   };
 
+  const handleCallWaiter = async () => {
+    setIsCallingWaiter(true);
+    try {
+      const success = await callWaiter(orderId, language);
+      if (success) {
+        toast.success(
+          language === "ka"
+            ? "მიმტანი გამოიძახა"
+            : language === "ru"
+              ? "Официант вызван"
+              : "Waiter called"
+        );
+      } else {
+        toast.error(
+          language === "ka"
+            ? "შეცდომა"
+            : language === "ru"
+              ? "Ошибка"
+              : "Error"
+        );
+      }
+    } catch (error) {
+      console.error("Failed to call waiter:", error);
+      toast.error(
+        language === "ka"
+          ? "შეცდომა"
+          : language === "ru"
+            ? "Ошибка"
+            : "Error"
+      );
+    } finally {
+      setIsCallingWaiter(false);
+    }
+  };
+
   const getModifierText = (cartItem: CartItem) => {
     const modifierTexts: string[] = [];
 
@@ -207,7 +245,7 @@ export function CartBar({
         </div>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent side="bottom" className="h-[85vh] !bg-white">
+          <SheetContent side="bottom" className="h-[85vh] bg-white!">
             <SheetHeader>
               <SheetTitle className="text-2xl">
                 {getUITranslation("yourOrder", language)}
@@ -268,10 +306,22 @@ export function CartBar({
       </div>
 
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent side="bottom" className="h-[85vh] !bg-white">
+        <SheetContent side="bottom" className="h-[85vh] bg-white!">
           <SheetHeader>
             <SheetTitle className="text-2xl flex items-center gap-2">
               {getUITranslation("yourOrder", language)}
+              <button
+                onClick={handleCallWaiter}
+                disabled={isCallingWaiter}
+                className="p-1 hover:bg-amber-50 rounded-lg transition-colors disabled:opacity-50"
+                aria-label="Call Waiter"
+              >
+                <Bell
+                  size={24}
+                  weight={isCallingWaiter ? "fill" : "duotone"}
+                  className={isCallingWaiter ? "text-amber-600 animate-pulse" : "text-amber-600"}
+                />
+              </button>
               <button
                 onClick={() => setShowQrCode(true)}
                 className="p-1 hover:bg-blue-50 rounded-lg transition-colors"

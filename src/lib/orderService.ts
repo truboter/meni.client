@@ -193,3 +193,38 @@ export async function checkOrderUpdate(
 
   return null;
 }
+
+/**
+ * Call waiter - creates a .call file in the order directory
+ */
+export async function callWaiter(
+  orderId: string,
+  language: string
+): Promise<boolean> {
+  try {
+    const locationPath = encodeLocationPath();
+    const callPath = `${ORDERS_PREFIX}/${locationPath}/${orderId}.call`;
+
+    const response = await fetch(`${S3_BUCKET_URL}/${callPath}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        language,
+        timestamp: new Date().toISOString(),
+      }),
+    });
+
+    if (response.ok) {
+      console.log("Waiter called successfully:", callPath);
+      return true;
+    } else {
+      console.warn(`Failed to call waiter (${response.status})`);
+      return false;
+    }
+  } catch (error) {
+    console.error("Error calling waiter:", error);
+    return false;
+  }
+}
