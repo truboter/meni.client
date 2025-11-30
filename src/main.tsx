@@ -12,6 +12,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<App />} />
         <Route path="/:lang" element={<App />} />
         <Route path="/:locationId/:lang" element={<App />} />
+        <Route path="/:lang/:orderId" element={<OrderView />} />
         <Route path="/:locationId/:lang/:orderId" element={<OrderView />} />
       </Routes>
     </BrowserRouter>
