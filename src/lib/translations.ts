@@ -325,6 +325,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "დახურვა",
       orderId: "შეკვეთის ID",
       cartCode: "კალათის კოდი",
+      poweredBy: "შექმნილია",
     },
     en: {
       search: "Search menu...",
@@ -349,6 +350,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       currencyWarningMessage:
         "If you choose a currency different from the venue's currency, the prices shown to you will be calculated at the current exchange rate, but you will still pay in the venue's currency!",
       ok: "OK",
+      poweredBy: "Powered by",
     },
     ru: {
       search: "Поиск в меню...",
@@ -373,6 +375,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Закрыть",
       orderId: "ID заказа",
       cartCode: "Код корзины",
+      poweredBy: "Разработано",
     },
     tr: {
       search: "Menüde ara...",
@@ -397,6 +400,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Kapat",
       orderId: "Sipariş ID",
       cartCode: "Sepet Kodu",
+      poweredBy: "Tarafından desteklenmektedir",
     },
     hy: {
       search: "Որոնել մենյուում...",
@@ -421,6 +425,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Փակել",
       orderId: "Պատվերի ID",
       cartCode: "Զամբյուղի կոդ",
+      poweredBy: "Ստեղծված է",
     },
     zh: {
       search: "搜索菜单...",
@@ -445,6 +450,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "关闭",
       orderId: "订单号",
       cartCode: "购物车代码",
+      poweredBy: "技术支持",
     },
     hi: {
       search: "मेनू में खोजें...",
@@ -469,6 +475,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "बंद करें",
       orderId: "ऑर्डर आईडी",
       cartCode: "कार्ट कोड",
+      poweredBy: "द्वारा संचालित",
     },
     es: {
       search: "Buscar en el menú...",
@@ -493,6 +500,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Cerrar",
       orderId: "ID del Pedido",
       cartCode: "Código de Carrito",
+      poweredBy: "Desarrollado por",
     },
     fr: {
       search: "Rechercher dans le menu...",
@@ -517,6 +525,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Fermer",
       orderId: "ID de Commande",
       cartCode: "Code Panier",
+      poweredBy: "Propulsé par",
     },
     ar: {
       search: "البحث في القائمة...",
@@ -541,6 +550,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "إغلاق",
       orderId: "رقم الطلب",
       cartCode: "رمز السلة",
+      poweredBy: "مدعوم من",
     },
     bn: {
       search: "মেনুতে অনুসন্ধান করুন...",
@@ -565,6 +575,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "বন্ধ করুন",
       orderId: "অর্ডার আইডি",
       cartCode: "কার্ট কোড",
+      poweredBy: "দ্বারা চালিত",
     },
     pt: {
       search: "Buscar no menu...",
@@ -589,6 +600,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Fechar",
       orderId: "ID do Pedido",
       cartCode: "Código do Carrinho",
+      poweredBy: "Desenvolvido por",
     },
     id: {
       search: "Cari menu...",
@@ -613,6 +625,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Tutup",
       orderId: "ID Pesanan",
       cartCode: "Kode Keranjang",
+      poweredBy: "Didukung oleh",
     },
     ur: {
       search: "مینو میں تلاش کریں...",
@@ -637,6 +650,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "بند کریں",
       orderId: "آرڈر آئی ڈی",
       cartCode: "کارٹ کوڈ",
+      poweredBy: "کی طرف سے تقویت یافتہ",
     },
     de: {
       search: "Menü durchsuchen...",
@@ -662,6 +676,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Schließen",
       orderId: "Bestellnummer",
       cartCode: "Warenkorbcode",
+      poweredBy: "Bereitgestellt von",
     },
     ja: {
       search: "メニューを検索...",
@@ -686,6 +701,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "閉じる",
       orderId: "注文ID",
       cartCode: "カートコード",
+      poweredBy: "提供元",
     },
     ko: {
       search: "메뉴 검색...",
@@ -710,6 +726,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "닫기",
       orderId: "주문 ID",
       cartCode: "장바구니 코드",
+      poweredBy: "제공",
     },
     vi: {
       search: "Tìm kiếm menu...",
@@ -734,6 +751,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Đóng",
       orderId: "Mã Đơn hàng",
       cartCode: "Mã Giỏ Hàng",
+      poweredBy: "Được hỗ trợ bởi",
     },
     it: {
       search: "Cerca nel menu...",
@@ -758,6 +776,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Chiudi",
       orderId: "ID Ordine",
       cartCode: "Codice Carrello",
+      poweredBy: "Realizzato da",
     },
     pl: {
       search: "Szukaj w menu...",
@@ -782,6 +801,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Zamknij",
       orderId: "ID Zamówienia",
       cartCode: "Kod Koszyka",
+      poweredBy: "Obsługiwane przez",
     },
     uk: {
       search: "Пошук в меню...",
@@ -806,6 +826,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Закрити",
       orderId: "ID замовлення",
       cartCode: "Код Кошика",
+      poweredBy: "Розроблено",
     },
     fa: {
       search: "جستجو در منو...",
@@ -830,6 +851,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "بستن",
       orderId: "شناسه سفارش",
       cartCode: "کد سبد خرید",
+      poweredBy: "قدرت گرفته از",
     },
     he: {
       search: "חיפוש בתפריט...",
@@ -854,6 +876,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "סגור",
       orderId: "מזהה הזמנה",
       cartCode: "קוד עגלה",
+      poweredBy: "מופעל על ידי",
     },
     az: {
       search: "Menyuda axtar...",
@@ -878,6 +901,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Bağla",
       orderId: "Sifariş ID",
       cartCode: "Səbət Kodu",
+      poweredBy: "Tərəfindən dəstəklənir",
     },
     kk: {
       search: "Мәзірден іздеу...",
@@ -902,6 +926,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Жабу",
       orderId: "Тапсырыс ID",
       cartCode: "Себет коды",
+      poweredBy: "Қолдау көрсетеді",
     },
     uz: {
       search: "Menyuda qidirish...",
@@ -926,6 +951,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Yopish",
       orderId: "Buyurtma ID",
       cartCode: "Savat Kodi",
+      poweredBy: "Tomonidan quvvatlantirilgan",
     },
     ab: {
       search: "Аменiu аҧшаара...",
@@ -950,6 +976,7 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Иарктәуп",
       orderId: "Азаказ ID",
       cartCode: "Акорзина акод",
+      poweredBy: "Иаԥҵоуп",
     },
   };
 

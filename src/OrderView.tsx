@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LanguageSelector } from "./components/LanguageSelector";
-import { type Language } from "./lib/translations";
+import { type Language, getUITranslation } from "./lib/translations";
 import { type Currency } from "./lib/currency";
 import { Toaster } from "./components/ui/sonner";
 import type { CartItem, MenuItem } from "./lib/types";
@@ -250,7 +250,7 @@ export default function OrderView() {
         <footer className="pb-6 pt-4 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-sm text-gray-500">
-              Powered by{" "}
+              {getUITranslation("poweredBy", language)}{" "}
               <a
                 href="https://meni.ge"
                 target="_blank"

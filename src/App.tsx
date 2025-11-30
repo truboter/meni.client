@@ -535,7 +535,7 @@ export default function App() {
       <footer className="pb-6 pt-8 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-sm text-gray-500">
-            Powered by{" "}
+            {getUITranslation("poweredBy", language)}{" "}
             <a
               href="https://meni.ge"
               target="_blank"
