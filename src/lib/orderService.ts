@@ -40,10 +40,10 @@ function getOrderLocationPath(orderId: string): string {
 
   // Create new path based on current URL
   const locationPath = encodeLocationPath();
-  
+
   // Save it for future use
   localStorage.setItem(`${ORDER_PATH_STORAGE_KEY}${orderId}`, locationPath);
-  
+
   return locationPath;
 }
 

@@ -520,7 +520,7 @@ export default function App() {
         />
       )}
 
-      <Toaster 
+      <Toaster
         position="top-center"
         toastOptions={{
           style: {
@@ -532,7 +532,7 @@ export default function App() {
       />
 
       {/* Footer */}
-      <footer className="pb-24 pt-8 px-4">
+      <footer className="pb-6 pt-8 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-sm text-gray-500">
             Powered by{" "}

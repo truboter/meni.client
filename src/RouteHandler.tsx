@@ -4,9 +4,33 @@ import OrderView from "./OrderView";
 
 // List of valid language codes
 const VALID_LANGUAGES = [
-  "ka", "en", "ru", "tr", "hy", "zh", "hi", "es", "fr", "ar", 
-  "bn", "pt", "id", "ur", "de", "ja", "ko", "vi", "it", "pl", 
-  "uk", "fa", "he", "az", "kk", "uz", "ab"
+  "ka",
+  "en",
+  "ru",
+  "tr",
+  "hy",
+  "zh",
+  "hi",
+  "es",
+  "fr",
+  "ar",
+  "bn",
+  "pt",
+  "id",
+  "ur",
+  "de",
+  "ja",
+  "ko",
+  "vi",
+  "it",
+  "pl",
+  "uk",
+  "fa",
+  "he",
+  "az",
+  "kk",
+  "uz",
+  "ab",
 ];
 
 // Check if string looks like an order ID (contains dash and is longer than 10 chars)

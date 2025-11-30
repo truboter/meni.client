@@ -222,11 +222,7 @@ export function CartBar({
     } catch (error) {
       console.error("Failed to call waiter:", error);
       toast.error(
-        language === "ka"
-          ? "შეცდომა"
-          : language === "ru"
-            ? "Ошибка"
-            : "Error",
+        language === "ka" ? "შეცდომა" : language === "ru" ? "Ошибка" : "Error",
         {
           duration: 3000,
           style: {
@@ -349,7 +345,11 @@ export function CartBar({
                 <Bell
                   size={24}
                   weight={isCallingWaiter ? "fill" : "duotone"}
-                  className={isCallingWaiter ? "text-amber-600 animate-pulse" : "text-amber-600"}
+                  className={
+                    isCallingWaiter
+                      ? "text-amber-600 animate-pulse"
+                      : "text-amber-600"
+                  }
                 />
               </button>
               <button

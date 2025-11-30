@@ -247,7 +247,7 @@ export default function OrderView() {
         </div>
 
         {/* Footer */}
-        <footer className="pb-8 pt-8 px-4">
+        <footer className="pb-6 pt-4 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-sm text-gray-500">
               Powered by{" "}
