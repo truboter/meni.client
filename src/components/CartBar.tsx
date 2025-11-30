@@ -188,7 +188,17 @@ export function CartBar({
             ? "მიმტანი გამოიძახა"
             : language === "ru"
               ? "Официант вызван"
-              : "Waiter called"
+              : "Waiter called",
+          {
+            duration: 4000,
+            style: {
+              background: "#10b981",
+              color: "white",
+              fontSize: "16px",
+              fontWeight: "600",
+              padding: "16px 24px",
+            },
+          }
         );
       } else {
         toast.error(
@@ -196,7 +206,17 @@ export function CartBar({
             ? "შეცდომა"
             : language === "ru"
               ? "Ошибка"
-              : "Error"
+              : "Error",
+          {
+            duration: 3000,
+            style: {
+              background: "#ef4444",
+              color: "white",
+              fontSize: "16px",
+              fontWeight: "600",
+              padding: "16px 24px",
+            },
+          }
         );
       }
     } catch (error) {
@@ -206,7 +226,17 @@ export function CartBar({
           ? "შეცდომა"
           : language === "ru"
             ? "Ошибка"
-            : "Error"
+            : "Error",
+        {
+          duration: 3000,
+          style: {
+            background: "#ef4444",
+            color: "white",
+            fontSize: "16px",
+            fontWeight: "600",
+            padding: "16px 24px",
+          },
+        }
       );
     } finally {
       setIsCallingWaiter(false);
