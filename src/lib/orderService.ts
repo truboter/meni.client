@@ -33,11 +33,24 @@ function encodeLocationPath(): string {
   // Get domain (e.g., "meni.ge" or "localhost:7003")
   const domain = window.location.host.replace(/:/g, "_");
 
-  // Get current URL path (e.g., "/demo/ru" or "/ru")
-  const path = window.location.pathname;
+  // Get current URL path (e.g., "/demo/ru" or "/ru" or "/ru/orderId")
+  let path = window.location.pathname;
+
+  // Remove orderId from path if present (last segment with dash and length > 10)
+  const segments = path.split("/").filter((s) => s);
+  if (segments.length > 0) {
+    const lastSegment = segments[segments.length - 1];
+    if (lastSegment.includes("-") && lastSegment.length > 10) {
+      // Last segment looks like an orderId, remove it
+      segments.pop();
+    }
+  }
+
+  // Reconstruct path without orderId
+  const cleanPath = segments.join("/");
 
   // Remove leading/trailing slashes and replace remaining slashes with underscores
-  const encodedPath = path.replace(/^\/+|\/+$/g, "").replace(/\//g, "_");
+  const encodedPath = cleanPath.replace(/^\/+|\/+$/g, "").replace(/\//g, "_");
 
   // Combine domain and path
   const locationPart = encodedPath || "home";
