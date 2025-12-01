@@ -1,27 +1,68 @@
 /**
- * Cookie Consent Manager
- * Manages user consent for data storage and provides safe storage methods
+ * Consent-Aware Storage Manager
+ * Automatically switches between localStorage and in-memory storage based on user consent
  */
 
 const CONSENT_STORAGE_KEY = "meni_cookie_consent";
 
 export type ConsentStatus = "accepted" | "declined" | null;
 
+// In-memory storage fallback
+class MemoryStorage {
+  private storage: Map<string, string> = new Map();
+
+  getItem(key: string): string | null {
+    return this.storage.get(key) ?? null;
+  }
+
+  setItem(key: string, value: string): void {
+    this.storage.set(key, value);
+  }
+
+  removeItem(key: string): void {
+    this.storage.delete(key);
+  }
+
+  clear(): void {
+    this.storage.clear();
+  }
+
+  get length(): number {
+    return this.storage.size;
+  }
+
+  key(index: number): string | null {
+    const keys = Array.from(this.storage.keys());
+    return keys[index] ?? null;
+  }
+
+  // Get all data for export
+  getAllData(): Record<string, string> {
+    const data: Record<string, string> = {};
+    this.storage.forEach((value, key) => {
+      data[key] = value;
+    });
+    return data;
+  }
+}
+
+// Singleton in-memory storage
+const memoryStorage = new MemoryStorage();
+
 /**
- * Get current consent status
+ * Get current consent status from actual localStorage
  */
 export const getConsentStatus = (): ConsentStatus => {
   try {
     const consent = localStorage.getItem(CONSENT_STORAGE_KEY);
     return consent as ConsentStatus;
   } catch {
-    // If localStorage is blocked, treat as declined
     return "declined";
   }
 };
 
 /**
- * Set consent status
+ * Set consent status in actual localStorage
  */
 export const setConsentStatus = (status: ConsentStatus): void => {
   try {
@@ -29,6 +70,15 @@ export const setConsentStatus = (status: ConsentStatus): void => {
       localStorage.removeItem(CONSENT_STORAGE_KEY);
     } else {
       localStorage.setItem(CONSENT_STORAGE_KEY, status);
+    }
+
+    // If consent is accepted, migrate memory storage to localStorage
+    if (status === "accepted") {
+      migrateMemoryToLocalStorage();
+    }
+    // If consent is declined, clear localStorage and move to memory
+    else if (status === "declined") {
+      migrateLocalStorageToMemory();
     }
   } catch (error) {
     console.error("Failed to save consent status:", error);
@@ -43,64 +93,90 @@ export const hasConsent = (): boolean => {
 };
 
 /**
- * Safe localStorage getter - returns null if no consent
+ * Get the appropriate storage based on consent
+ */
+const getStorage = (): Storage | MemoryStorage => {
+  return hasConsent() ? localStorage : memoryStorage;
+};
+
+/**
+ * Migrate data from memory storage to localStorage
+ */
+const migrateMemoryToLocalStorage = (): void => {
+  try {
+    const memoryData = memoryStorage.getAllData();
+    Object.entries(memoryData).forEach(([key, value]) => {
+      if (key !== CONSENT_STORAGE_KEY) {
+        localStorage.setItem(key, value);
+      }
+    });
+    memoryStorage.clear();
+  } catch (error) {
+    console.error("Failed to migrate to localStorage:", error);
+  }
+};
+
+/**
+ * Migrate data from localStorage to memory storage
+ */
+const migrateLocalStorageToMemory = (): void => {
+  try {
+    const consentValue = localStorage.getItem(CONSENT_STORAGE_KEY);
+    
+    // Save all localStorage data to memory
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key !== CONSENT_STORAGE_KEY) {
+        const value = localStorage.getItem(key);
+        if (value) {
+          memoryStorage.setItem(key, value);
+        }
+      }
+    }
+    
+    // Clear localStorage but restore consent
+    localStorage.clear();
+    if (consentValue) {
+      localStorage.setItem(CONSENT_STORAGE_KEY, consentValue);
+    }
+  } catch (error) {
+    console.error("Failed to migrate to memory storage:", error);
+  }
+};
+
+/**
+ * Universal storage getter - works regardless of consent
  */
 export const getItem = (key: string): string | null => {
-  if (!hasConsent() && key !== CONSENT_STORAGE_KEY) {
-    console.warn(
-      `Attempted to read ${key} without consent. Returning null.`
-    );
-    return null;
-  }
+  const storage = getStorage();
   try {
-    return localStorage.getItem(key);
+    return storage.getItem(key);
   } catch {
     return null;
   }
 };
 
 /**
- * Safe localStorage setter - does nothing if no consent
+ * Universal storage setter - works regardless of consent
  */
 export const setItem = (key: string, value: string): boolean => {
-  // Always allow consent key itself
-  if (key === CONSENT_STORAGE_KEY) {
-    try {
-      localStorage.setItem(key, value);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  if (!hasConsent()) {
-    console.warn(
-      `Attempted to write ${key} without consent. Operation blocked.`
-    );
-    return false;
-  }
-
+  const storage = getStorage();
   try {
-    localStorage.setItem(key, value);
+    storage.setItem(key, value);
     return true;
-  } catch {
+  } catch (error) {
+    console.error(`Failed to set ${key}:`, error);
     return false;
   }
 };
 
 /**
- * Safe localStorage remove - does nothing if no consent
+ * Universal storage remove - works regardless of consent
  */
 export const removeItem = (key: string): boolean => {
-  if (!hasConsent() && key !== CONSENT_STORAGE_KEY) {
-    console.warn(
-      `Attempted to remove ${key} without consent. Operation blocked.`
-    );
-    return false;
-  }
-
+  const storage = getStorage();
   try {
-    localStorage.removeItem(key);
+    storage.removeItem(key);
     return true;
   } catch {
     return false;
@@ -108,15 +184,19 @@ export const removeItem = (key: string): boolean => {
 };
 
 /**
- * Clear all data (used when consent is revoked)
+ * Clear all data (except consent key)
  */
 export const clearAllData = (): void => {
   try {
     const consentValue = localStorage.getItem(CONSENT_STORAGE_KEY);
-    localStorage.clear();
-    // Restore consent status
-    if (consentValue) {
-      localStorage.setItem(CONSENT_STORAGE_KEY, consentValue);
+    
+    if (hasConsent()) {
+      localStorage.clear();
+      if (consentValue) {
+        localStorage.setItem(CONSENT_STORAGE_KEY, consentValue);
+      }
+    } else {
+      memoryStorage.clear();
     }
   } catch (error) {
     console.error("Failed to clear data:", error);
@@ -124,15 +204,37 @@ export const clearAllData = (): void => {
 };
 
 /**
- * Show a user-friendly message when consent is declined
+ * Get all stored data (for export/debugging)
  */
-export const showConsentRequiredMessage = (language: string = "en"): string => {
-  const messages = {
-    ka: "გთხოვთ მიიღოთ Cookie-ების გამოყენება სერვისის მუშაობისთვის.",
-    en: "Please accept cookies to use this service.",
-    ru: "Пожалуйста, примите использование cookies для работы сервиса.",
-  };
-  return messages[language as keyof typeof messages] || messages.en;
+export const getAllData = (): Record<string, string> => {
+  const data: Record<string, string> = {};
+  
+  if (hasConsent()) {
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key !== CONSENT_STORAGE_KEY) {
+          const value = localStorage.getItem(key);
+          if (value) {
+            data[key] = value;
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Failed to get localStorage data:", error);
+    }
+  } else {
+    return memoryStorage.getAllData();
+  }
+  
+  return data;
+};
+
+/**
+ * Get storage type for debugging
+ */
+export const getStorageType = (): "localStorage" | "memory" => {
+  return hasConsent() ? "localStorage" : "memory";
 };
 
 // Export consent key for direct access where needed

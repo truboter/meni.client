@@ -6,7 +6,6 @@ import { LanguageSelector } from "./LanguageSelector";
 import {
   setConsentStatus,
   getConsentStatus,
-  clearAllData,
 } from "@/lib/consentManager";
 
 interface CookieConsentProps {
@@ -36,12 +35,7 @@ export function CookieConsent({
 
   const handleDecline = () => {
     setConsentStatus("declined");
-    // Clear all data except consent status
-    clearAllData();
     setIsVisible(false);
-    
-    // Show message that service won't work
-    alert(getUITranslation("cookieDeclineWarning", language));
   };
 
   if (!isVisible) return null;

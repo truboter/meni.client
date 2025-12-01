@@ -4,6 +4,7 @@ import { ArrowLeft, Trash2, Download, AlertTriangle } from "lucide-react";
 import { type Language, getUITranslation } from "../lib/translations";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
+import * as consentManager from "../lib/consentManager";
 
 interface DataManagementProps {
   language: Language;
@@ -96,22 +97,14 @@ export function DataManagement({ language }: DataManagementProps) {
   const t =
     (content as Record<string, typeof content.en>)[language] || content.en;
 
-  // Get all localStorage data
-  const getLocalStorageData = () => {
-    const data: Record<string, string> = {};
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key) {
-        data[key] = localStorage.getItem(key) || "";
-      }
-    }
-    return data;
-  };
+  // Get storage type
+  const storageType = consentManager.getStorageType();
 
   const handleExportData = () => {
     const data = {
       exportDate: new Date().toISOString(),
-      localStorage: getLocalStorageData(),
+      storageType,
+      data: consentManager.getAllData(),
     };
 
     const blob = new Blob([JSON.stringify(data, null, 2)], {
@@ -136,7 +129,7 @@ export function DataManagement({ language }: DataManagementProps) {
   };
 
   const handleDeleteData = () => {
-    localStorage.clear();
+    consentManager.clearAllData();
     setShowDeleteConfirm(false);
 
     toast.success(t.dataDeleted, {
@@ -153,7 +146,7 @@ export function DataManagement({ language }: DataManagementProps) {
     }, 1500);
   };
 
-  const localData = getLocalStorageData();
+  const localData = consentManager.getAllData();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -176,6 +169,44 @@ export function DataManagement({ language }: DataManagementProps) {
 
       {/* Content */}
       <main className="max-w-3xl mx-auto px-4 py-6 pb-20">
+        {/* Storage Type Info */}
+        <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-900">
+            {language === "ka" && (
+              <>
+                <strong>მონაცემთა შენახვის ტიპი:</strong>{" "}
+                {storageType === "localStorage"
+                  ? "localStorage (მოწყობილობა)"
+                  : "მეხსიერება (დროებითი)"}
+              </>
+            )}
+            {language === "ru" && (
+              <>
+                <strong>Тип хранения:</strong>{" "}
+                {storageType === "localStorage"
+                  ? "localStorage (устройство)"
+                  : "Память (временно)"}
+              </>
+            )}
+            {language === "en" && (
+              <>
+                <strong>Storage Type:</strong>{" "}
+                {storageType === "localStorage"
+                  ? "localStorage (device)"
+                  : "Memory (temporary)"}
+              </>
+            )}
+            {!(["ka", "ru", "en"] as string[]).includes(language) && (
+              <>
+                <strong>Storage Type:</strong>{" "}
+                {storageType === "localStorage"
+                  ? "localStorage (device)"
+                  : "Memory (temporary)"}
+              </>
+            )}
+          </p>
+        </div>
+
         {/* Stored Data Section */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-4">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">
