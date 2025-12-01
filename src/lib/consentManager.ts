@@ -49,39 +49,55 @@ class MemoryStorage {
 // Singleton in-memory storage
 const memoryStorage = new MemoryStorage();
 
+// In-memory consent storage (for declined state)
+// IMPORTANT: When user declines cookies, we must NOT store anything in localStorage,
+// not even the consent decision itself. This ensures true GDPR compliance.
+let inMemoryConsent: ConsentStatus = null;
+
 /**
- * Get current consent status from actual localStorage
+ * Get current consent status from localStorage or memory
  */
 export const getConsentStatus = (): ConsentStatus => {
+  // Check memory first (for declined state)
+  if (inMemoryConsent === "declined") {
+    return "declined";
+  }
+
+  // Then check localStorage
   try {
     const consent = localStorage.getItem(CONSENT_STORAGE_KEY);
     return consent as ConsentStatus;
   } catch {
-    return "declined";
+    return null;
   }
 };
 
 /**
- * Set consent status in actual localStorage
+ * Set consent status - accepted goes to localStorage, declined stays in memory
  */
 export const setConsentStatus = (status: ConsentStatus): void => {
   try {
     if (status === null) {
+      // Clear both
       localStorage.removeItem(CONSENT_STORAGE_KEY);
-    } else {
+      inMemoryConsent = null;
+    } else if (status === "accepted") {
+      // Save to localStorage and clear memory
       localStorage.setItem(CONSENT_STORAGE_KEY, status);
-    }
-
-    // If consent is accepted, migrate memory storage to localStorage
-    if (status === "accepted") {
+      inMemoryConsent = null;
+      // Migrate memory storage to localStorage
       migrateMemoryToLocalStorage();
-    }
-    // If consent is declined, clear localStorage and move to memory
-    else if (status === "declined") {
+    } else if (status === "declined") {
+      // Save to memory only, clear localStorage
+      inMemoryConsent = "declined";
       migrateLocalStorageToMemory();
+      // Remove consent from localStorage
+      localStorage.removeItem(CONSENT_STORAGE_KEY);
     }
   } catch (error) {
     console.error("Failed to save consent status:", error);
+    // Fallback to memory if localStorage fails
+    inMemoryConsent = status;
   }
 };
 
@@ -121,9 +137,7 @@ const migrateMemoryToLocalStorage = (): void => {
  */
 const migrateLocalStorageToMemory = (): void => {
   try {
-    const consentValue = localStorage.getItem(CONSENT_STORAGE_KEY);
-    
-    // Save all localStorage data to memory
+    // Save all localStorage data to memory (except consent key)
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key !== CONSENT_STORAGE_KEY) {
@@ -134,11 +148,8 @@ const migrateLocalStorageToMemory = (): void => {
       }
     }
     
-    // Clear localStorage but restore consent
+    // Clear localStorage completely (including consent)
     localStorage.clear();
-    if (consentValue) {
-      localStorage.setItem(CONSENT_STORAGE_KEY, consentValue);
-    }
   } catch (error) {
     console.error("Failed to migrate to memory storage:", error);
   }
@@ -184,18 +195,21 @@ export const removeItem = (key: string): boolean => {
 };
 
 /**
- * Clear all data (except consent key)
+ * Clear all data (except consent key if accepted)
  */
 export const clearAllData = (): void => {
   try {
-    const consentValue = localStorage.getItem(CONSENT_STORAGE_KEY);
+    const consentStatus = getConsentStatus();
     
-    if (hasConsent()) {
+    if (consentStatus === "accepted") {
+      // Clear localStorage but keep consent
+      const consentValue = localStorage.getItem(CONSENT_STORAGE_KEY);
       localStorage.clear();
       if (consentValue) {
         localStorage.setItem(CONSENT_STORAGE_KEY, consentValue);
       }
     } else {
+      // Clear memory storage (consent stays in inMemoryConsent)
       memoryStorage.clear();
     }
   } catch (error) {
