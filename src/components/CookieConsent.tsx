@@ -3,8 +3,11 @@ import { Button } from "@/components/ui/button";
 import { X } from "@phosphor-icons/react";
 import { type Language, getUITranslation } from "@/lib/translations";
 import { LanguageSelector } from "./LanguageSelector";
-
-const CONSENT_STORAGE_KEY = "meni_cookie_consent";
+import {
+  setConsentStatus,
+  getConsentStatus,
+  clearAllData,
+} from "@/lib/consentManager";
 
 interface CookieConsentProps {
   language: Language;
@@ -19,7 +22,7 @@ export function CookieConsent({
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
 
   useEffect(() => {
-    const consent = localStorage.getItem(CONSENT_STORAGE_KEY);
+    const consent = getConsentStatus();
     if (!consent) {
       // Show banner after a short delay for better UX
       setTimeout(() => setIsVisible(true), 1000);
@@ -27,13 +30,18 @@ export function CookieConsent({
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem(CONSENT_STORAGE_KEY, "accepted");
+    setConsentStatus("accepted");
     setIsVisible(false);
   };
 
   const handleDecline = () => {
-    localStorage.setItem(CONSENT_STORAGE_KEY, "declined");
+    setConsentStatus("declined");
+    // Clear all data except consent status
+    clearAllData();
     setIsVisible(false);
+    
+    // Show message that service won't work
+    alert(getUITranslation("cookieDeclineWarning", language));
   };
 
   if (!isVisible) return null;

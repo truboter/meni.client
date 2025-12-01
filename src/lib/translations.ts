@@ -331,6 +331,8 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
         "ეს აპლიკაცია იყენებს ლოკალურ შენახვას (localStorage) თქვენი შეკვეთების, ენის პარამეტრებისა და სხვა პარამეტრების შესანახად, რათა უზრუნველყოს საუკეთესო გამოცდილება. გაგრძელებით თქვენ ეთანხმებით მონაცემების შენახვას.",
       cookieAccept: "მიღება",
       cookieDecline: "უარყოფა",
+      cookieDeclineWarning:
+        "უარყოფის შემთხვევაში სერვისი არ იმუშავებს, რადგან ის საჭიროებს მონაცემების შენახვას თქვენს მოწყობილობაზე.",
     },
     en: {
       search: "Search menu...",
@@ -361,6 +363,8 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
         "This app uses local storage to save your orders, language preferences, and other settings to provide the best experience. By continuing, you agree to data storage.",
       cookieAccept: "Accept",
       cookieDecline: "Decline",
+      cookieDeclineWarning:
+        "If you decline, the service will not work as it requires data storage on your device.",
     },
     ru: {
       search: "Поиск в меню...",
@@ -391,6 +395,8 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
         "Это приложение использует локальное хранилище для сохранения ваших заказов, языковых предпочтений и других настроек для обеспечения наилучшего опыта. Продолжая, вы соглашаетесь на хранение данных.",
       cookieAccept: "Принять",
       cookieDecline: "Отклонить",
+      cookieDeclineWarning:
+        "При отказе сервис не будет работать, так как ему требуется хранение данных на вашем устройстве.",
     },
     tr: {
       search: "Menüde ara...",

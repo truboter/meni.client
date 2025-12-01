@@ -28,8 +28,7 @@ export function DataManagement({ language }: DataManagementProps) {
       exportData: "ექსპორტი",
       exportDesc: "გადმოწერეთ თქვენი ყველა მონაცემი JSON ფორმატში",
       deleteData: "მონაცემების წაშლა",
-      deleteDesc:
-        "სამუდამოდ წაშალეთ ყველა თქვენი მონაცემი ამ მოწყობილობიდან",
+      deleteDesc: "სამუდამოდ წაშალეთ ყველა თქვენი მონაცემი ამ მოწყობილობიდან",
       deleteWarning: "გაფრთხილება!",
       deleteWarningText:
         "ეს მოქმედება წაშლის ყველა თქვენს მონაცემს, მათ შორის შეკვეთებს და პარამეტრებს. ეს მოქმედება შეუქცევადია.",
@@ -68,7 +67,8 @@ export function DataManagement({ language }: DataManagementProps) {
     },
     ru: {
       title: "Мои данные",
-      description: "Управляйте своими персональными данными и настройками здесь.",
+      description:
+        "Управляйте своими персональными данными и настройками здесь.",
       storedData: "Сохраненные данные",
       localStorage: "Локальные данные (на вашем устройстве)",
       orderId: "ID заказа",
@@ -93,7 +93,8 @@ export function DataManagement({ language }: DataManagementProps) {
     },
   };
 
-  const t = (content as Record<string, typeof content.en>)[language] || content.en;
+  const t =
+    (content as Record<string, typeof content.en>)[language] || content.en;
 
   // Get all localStorage data
   const getLocalStorageData = () => {

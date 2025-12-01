@@ -257,21 +257,25 @@ Email: privacy@meni.ge
       {/* Content */}
       <main className="max-w-3xl mx-auto px-4 py-6 pb-20">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          {sections.map((section: { title: string; content: string }, index: number) => (
-            <div
-              key={index}
-              className={`p-6 ${
-                index !== sections.length - 1 ? "border-b border-gray-200" : ""
-              }`}
-            >
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">
-                {section.title}
-              </h2>
-              <div className="text-gray-700 whitespace-pre-line leading-relaxed">
-                {section.content}
+          {sections.map(
+            (section: { title: string; content: string }, index: number) => (
+              <div
+                key={index}
+                className={`p-6 ${
+                  index !== sections.length - 1
+                    ? "border-b border-gray-200"
+                    : ""
+                }`}
+              >
+                <h2 className="text-lg font-semibold text-gray-900 mb-3">
+                  {section.title}
+                </h2>
+                <div className="text-gray-700 whitespace-pre-line leading-relaxed">
+                  {section.content}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
 
         {/* Footer note */}
@@ -279,8 +283,8 @@ Email: privacy@meni.ge
           <p className="text-sm text-blue-900">
             {language === "ka" && (
               <>
-                ეს პოლიტიკა შესაბამისია GDPR (General Data Protection Regulation)
-                მოთხოვნებთან.
+                ეს პოლიტიკა შესაბამისია GDPR (General Data Protection
+                Regulation) მოთხოვნებთან.
               </>
             )}
             {language === "ru" && (

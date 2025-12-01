@@ -19,6 +19,7 @@ import {
   extractCategories,
 } from "./lib/locationService";
 import { saveOrder, loadOrder } from "./lib/orderService";
+import * as consentManager from "./lib/consentManager";
 import "./index.css";
 
 const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
@@ -34,20 +35,20 @@ const generateOrderId = (): string => {
 
 // Get or create order ID
 const getOrderId = (): string => {
-  const existingOrderId = localStorage.getItem(ORDER_ID_STORAGE_KEY);
+  const existingOrderId = consentManager.getItem(ORDER_ID_STORAGE_KEY);
   if (existingOrderId) {
     return existingOrderId;
   }
 
   const newOrderId = generateOrderId();
-  localStorage.setItem(ORDER_ID_STORAGE_KEY, newOrderId);
+  consentManager.setItem(ORDER_ID_STORAGE_KEY, newOrderId);
   return newOrderId;
 };
 
 // Determine optimal grid columns based on screen width
 const getOptimalGridColumns = (): GridColumns => {
   // Check localStorage first
-  const savedColumns = localStorage.getItem(GRID_COLUMNS_STORAGE_KEY);
+  const savedColumns = consentManager.getItem(GRID_COLUMNS_STORAGE_KEY);
   if (savedColumns) {
     const parsed = parseInt(savedColumns, 10);
     if ([1, 2, 3].includes(parsed)) {
@@ -110,7 +111,7 @@ export default function App() {
     }
 
     // Check localStorage
-    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    const savedLanguage = consentManager.getItem(LANGUAGE_STORAGE_KEY);
     if (savedLanguage && savedLanguage.length === 2) {
       return savedLanguage as Language;
     }
@@ -138,6 +139,15 @@ export default function App() {
     element: HTMLElement;
     imageUrl: string;
   } | null>(null);
+  const [consentDeclined, setConsentDeclined] = useState(false);
+
+  // Check consent status
+  useEffect(() => {
+    const status = consentManager.getConsentStatus();
+    if (status === "declined") {
+      setConsentDeclined(true);
+    }
+  }, []);
 
   // State for location data
   const [locationData, setLocationData] = useState<LocationData | null>(null);
@@ -190,7 +200,7 @@ export default function App() {
   // Update URL when language changes
   useEffect(() => {
     // Save language to localStorage
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+    consentManager.setItem(LANGUAGE_STORAGE_KEY, language);
 
     // Update URL if language is different from URL parameter
     if (language !== urlLang) {
@@ -382,7 +392,7 @@ export default function App() {
 
   const handleGridColumnsChange = (columns: GridColumns) => {
     setGridColumns(columns);
-    localStorage.setItem(GRID_COLUMNS_STORAGE_KEY, columns.toString());
+    consentManager.setItem(GRID_COLUMNS_STORAGE_KEY, columns.toString());
   };
 
   const handleUpdateCart = (updatedCart: CartItem[]) => {
@@ -430,6 +440,50 @@ export default function App() {
             className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
           >
             Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show consent declined screen
+  if (consentDeclined) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg
+              className="w-8 h-8 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            {language === "ka" && "სერვისი მიუწვდომელია"}
+            {language === "ru" && "Сервис недоступен"}
+            {language === "en" && "Service Unavailable"}
+          </h2>
+          <p className="text-gray-600 mb-6">
+            {getUITranslation("cookieDeclineWarning", language)}
+          </p>
+          <button
+            onClick={() => {
+              consentManager.setConsentStatus(null);
+              window.location.reload();
+            }}
+            className="w-full bg-sky-500 hover:bg-sky-600 text-white font-medium py-3 px-6 rounded-lg transition-colors"
+          >
+            {language === "ka" && "თავიდან ცდა"}
+            {language === "ru" && "Попробовать снова"}
+            {language === "en" && "Try Again"}
           </button>
         </div>
       </div>
@@ -544,7 +598,8 @@ export default function App() {
               {language === "ka" && "კონფიდენციალურობა"}
               {language === "ru" && "Конфиденциальность"}
               {language === "en" && "Privacy"}
-              {!(["ka", "ru", "en"] as string[]).includes(language) && "Privacy"}
+              {!(["ka", "ru", "en"] as string[]).includes(language) &&
+                "Privacy"}
             </a>
             <span className="text-gray-400">•</span>
             <a
@@ -564,7 +619,8 @@ export default function App() {
               {language === "ka" && "ჩემი მონაცემები"}
               {language === "ru" && "Мои данные"}
               {language === "en" && "My Data"}
-              {!(["ka", "ru", "en"] as string[]).includes(language) && "My Data"}
+              {!(["ka", "ru", "en"] as string[]).includes(language) &&
+                "My Data"}
             </a>
           </div>
           {/* Powered By */}
