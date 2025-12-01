@@ -10,6 +10,7 @@ import { restaurantData, venueInfo } from "./lib/data";
 import { type Language, getUITranslation } from "./lib/translations";
 import { type Currency } from "./lib/currency";
 import { Toaster } from "./components/ui/sonner";
+import { CookieConsent } from "./components/CookieConsent";
 import type { CartItem, MenuItem, LocationData } from "./lib/types";
 import type { GridColumns } from "./components/GridViewToggle";
 import {
@@ -533,20 +534,58 @@ export default function App() {
 
       {/* Footer */}
       <footer className="pb-6 pt-8 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="text-sm text-gray-500">
-            {getUITranslation("poweredBy", language)}{" "}
+        <div className="max-w-4xl mx-auto">
+          {/* Legal Links */}
+          <div className="flex flex-wrap justify-center gap-3 mb-4 text-sm">
             <a
-              href="https://meni.ge"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sky-600 hover:text-sky-700 font-medium transition-colors"
+              href="/privacy"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
             >
-              meni.ge
+              {language === "ka" && "კონფიდენციალურობა"}
+              {language === "ru" && "Конфиденциальность"}
+              {language === "en" && "Privacy"}
+              {!(["ka", "ru", "en"] as string[]).includes(language) && "Privacy"}
             </a>
-          </p>
+            <span className="text-gray-400">•</span>
+            <a
+              href="/terms"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              {language === "ka" && "პირობები"}
+              {language === "ru" && "Условия"}
+              {language === "en" && "Terms"}
+              {!(["ka", "ru", "en"] as string[]).includes(language) && "Terms"}
+            </a>
+            <span className="text-gray-400">•</span>
+            <a
+              href="/data"
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              {language === "ka" && "ჩემი მონაცემები"}
+              {language === "ru" && "Мои данные"}
+              {language === "en" && "My Data"}
+              {!(["ka", "ru", "en"] as string[]).includes(language) && "My Data"}
+            </a>
+          </div>
+          {/* Powered By */}
+          <div className="text-center">
+            <p className="text-sm text-gray-500">
+              {getUITranslation("poweredBy", language)}{" "}
+              <a
+                href="https://meni.ge"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sky-600 hover:text-sky-700 font-medium transition-colors"
+              >
+                meni.ge
+              </a>
+            </p>
+          </div>
         </div>
       </footer>
+
+      {/* Cookie Consent Banner */}
+      <CookieConsent language={language} onLanguageChange={setLanguage} />
     </div>
   );
 }

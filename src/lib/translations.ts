@@ -326,6 +326,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "შეკვეთის ID",
       cartCode: "კალათის კოდი",
       poweredBy: "შექმნილია",
+      cookieTitle: "ჩვენ ვიყენებთ ქუქიებს",
+      cookieMessage:
+        "ეს აპლიკაცია იყენებს ლოკალურ შენახვას (localStorage) თქვენი შეკვეთების, ენის პარამეტრებისა და სხვა პარამეტრების შესანახად, რათა უზრუნველყოს საუკეთესო გამოცდილება. გაგრძელებით თქვენ ეთანხმებით მონაცემების შენახვას.",
+      cookieAccept: "მიღება",
+      cookieDecline: "უარყოფა",
     },
     en: {
       search: "Search menu...",
@@ -351,6 +356,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
         "If you choose a currency different from the venue's currency, the prices shown to you will be calculated at the current exchange rate, but you will still pay in the venue's currency!",
       ok: "OK",
       poweredBy: "Powered by",
+      cookieTitle: "We use cookies",
+      cookieMessage:
+        "This app uses local storage to save your orders, language preferences, and other settings to provide the best experience. By continuing, you agree to data storage.",
+      cookieAccept: "Accept",
+      cookieDecline: "Decline",
     },
     ru: {
       search: "Поиск в меню...",
@@ -376,6 +386,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "ID заказа",
       cartCode: "Код корзины",
       poweredBy: "Разработано",
+      cookieTitle: "Мы используем файлы cookie",
+      cookieMessage:
+        "Это приложение использует локальное хранилище для сохранения ваших заказов, языковых предпочтений и других настроек для обеспечения наилучшего опыта. Продолжая, вы соглашаетесь на хранение данных.",
+      cookieAccept: "Принять",
+      cookieDecline: "Отклонить",
     },
     tr: {
       search: "Menüde ara...",
@@ -401,6 +416,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "Sipariş ID",
       cartCode: "Sepet Kodu",
       poweredBy: "Tarafından desteklenmektedir",
+      cookieTitle: "Çerezleri kullanıyoruz",
+      cookieMessage:
+        "Bu uygulama, en iyi deneyimi sağlamak için siparişlerinizi, dil tercihlerinizi ve diğer ayarlarınızı kaydetmek için yerel depolama kullanır. Devam ederek veri depolamayı kabul etmiş olursunuz.",
+      cookieAccept: "Kabul et",
+      cookieDecline: "Reddet",
     },
     hy: {
       search: "Որոնել մենյուում...",
@@ -425,7 +445,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Փակել",
       orderId: "Պատվերի ID",
       cartCode: "Զամբյուղի կոդ",
-      poweredBy: "Ստեղծված է",
+      poweredBy: "Սպասարկվում է",
+      cookieTitle: "Մենք օգտագործում ենք cookie-ներ",
+      cookieMessage:
+        "Այս հավելվածը օգտագործում է տեղական պահեստ՝ ձեր պատվերները, լեզվի նախընտրությունները և այլ կարգավորումներ պահպանելու համար՝ լավագույն փորձը ապահովելու համար։ Շարունակելով՝ դուք համաձայնում եք տվյալների պահպանման հետ։",
+      cookieAccept: "Ընդունել",
+      cookieDecline: "Մերժել",
     },
     zh: {
       search: "搜索菜单...",
@@ -451,6 +476,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "订单号",
       cartCode: "购物车代码",
       poweredBy: "技术支持",
+      cookieTitle: "我们使用Cookie",
+      cookieMessage:
+        "此应用使用本地存储来保存您的订单、语言偏好和其他设置，以提供最佳体验。继续使用即表示您同意数据存储。",
+      cookieAccept: "接受",
+      cookieDecline: "拒绝",
     },
     hi: {
       search: "मेनू में खोजें...",
@@ -476,6 +506,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "ऑर्डर आईडी",
       cartCode: "कार्ट कोड",
       poweredBy: "द्वारा संचालित",
+      cookieTitle: "हम कुकीज़ का उपयोग करते हैं",
+      cookieMessage:
+        "यह ऐप सर्वोत्तम अनुभव प्रदान करने के लिए आपके ऑर्डर, भाषा वरीयताओं और अन्य सेटिंग्स को सहेजने के लिए स्थानीय संग्रहण का उपयोग करता है। जारी रखकर, आप डेटा संग्रहण के लिए सहमत होते हैं।",
+      cookieAccept: "स्वीकार करें",
+      cookieDecline: "अस्वीकार करें",
     },
     es: {
       search: "Buscar en el menú...",
@@ -501,6 +536,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "ID del Pedido",
       cartCode: "Código de Carrito",
       poweredBy: "Desarrollado por",
+      cookieTitle: "Usamos cookies",
+      cookieMessage:
+        "Esta aplicación utiliza almacenamiento local para guardar sus pedidos, preferencias de idioma y otras configuraciones para proporcionar la mejor experiencia. Al continuar, acepta el almacenamiento de datos.",
+      cookieAccept: "Aceptar",
+      cookieDecline: "Rechazar",
     },
     fr: {
       search: "Rechercher dans le menu...",
@@ -526,6 +566,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "ID de Commande",
       cartCode: "Code Panier",
       poweredBy: "Propulsé par",
+      cookieTitle: "Nous utilisons des cookies",
+      cookieMessage:
+        "Cette application utilise le stockage local pour enregistrer vos commandes, vos préférences linguistiques et d'autres paramètres afin de vous offrir la meilleure expérience. En continuant, vous acceptez le stockage des données.",
+      cookieAccept: "Accepter",
+      cookieDecline: "Refuser",
     },
     ar: {
       search: "البحث في القائمة...",
@@ -551,6 +596,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "رقم الطلب",
       cartCode: "رمز السلة",
       poweredBy: "مدعوم من",
+      cookieTitle: "نحن نستخدم ملفات تعريف الارتباط",
+      cookieMessage:
+        "يستخدم هذا التطبيق التخزين المحلي لحفظ طلباتك وتفضيلات اللغة والإعدادات الأخرى لتوفير أفضل تجربة. من خلال المتابعة، فإنك توافق على تخزين البيانات.",
+      cookieAccept: "قبول",
+      cookieDecline: "رفض",
     },
     bn: {
       search: "মেনুতে অনুসন্ধান করুন...",
@@ -576,6 +626,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "অর্ডার আইডি",
       cartCode: "কার্ট কোড",
       poweredBy: "দ্বারা চালিত",
+      cookieTitle: "আমরা কুকিজ ব্যবহার করি",
+      cookieMessage:
+        "এই অ্যাপ্লিকেশন সেরা অভিজ্ঞতা প্রদানের জন্য আপনার অর্ডার, ভাষা পছন্দ এবং অন্যান্য সেটিংস সংরক্ষণ করতে স্থানীয় সঞ্চয়স্থান ব্যবহার করে। চালিয়ে যাওয়ার মাধ্যমে, আপনি ডেটা সংরক্ষণে সম্মত হন।",
+      cookieAccept: "গ্রহণ করুন",
+      cookieDecline: "প্রত্যাখ্যান করুন",
     },
     pt: {
       search: "Buscar no menu...",
@@ -601,6 +656,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "ID do Pedido",
       cartCode: "Código do Carrinho",
       poweredBy: "Desenvolvido por",
+      cookieTitle: "Usamos cookies",
+      cookieMessage:
+        "Este aplicativo usa armazenamento local para salvar seus pedidos, preferências de idioma e outras configurações para fornecer a melhor experiência. Ao continuar, você concorda com o armazenamento de dados.",
+      cookieAccept: "Aceitar",
+      cookieDecline: "Recusar",
     },
     id: {
       search: "Cari menu...",
@@ -626,6 +686,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "ID Pesanan",
       cartCode: "Kode Keranjang",
       poweredBy: "Didukung oleh",
+      cookieTitle: "Kami menggunakan cookie",
+      cookieMessage:
+        "Aplikasi ini menggunakan penyimpanan lokal untuk menyimpan pesanan, preferensi bahasa, dan pengaturan lain Anda untuk memberikan pengalaman terbaik. Dengan melanjutkan, Anda menyetujui penyimpanan data.",
+      cookieAccept: "Terima",
+      cookieDecline: "Tolak",
     },
     ur: {
       search: "مینو میں تلاش کریں...",
@@ -650,7 +715,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "بند کریں",
       orderId: "آرڈر آئی ڈی",
       cartCode: "کارٹ کوڈ",
-      poweredBy: "کی طرف سے تقویت یافتہ",
+      poweredBy: "کی طرف سے تعاون یافتہ",
+      cookieTitle: "ہم کوکیز استعمال کرتے ہیں",
+      cookieMessage:
+        "یہ ایپ بہترین تجربہ فراہم کرنے کے لیے آپ کے آرڈرز، زبان کی ترجیحات اور دیگر ترتیبات کو محفوظ کرنے کے لیے مقامی اسٹوریج استعمال کرتی ہے۔ جاری رکھ کر، آپ ڈیٹا اسٹوریج سے اتفاق کرتے ہیں۔",
+      cookieAccept: "قبول کریں",
+      cookieDecline: "مسترد کریں",
     },
     de: {
       search: "Menü durchsuchen...",
@@ -676,7 +746,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Schließen",
       orderId: "Bestellnummer",
       cartCode: "Warenkorbcode",
-      poweredBy: "Bereitgestellt von",
+      poweredBy: "Unterstützt von",
+      cookieTitle: "Wir verwenden Cookies",
+      cookieMessage:
+        "Diese App verwendet lokalen Speicher, um Ihre Bestellungen, Spracheinstellungen und andere Einstellungen zu speichern, um die beste Erfahrung zu bieten. Indem Sie fortfahren, stimmen Sie der Datenspeicherung zu.",
+      cookieAccept: "Akzeptieren",
+      cookieDecline: "Ablehnen",
     },
     ja: {
       search: "メニューを検索...",
@@ -702,6 +777,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "注文ID",
       cartCode: "カートコード",
       poweredBy: "提供元",
+      cookieTitle: "Cookieを使用しています",
+      cookieMessage:
+        "このアプリは、最高のエクスペリエンスを提供するために、ご注文、言語設定、その他の設定を保存するためにローカルストレージを使用します。続行することで、データストレージに同意したことになります。",
+      cookieAccept: "同意する",
+      cookieDecline: "拒否する",
     },
     ko: {
       search: "메뉴 검색...",
@@ -726,7 +806,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "닫기",
       orderId: "주문 ID",
       cartCode: "장바구니 코드",
-      poweredBy: "제공",
+      poweredBy: "제공:",
+      cookieTitle: "쿠키를 사용합니다",
+      cookieMessage:
+        "이 앱은 최상의 경험을 제공하기 위해 주문, 언어 기본 설정 및 기타 설정을 저장하기 위해 로컬 저장소를 사용합니다. 계속하면 데이터 저장에 동의하는 것입니다.",
+      cookieAccept: "수락",
+      cookieDecline: "거부",
     },
     vi: {
       search: "Tìm kiếm menu...",
@@ -752,6 +837,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "Mã Đơn hàng",
       cartCode: "Mã Giỏ Hàng",
       poweredBy: "Được hỗ trợ bởi",
+      cookieTitle: "Chúng tôi sử dụng cookie",
+      cookieMessage:
+        "Ứng dụng này sử dụng bộ nhớ cục bộ để lưu đơn hàng, tùy chọn ngôn ngữ và các cài đặt khác của bạn để mang lại trải nghiệm tốt nhất. Bằng cách tiếp tục, bạn đồng ý với việc lưu trữ dữ liệu.",
+      cookieAccept: "Chấp nhận",
+      cookieDecline: "Từ chối",
     },
     it: {
       search: "Cerca nel menu...",
@@ -776,7 +866,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Chiudi",
       orderId: "ID Ordine",
       cartCode: "Codice Carrello",
-      poweredBy: "Realizzato da",
+      poweredBy: "Sviluppato da",
+      cookieTitle: "Utilizziamo i cookie",
+      cookieMessage:
+        "Questa app utilizza l'archiviazione locale per salvare i tuoi ordini, le preferenze linguistiche e altre impostazioni per fornire la migliore esperienza. Continuando, accetti l'archiviazione dei dati.",
+      cookieAccept: "Accetta",
+      cookieDecline: "Rifiuta",
     },
     pl: {
       search: "Szukaj w menu...",
@@ -802,6 +897,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "ID Zamówienia",
       cartCode: "Kod Koszyka",
       poweredBy: "Obsługiwane przez",
+      cookieTitle: "Używamy plików cookie",
+      cookieMessage:
+        "Ta aplikacja wykorzystuje lokalne przechowywanie do zapisywania zamówień, preferencji językowych i innych ustawień, aby zapewnić najlepsze doświadczenie. Kontynuując, zgadzasz się na przechowywanie danych.",
+      cookieAccept: "Akceptuj",
+      cookieDecline: "Odrzuć",
     },
     uk: {
       search: "Пошук в меню...",
@@ -826,7 +926,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Закрити",
       orderId: "ID замовлення",
       cartCode: "Код Кошика",
-      poweredBy: "Розроблено",
+      poweredBy: "Підтримується",
+      cookieTitle: "Ми використовуємо файли cookie",
+      cookieMessage:
+        "Цей додаток використовує локальне сховище для збереження ваших замовлень, мовних налаштувань та інших параметрів, щоб забезпечити найкращий досвід. Продовжуючи, ви погоджуєтесь із зберіганням даних.",
+      cookieAccept: "Прийняти",
+      cookieDecline: "Відхилити",
     },
     fa: {
       search: "جستجو در منو...",
@@ -851,7 +956,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "بستن",
       orderId: "شناسه سفارش",
       cartCode: "کد سبد خرید",
-      poweredBy: "قدرت گرفته از",
+      poweredBy: "پشتیبانی شده توسط",
+      cookieTitle: "ما از کوکی استفاده می‌کنیم",
+      cookieMessage:
+        "این برنامه از ذخیره‌سازی محلی برای ذخیره سفارشات، ترجیحات زبان و سایر تنظیمات شما استفاده می‌کند تا بهترین تجربه را ارائه دهد. با ادامه دادن، شما با ذخیره‌سازی داده موافقت می‌کنید.",
+      cookieAccept: "پذیرش",
+      cookieDecline: "رد کردن",
     },
     he: {
       search: "חיפוש בתפריט...",
@@ -877,6 +987,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "מזהה הזמנה",
       cartCode: "קוד עגלה",
       poweredBy: "מופעל על ידי",
+      cookieTitle: "אנחנו משתמשים בעוגיות",
+      cookieMessage:
+        "אפליקציה זו משתמשת באחסון מקומי כדי לשמור את ההזמנות, העדפות השפה והגדרות אחרות שלך כדי לספק את החוויה הטובה ביותר. על ידי המשך, אתה מסכים לאחסון נתונים.",
+      cookieAccept: "קבל",
+      cookieDecline: "דחה",
     },
     az: {
       search: "Menyuda axtar...",
@@ -902,6 +1017,11 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       orderId: "Sifariş ID",
       cartCode: "Səbət Kodu",
       poweredBy: "Tərəfindən dəstəklənir",
+      cookieTitle: "Biz kukilərdən istifadə edirik",
+      cookieMessage:
+        "Bu proqram ən yaxşı təcrübəni təmin etmək üçün sifarişlərinizi, dil seçimlərinizi və digər parametrlərinizi saxlamaq üçün yerli saxlancdan istifadə edir. Davam etməklə siz məlumatların saxlanmasına razı olursunuz.",
+      cookieAccept: "Qəbul et",
+      cookieDecline: "İmtina et",
     },
     kk: {
       search: "Мәзірден іздеу...",
@@ -926,7 +1046,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Жабу",
       orderId: "Тапсырыс ID",
       cartCode: "Себет коды",
-      poweredBy: "Қолдау көрсетеді",
+      poweredBy: "Қолдау көрсеткен",
+      cookieTitle: "Біз cookie файлдарын пайдаланамыз",
+      cookieMessage:
+        "Бұл қолданба ең жақсы тәжірибені қамтамасыз ету үшін тапсырыстарыңызды, тіл параметрлеріңізді және басқа параметрлерді сақтау үшін жергілікті сақтауды пайдаланады. Жалғастыра отырып, сіз деректерді сақтауға келісесіз.",
+      cookieAccept: "Қабылдау",
+      cookieDecline: "Бас тарту",
     },
     uz: {
       search: "Menyuda qidirish...",
@@ -951,7 +1076,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Yopish",
       orderId: "Buyurtma ID",
       cartCode: "Savat Kodi",
-      poweredBy: "Tomonidan quvvatlantirilgan",
+      poweredBy: "Tomonidan qo'llab-quvvatlanadi",
+      cookieTitle: "Biz cookie-lardan foydalanamiz",
+      cookieMessage:
+        "Ushbu ilova eng yaxshi tajribani taqdim etish uchun buyurtmalaringizni, til sozlamalaringizni va boshqa sozlamalaringizni saqlash uchun mahalliy saqlashdan foydalanadi. Davom etish orqali siz ma'lumotlarni saqlashga rozilik bildirasiz.",
+      cookieAccept: "Qabul qilish",
+      cookieDecline: "Rad etish",
     },
     ab: {
       search: "Аменiu аҧшаара...",
@@ -976,7 +1106,12 @@ export const uiTranslations: Partial<Record<Language, Record<string, string>>> =
       close: "Иарктәуп",
       orderId: "Азаказ ID",
       cartCode: "Акорзина акод",
-      poweredBy: "Иаԥҵоуп",
+      poweredBy: "Адгылара ауеит",
+      cookieTitle: "Ҳара cookie-қәа рыхаҭоит",
+      cookieMessage:
+        "Ари аҵшьыӡса ихадоу амчыбжьа ахьԥынхеит уҳәа уааҵхьагылараққәа, убызшәа ахархәараҵәеи нежәеи иакреи алшоит. Уҳасабеит уҳәеи, аинформациа ахьчара уркоеит.",
+      cookieAccept: "Излыршәара",
+      cookieDecline: "Изныӷәара",
     },
   };
 
