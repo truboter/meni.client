@@ -3,6 +3,7 @@ import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { TermsOfService } from "./pages/TermsOfService";
 import { DataManagement } from "./pages/DataManagement";
 import { type Language } from "./lib/translations";
+import * as consentManager from "./lib/consentManager";
 
 const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
 
@@ -12,7 +13,7 @@ interface LegalPageWrapperProps {
 
 export function LegalPageWrapper({ page }: LegalPageWrapperProps) {
   const [language] = useState<Language>(() => {
-    const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    const savedLanguage = consentManager.getItem(LANGUAGE_STORAGE_KEY);
     if (savedLanguage && savedLanguage.length === 2) {
       return savedLanguage as Language;
     }

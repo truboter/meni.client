@@ -53,7 +53,7 @@ export default function OrderView() {
   const { locationId: urlLocationId, lang: urlLang, orderId } = getParams();
 
   const [language, setLanguage] = useState<Language>(() => {
-    const savedLang = localStorage.getItem(ORDER_VIEW_LANGUAGE_STORAGE_KEY);
+    const savedLang = consentManager.getItem(ORDER_VIEW_LANGUAGE_STORAGE_KEY);
     if (savedLang && ["ka", "en", "ru"].includes(savedLang)) {
       return savedLang as Language;
     }
@@ -121,7 +121,7 @@ export default function OrderView() {
 
   // Save language preference
   useEffect(() => {
-    localStorage.setItem(ORDER_VIEW_LANGUAGE_STORAGE_KEY, language);
+    consentManager.setItem(ORDER_VIEW_LANGUAGE_STORAGE_KEY, language);
   }, [language]);
 
   const handleLanguageChange = (newLang: Language) => {

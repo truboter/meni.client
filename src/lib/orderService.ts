@@ -1,4 +1,5 @@
 import type { CartItem } from "./types";
+import * as consentManager from "./consentManager";
 
 // Simplified order item for S3 storage (only IDs and selections)
 export interface OrderItemCompact {
@@ -33,7 +34,7 @@ const ORDER_PATH_STORAGE_KEY = "meni_order_path_";
  */
 function getOrderLocationPath(orderId: string): string {
   // Try to get saved path first
-  const savedPath = localStorage.getItem(`${ORDER_PATH_STORAGE_KEY}${orderId}`);
+  const savedPath = consentManager.getItem(`${ORDER_PATH_STORAGE_KEY}${orderId}`);
   if (savedPath) {
     return savedPath;
   }
@@ -42,7 +43,7 @@ function getOrderLocationPath(orderId: string): string {
   const locationPath = encodeLocationPath();
 
   // Save it for future use
-  localStorage.setItem(`${ORDER_PATH_STORAGE_KEY}${orderId}`, locationPath);
+  consentManager.setItem(`${ORDER_PATH_STORAGE_KEY}${orderId}`, locationPath);
 
   return locationPath;
 }
@@ -113,7 +114,7 @@ export async function saveOrder(
 
   // Always save full order to localStorage first
   try {
-    localStorage.setItem(`meni_order_${orderId}`, JSON.stringify(order));
+    consentManager.setItem(`meni_order_${orderId}`, JSON.stringify(order));
     console.log("Order saved to localStorage");
   } catch (error) {
     console.error("Error saving to localStorage:", error);
@@ -159,7 +160,7 @@ export async function saveOrder(
 export async function loadOrder(orderId: string): Promise<Order | null> {
   // Try localStorage first
   try {
-    const localData = localStorage.getItem(`meni_order_${orderId}`);
+    const localData = consentManager.getItem(`meni_order_${orderId}`);
     if (localData) {
       const order = JSON.parse(localData) as Order;
       console.log("Order loaded from localStorage:", order);
@@ -178,7 +179,7 @@ export async function loadOrder(orderId: string): Promise<Order | null> {
       const order = (await response.json()) as Order;
       console.log("Order loaded from S3:", order);
       // Save to localStorage for faster future access
-      localStorage.setItem(`meni_order_${orderId}`, JSON.stringify(order));
+      consentManager.setItem(`meni_order_${orderId}`, JSON.stringify(order));
       return order;
     }
   } catch (error) {
