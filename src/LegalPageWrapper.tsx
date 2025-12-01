@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 import { TermsOfService } from "./pages/TermsOfService";
 import { DataManagement } from "./pages/DataManagement";
@@ -11,17 +11,13 @@ interface LegalPageWrapperProps {
 }
 
 export function LegalPageWrapper({ page }: LegalPageWrapperProps) {
-  const [language, setLanguage] = useState<Language>(() => {
+  const [language] = useState<Language>(() => {
     const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
     if (savedLanguage && savedLanguage.length === 2) {
       return savedLanguage as Language;
     }
     return "ka";
   });
-
-  useEffect(() => {
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
-  }, [language]);
 
   switch (page) {
     case "privacy":

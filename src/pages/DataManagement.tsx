@@ -93,7 +93,7 @@ export function DataManagement({ language }: DataManagementProps) {
     },
   };
 
-  const t = content[language] || content.en;
+  const t = (content as Record<string, typeof content.en>)[language] || content.en;
 
   // Get all localStorage data
   const getLocalStorageData = () => {

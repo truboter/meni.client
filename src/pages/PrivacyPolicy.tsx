@@ -233,7 +233,7 @@ Email: privacy@meni.ge
   };
 
   const { title, lastUpdated, sections } =
-    content[language] || content.en;
+    (content as Record<string, typeof content.en>)[language] || content.en;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -257,7 +257,7 @@ Email: privacy@meni.ge
       {/* Content */}
       <main className="max-w-3xl mx-auto px-4 py-6 pb-20">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-          {sections.map((section, index) => (
+          {sections.map((section: { title: string; content: string }, index: number) => (
             <div
               key={index}
               className={`p-6 ${
