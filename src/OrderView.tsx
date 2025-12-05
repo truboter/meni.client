@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { LanguageSelector } from "./components/LanguageSelector";
+import { MarkdownViewer } from "./components/MarkdownViewer";
+import { DataManagement } from "./pages/DataManagement";
 import { type Language, getUITranslation } from "./lib/translations";
 import { type Currency } from "./lib/currency";
 import { Toaster } from "./components/ui/sonner";
@@ -65,6 +67,9 @@ export default function OrderView() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false);
+  const [termsDialogOpen, setTermsDialogOpen] = useState(false);
+  const [dataDialogOpen, setDataDialogOpen] = useState(false);
 
   // Helper function for price conversion
   const convertPrice = (price: number) => price;
@@ -252,8 +257,8 @@ export default function OrderView() {
           <div className="max-w-4xl mx-auto">
             {/* Legal Links */}
             <div className="flex flex-wrap justify-center gap-3 mb-4 text-sm">
-              <a
-                href="/privacy"
+              <button
+                onClick={() => setPrivacyDialogOpen(true)}
                 className="text-gray-600 hover:text-gray-900 transition-colors"
               >
                 {language === "ka" && "კონფიდენციალურობა"}
@@ -261,10 +266,10 @@ export default function OrderView() {
                 {language === "en" && "Privacy"}
                 {!(["ka", "ru", "en"] as string[]).includes(language) &&
                   "Privacy"}
-              </a>
+              </button>
               <span className="text-gray-400">•</span>
-              <a
-                href="/terms"
+              <button
+                onClick={() => setTermsDialogOpen(true)}
                 className="text-gray-600 hover:text-gray-900 transition-colors"
               >
                 {language === "ka" && "პირობები"}
@@ -272,10 +277,10 @@ export default function OrderView() {
                 {language === "en" && "Terms"}
                 {!(["ka", "ru", "en"] as string[]).includes(language) &&
                   "Terms"}
-              </a>
+              </button>
               <span className="text-gray-400">•</span>
-              <a
-                href="/data"
+              <button
+                onClick={() => setDataDialogOpen(true)}
                 className="text-gray-600 hover:text-gray-900 transition-colors"
               >
                 {language === "ka" && "ჩემი მონაცემები"}
@@ -283,7 +288,7 @@ export default function OrderView() {
                 {language === "en" && "My Data"}
                 {!(["ka", "ru", "en"] as string[]).includes(language) &&
                   "My Data"}
-              </a>
+              </button>
             </div>
             {/* Powered By */}
             <div className="text-center">
@@ -302,6 +307,31 @@ export default function OrderView() {
           </div>
         </footer>
       </div>
+
+      {/* Privacy Policy Dialog */}
+      <MarkdownViewer
+        isOpen={privacyDialogOpen}
+        onClose={() => setPrivacyDialogOpen(false)}
+        type="privacy"
+        language={language}
+      />
+
+      {/* Terms of Service Dialog */}
+      <MarkdownViewer
+        isOpen={termsDialogOpen}
+        onClose={() => setTermsDialogOpen(false)}
+        type="terms"
+        language={language}
+      />
+
+      {/* Data Management Dialog */}
+      {dataDialogOpen && (
+        <DataManagement
+          isOpen={dataDialogOpen}
+          onClose={() => setDataDialogOpen(false)}
+          language={language}
+        />
+      )}
 
       <Toaster position="top-center" />
     </div>

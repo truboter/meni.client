@@ -40,7 +40,12 @@ export function LegalPageWrapper({ page }: LegalPageWrapperProps) {
     case "terms":
       return <TermsOfService language={language} />;
     case "data":
-      return <DataManagement language={language} onClose={() => window.history.back()} />;
+      return (
+        <DataManagement
+          language={language}
+          onClose={() => window.history.back()}
+        />
+      );
     default:
       return null;
   }

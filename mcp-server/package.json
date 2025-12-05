@@ -1,0 +1,22 @@
+{
+  "name": "@meni/chatgpt-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for ChatGPT-5.1 access",
+  "type": "module",
+  "main": "dist/chatgpt-server.js",
+  "bin": {
+    "chatgpt-server": "./dist/chatgpt-server.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "openai": "^4.76.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  }
+}

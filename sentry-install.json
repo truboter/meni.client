@@ -1,0 +1,13 @@
+{
+  "sentry-dependencies": {
+    "@sentry/react": "^7.119.0",
+    "@sentry/vite-plugin": "^2.22.6"
+  },
+  "installation-instructions": {
+    "step1": "Run in Windows PowerShell/CMD (not WSL): npm install --save @sentry/react @sentry/vite-plugin",
+    "step2": "Follow docs/SENTRY_SETUP.md for complete setup guide",
+    "step3": "Create Sentry account at https://sentry.io",
+    "step4": "Add VITE_SENTRY_DSN to .env.local",
+    "step5": "Initialize Sentry in src/main.tsx as shown in docs"
+  }
+}

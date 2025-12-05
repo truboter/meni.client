@@ -8,10 +8,15 @@
     "dev:7003": "vite --port 7003",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "translate-privacy": "tsx scripts/translate-privacy.ts",
+    "list-gpt-models": "tsx scripts/list-gpt-models.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.943.0",
     "@github/spark": "latest",
+    "@sentry/react": "^7.119.0",
+    "@sentry/vite-plugin": "^2.22.6",
     "@phosphor-icons/react": "^2.1.7",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.2",
@@ -36,6 +41,7 @@
     "date-fns": "^4.1.0",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.552.0",
+    "openai": "^6.10.0",
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-day-picker": "^8.10.1",
