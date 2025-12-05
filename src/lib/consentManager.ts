@@ -88,11 +88,10 @@ export const setConsentStatus = (status: ConsentStatus): void => {
       // Migrate memory storage to localStorage
       migrateMemoryToLocalStorage();
     } else if (status === "declined") {
-      // Save to memory only, clear localStorage
+      // Save to memory only FIRST to ensure getStorage() returns memory
       inMemoryConsent = "declined";
+      // Then migrate and clear localStorage
       migrateLocalStorageToMemory();
-      // Remove consent from localStorage
-      localStorage.removeItem(CONSENT_STORAGE_KEY);
     }
   } catch (error) {
     console.error("Failed to save consent status:", error);
@@ -147,9 +146,16 @@ const migrateLocalStorageToMemory = (): void => {
         }
       }
     }
-    
+
     // Clear localStorage completely (including consent)
     localStorage.clear();
+
+    // Double-check: ensure localStorage is actually empty
+    // (in case something tried to write during clear)
+    if (localStorage.length > 0) {
+      console.warn("⚠️ localStorage not empty after clear, clearing again...");
+      localStorage.clear();
+    }
   } catch (error) {
     console.error("Failed to migrate to memory storage:", error);
   }
@@ -171,7 +177,24 @@ export const getItem = (key: string): string | null => {
  * Universal storage setter - works regardless of consent
  */
 export const setItem = (key: string, value: string): boolean => {
+  const consent = getConsentStatus();
   const storage = getStorage();
+
+  // STRICT: Never allow localStorage writes when consent is declined
+  if (consent === "declined" && storage === localStorage) {
+    console.error(
+      `🚫 GDPR VIOLATION PREVENTED: Attempted localStorage write with declined consent`,
+      {
+        key,
+        consent,
+        stackTrace: new Error().stack,
+      }
+    );
+    // Force use memory storage instead
+    memoryStorage.setItem(key, value);
+    return true;
+  }
+
   try {
     storage.setItem(key, value);
     return true;
@@ -200,7 +223,7 @@ export const removeItem = (key: string): boolean => {
 export const clearAllData = (): void => {
   try {
     const consentStatus = getConsentStatus();
-    
+
     if (consentStatus === "accepted") {
       // Clear localStorage but keep consent
       const consentValue = localStorage.getItem(CONSENT_STORAGE_KEY);
@@ -222,7 +245,7 @@ export const clearAllData = (): void => {
  */
 export const getAllData = (): Record<string, string> => {
   const data: Record<string, string> = {};
-  
+
   if (hasConsent()) {
     try {
       for (let i = 0; i < localStorage.length; i++) {
@@ -240,7 +263,7 @@ export const getAllData = (): Record<string, string> => {
   } else {
     return memoryStorage.getAllData();
   }
-  
+
   return data;
 };
 

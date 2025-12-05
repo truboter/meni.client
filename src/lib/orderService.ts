@@ -11,6 +11,7 @@ export interface OrderItemCompact {
 // Full order with cart items (for localStorage)
 export interface Order {
   orderId: string;
+  userId?: string;
   items: CartItem[];
   createdAt: string;
   updatedAt: string;
@@ -19,6 +20,7 @@ export interface Order {
 // Compact order for S3 (minimal data)
 export interface OrderCompact {
   orderId: string;
+  userId?: string;
   items: OrderItemCompact[];
   createdAt: string;
   updatedAt: string;
@@ -34,7 +36,9 @@ const ORDER_PATH_STORAGE_KEY = "meni_order_path_";
  */
 function getOrderLocationPath(orderId: string): string {
   // Try to get saved path first
-  const savedPath = consentManager.getItem(`${ORDER_PATH_STORAGE_KEY}${orderId}`);
+  const savedPath = consentManager.getItem(
+    `${ORDER_PATH_STORAGE_KEY}${orderId}`
+  );
   if (savedPath) {
     return savedPath;
   }
@@ -103,10 +107,12 @@ function toCompactItem(cartItem: CartItem): OrderItemCompact {
  */
 export async function saveOrder(
   orderId: string,
-  items: CartItem[]
+  items: CartItem[],
+  userId?: string
 ): Promise<void> {
   const order: Order = {
     orderId,
+    userId,
     items,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -123,6 +129,7 @@ export async function saveOrder(
   // Create compact version for S3
   const compactOrder: OrderCompact = {
     orderId,
+    userId,
     items: items.map(toCompactItem),
     createdAt: order.createdAt,
     updatedAt: order.updatedAt,
@@ -227,6 +234,29 @@ export async function checkOrderUpdate(
   }
 
   return null;
+}
+
+/**
+ * Delete order from S3
+ */
+export async function deleteOrder(orderId: string): Promise<boolean> {
+  try {
+    const orderPath = getOrderPath(orderId);
+    const response = await fetch(`${S3_BUCKET_URL}/${orderPath}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok || response.status === 204 || response.status === 404) {
+      console.log("Order deleted successfully:", orderPath);
+      return true;
+    } else {
+      console.warn(`Failed to delete order (${response.status})`);
+      return false;
+    }
+  } catch (error) {
+    console.error("Error deleting order:", error);
+    return false;
+  }
 }
 
 /**

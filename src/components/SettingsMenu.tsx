@@ -153,8 +153,8 @@ export function SettingsMenu({
   };
 
   const handleLanguageOpenChange = (open: boolean) => {
-    setIsLanguageOpen(open);
     if (open) {
+      // Close other menus when opening this one
       setIsCurrencyOpen(false);
       setIsGridOpen(false);
       // Make button fully opaque when opened
@@ -162,22 +162,25 @@ export function SettingsMenu({
         setLanguageButtonState("visible");
       }
     }
+    setIsLanguageOpen(open);
   };
 
   const handleCurrencyOpenChange = (open: boolean) => {
-    setIsCurrencyOpen(open);
     if (open) {
+      // Close other menus when opening this one
       setIsLanguageOpen(false);
       setIsGridOpen(false);
     }
+    setIsCurrencyOpen(open);
   };
 
   const handleGridOpenChange = (open: boolean) => {
-    setIsGridOpen(open);
     if (open) {
+      // Close other menus when opening this one
       setIsLanguageOpen(false);
       setIsCurrencyOpen(false);
     }
+    setIsGridOpen(open);
   };
 
   const handleCurrencyChange = (curr: Currency) => {

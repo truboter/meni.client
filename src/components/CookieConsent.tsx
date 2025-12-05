@@ -3,10 +3,7 @@ import { Button } from "@/components/ui/button";
 import { X } from "@phosphor-icons/react";
 import { type Language, getUITranslation } from "@/lib/translations";
 import { LanguageSelector } from "./LanguageSelector";
-import {
-  setConsentStatus,
-  getConsentStatus,
-} from "@/lib/consentManager";
+import { setConsentStatus, getConsentStatus } from "@/lib/consentManager";
 
 interface CookieConsentProps {
   language: Language;

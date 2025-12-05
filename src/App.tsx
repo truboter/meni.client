@@ -6,6 +6,7 @@ import { MenuGrid } from "./components/MenuGrid";
 import { CartBar } from "./components/CartBar";
 import { MenuItemDialog } from "./components/MenuItemDialog";
 import { FlyToCartAnimation } from "./components/FlyToCartAnimation";
+import { LegalDialog } from "./components/LegalDialog";
 import { restaurantData, venueInfo } from "./lib/data";
 import { type Language, getUITranslation } from "./lib/translations";
 import { type Currency } from "./lib/currency";
@@ -18,19 +19,35 @@ import {
   convertLocationDataToMenuItems,
   extractCategories,
 } from "./lib/locationService";
-import { saveOrder, loadOrder } from "./lib/orderService";
 import * as consentManager from "./lib/consentManager";
+import { saveOrder, loadOrder } from "./lib/orderService";
+import { getPrivacyPolicyContent } from "./lib/privacyPolicyContent";
+import { getTermsContent } from "./lib/legalContent";
+import { DataManagement } from "./pages/DataManagement";
 import "./index.css";
 
 const LANGUAGE_STORAGE_KEY = "meni_preferred_language";
 const GRID_COLUMNS_STORAGE_KEY = "meni_grid_columns";
 const ORDER_ID_STORAGE_KEY = "meni_order_id";
+const USER_ID_STORAGE_KEY = "meni_user_id";
 
-// Generate a unique order ID
-const generateOrderId = (): string => {
+// Generate a unique ID (for both order and user)
+const generateUniqueId = (): string => {
   const timestamp = Date.now().toString(36);
   const randomPart = Math.random().toString(36).substring(2, 15);
   return `${timestamp}-${randomPart}`;
+};
+
+// Get or create user ID - persists across sessions
+const getUserId = (): string => {
+  const existingUserId = consentManager.getItem(USER_ID_STORAGE_KEY);
+  if (existingUserId) {
+    return existingUserId;
+  }
+
+  const newUserId = generateUniqueId();
+  consentManager.setItem(USER_ID_STORAGE_KEY, newUserId);
+  return newUserId;
 };
 
 // Get or create order ID - works with both localStorage and memory storage
@@ -40,7 +57,7 @@ const getOrderId = (): string => {
     return existingOrderId;
   }
 
-  const newOrderId = generateOrderId();
+  const newOrderId = generateUniqueId();
   consentManager.setItem(ORDER_ID_STORAGE_KEY, newOrderId);
   return newOrderId;
 };
@@ -123,7 +140,8 @@ export default function App() {
   const locationId = getLocationId();
   const initialLanguage = getInitialLanguage();
 
-  const [orderId] = useState<string>(() => getOrderId());
+  const [userId] = useState<string>(() => getUserId());
+  const [orderId, setOrderId] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const [currency, setCurrency] = useState<Currency>("GEL");
@@ -139,6 +157,11 @@ export default function App() {
     element: HTMLElement;
     imageUrl: string;
   } | null>(null);
+
+  // Legal dialogs state
+  const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false);
+  const [termsDialogOpen, setTermsDialogOpen] = useState(false);
+  const [dataDialogOpen, setDataDialogOpen] = useState(false);
 
   // State for location data
   const [locationData, setLocationData] = useState<LocationData | null>(null);
@@ -160,6 +183,8 @@ export default function App() {
 
   // Initialize order ID on app load and restore cart
   useEffect(() => {
+    if (!orderId) return; // Skip if no orderId yet
+
     console.log("Order ID:", orderId);
 
     // Load saved order from S3/localStorage
@@ -181,12 +206,12 @@ export default function App() {
 
   // Save cart to S3 when it changes
   useEffect(() => {
-    if (cart.length > 0) {
-      saveOrder(orderId, cart).catch((error) => {
+    if (cart.length > 0 && orderId) {
+      saveOrder(orderId, cart, userId).catch((error) => {
         console.error("Failed to save order to S3:", error);
       });
     }
-  }, [cart, orderId]);
+  }, [cart, orderId, userId]);
 
   // Update URL when language changes
   useEffect(() => {
@@ -253,6 +278,11 @@ export default function App() {
     quantity: number,
     selectedModifiers: Record<string, string[]>
   ) => {
+    // Generate orderID only when adding first item to empty cart
+    if (cart.length === 0 && !orderId) {
+      setOrderId(getOrderId());
+    }
+
     let totalPrice = item.price * quantity;
 
     // Calculate modifier prices
@@ -312,6 +342,11 @@ export default function App() {
   };
 
   const handleQuickAdd = (item: MenuItem) => {
+    // Generate orderID only when adding first item to empty cart
+    if (cart.length === 0 && !orderId) {
+      setOrderId(getOrderId());
+    }
+
     const totalPrice = item.price;
 
     setCart((currentCart) => {
@@ -510,7 +545,7 @@ export default function App() {
         language={language}
         currency={currency}
         convertPrices={convertPrices}
-        orderId={orderId}
+        orderId={orderId || ""}
         menuItems={menuItems}
       />
 
@@ -538,8 +573,8 @@ export default function App() {
         <div className="max-w-4xl mx-auto">
           {/* Legal Links */}
           <div className="flex flex-wrap justify-center gap-3 mb-4 text-sm">
-            <a
-              href="/privacy"
+            <button
+              onClick={() => setPrivacyDialogOpen(true)}
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
               {language === "ka" && "კონფიდენციალურობა"}
@@ -547,20 +582,20 @@ export default function App() {
               {language === "en" && "Privacy"}
               {!(["ka", "ru", "en"] as string[]).includes(language) &&
                 "Privacy"}
-            </a>
+            </button>
             <span className="text-gray-400">•</span>
-            <a
-              href="/terms"
+            <button
+              onClick={() => setTermsDialogOpen(true)}
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
               {language === "ka" && "პირობები"}
               {language === "ru" && "Условия"}
               {language === "en" && "Terms"}
               {!(["ka", "ru", "en"] as string[]).includes(language) && "Terms"}
-            </a>
+            </button>
             <span className="text-gray-400">•</span>
-            <a
-              href="/data"
+            <button
+              onClick={() => setDataDialogOpen(true)}
               className="text-gray-600 hover:text-gray-900 transition-colors"
             >
               {language === "ka" && "ჩემი მონაცემები"}
@@ -568,7 +603,7 @@ export default function App() {
               {language === "en" && "My Data"}
               {!(["ka", "ru", "en"] as string[]).includes(language) &&
                 "My Data"}
-            </a>
+            </button>
           </div>
           {/* Powered By */}
           <div className="text-center">
@@ -589,6 +624,41 @@ export default function App() {
 
       {/* Cookie Consent Banner */}
       <CookieConsent language={language} onLanguageChange={setLanguage} />
+
+      {/* Legal Dialogs */}
+      <LegalDialog
+        isOpen={privacyDialogOpen}
+        onClose={() => setPrivacyDialogOpen(false)}
+        language={language}
+        onLanguageChange={setLanguage}
+        title={getPrivacyPolicyContent(language)?.title || "Privacy Policy"}
+        lastUpdated={getPrivacyPolicyContent(language)?.lastUpdated || ""}
+        intro={getPrivacyPolicyContent(language)?.intro}
+        sections={getPrivacyPolicyContent(language)?.sections || []}
+      />
+
+      <LegalDialog
+        isOpen={termsDialogOpen}
+        onClose={() => setTermsDialogOpen(false)}
+        language={language}
+        onLanguageChange={setLanguage}
+        title={getTermsContent(language).title}
+        lastUpdated={getTermsContent(language).lastUpdated}
+        sections={getTermsContent(language).sections.map((section) => ({
+          title: section.title,
+          paragraphs: [{ id: section.title, content: section.content }],
+        }))}
+      />
+
+      {/* Data Management Dialog - Full Screen */}
+      {dataDialogOpen && (
+        <div className="fixed inset-0 z-50 bg-white">
+          <DataManagement
+            language={language}
+            onClose={() => setDataDialogOpen(false)}
+          />
+        </div>
+      )}
     </div>
   );
 }

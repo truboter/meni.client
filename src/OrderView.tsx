@@ -6,6 +6,7 @@ import { type Currency } from "./lib/currency";
 import { Toaster } from "./components/ui/sonner";
 import type { CartItem, MenuItem } from "./lib/types";
 import { loadOrder } from "./lib/orderService";
+import * as consentManager from "./lib/consentManager";
 import {
   fetchLocationData,
   convertLocationDataToMenuItems,
