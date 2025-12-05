@@ -6,7 +6,7 @@ import { MenuGrid } from "./components/MenuGrid";
 import { CartBar } from "./components/CartBar";
 import { MenuItemDialog } from "./components/MenuItemDialog";
 import { FlyToCartAnimation } from "./components/FlyToCartAnimation";
-import { LegalDialog } from "./components/LegalDialog";
+import { MarkdownViewer } from "./components/MarkdownViewer";
 import { restaurantData, venueInfo } from "./lib/data";
 import { type Language, getUITranslation } from "./lib/translations";
 import { type Currency } from "./lib/currency";
@@ -21,8 +21,6 @@ import {
 } from "./lib/locationService";
 import * as consentManager from "./lib/consentManager";
 import { saveOrder, loadOrder } from "./lib/orderService";
-import { getPrivacyPolicyContent } from "./lib/privacyPolicyContent";
-import { getTermsContent } from "./lib/legalContent";
 import { DataManagement } from "./pages/DataManagement";
 import "./index.css";
 
@@ -626,28 +624,20 @@ export default function App() {
       <CookieConsent language={language} onLanguageChange={setLanguage} />
 
       {/* Legal Dialogs */}
-      <LegalDialog
+      <MarkdownViewer
         isOpen={privacyDialogOpen}
         onClose={() => setPrivacyDialogOpen(false)}
         language={language}
         onLanguageChange={setLanguage}
-        title={getPrivacyPolicyContent(language)?.title || "Privacy Policy"}
-        lastUpdated={getPrivacyPolicyContent(language)?.lastUpdated || ""}
-        intro={getPrivacyPolicyContent(language)?.intro}
-        sections={getPrivacyPolicyContent(language)?.sections || []}
+        documentType="privacy"
       />
 
-      <LegalDialog
+      <MarkdownViewer
         isOpen={termsDialogOpen}
         onClose={() => setTermsDialogOpen(false)}
         language={language}
         onLanguageChange={setLanguage}
-        title={getTermsContent(language).title}
-        lastUpdated={getTermsContent(language).lastUpdated}
-        sections={getTermsContent(language).sections.map((section) => ({
-          title: section.title,
-          paragraphs: [{ id: section.title, content: section.content }],
-        }))}
+        documentType="terms"
       />
 
       {/* Data Management Dialog - Full Screen */}
