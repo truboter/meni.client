@@ -14,6 +14,7 @@
 ## Требования
 
 1. OpenAI API ключ в `.env.local`:
+
    ```env
    VITE_OPENAI_API_KEY=sk-your-key-here
    ```
@@ -38,37 +39,40 @@ npm run translate-privacy -- --target ru
 ### Примеры
 
 **Перевод на русский:**
+
 ```bash
 npm run translate-privacy -- --target ru
 ```
 
 **Перевод на грузинский:**
+
 ```bash
 npm run translate-privacy -- --target ka
 ```
 
 **Перевод на немецкий без кеша:**
+
 ```bash
 npm run translate-privacy -- --target de --no-cache
 ```
 
 ## Поддерживаемые языки
 
-| Код | Язык | Код | Язык |
-|-----|------|-----|------|
-| ru  | Russian | de  | German |
-| ka  | Georgian | fr  | French |
-| it  | Italian | tr  | Turkish |
-| he  | Hebrew | es  | Spanish |
-| ar  | Arabic | zh  | Chinese |
-| hi  | Hindi | bn  | Bengali |
-| pt  | Portuguese | id  | Indonesian |
-| ur  | Urdu | ja  | Japanese |
-| ko  | Korean | vi  | Vietnamese |
-| pl  | Polish | uk  | Ukrainian |
-| fa  | Persian | hy  | Armenian |
-| az  | Azerbaijani | kk  | Kazakh |
-| uz  | Uzbek | ab  | Abkhazian |
+| Код | Язык        | Код | Язык       |
+| --- | ----------- | --- | ---------- |
+| ru  | Russian     | de  | German     |
+| ka  | Georgian    | fr  | French     |
+| it  | Italian     | tr  | Turkish    |
+| he  | Hebrew      | es  | Spanish    |
+| ar  | Arabic      | zh  | Chinese    |
+| hi  | Hindi       | bn  | Bengali    |
+| pt  | Portuguese  | id  | Indonesian |
+| ur  | Urdu        | ja  | Japanese   |
+| ko  | Korean      | vi  | Vietnamese |
+| pl  | Polish      | uk  | Ukrainian  |
+| fa  | Persian     | hy  | Armenian   |
+| az  | Azerbaijani | kk  | Kazakh     |
+| uz  | Uzbek       | ab  | Abkhazian  |
 
 ## Как работает
 
@@ -79,6 +83,7 @@ npm run translate-privacy -- --target de --no-cache
 3. **Перевод**: Если кеша нет - отправляется запрос в GPT-4o с специализированным промптом
 
 4. **Сохранение**: Переведенный блок сохраняется в S3 с ключом:
+
    ```
    legal/translations/{lang}/{hash}.md
    ```
@@ -128,6 +133,7 @@ legal/
 ## Troubleshooting
 
 ### Ошибка "API key not found"
+
 ```bash
 # Проверьте .env.local:
 cat .env.local
@@ -137,6 +143,7 @@ VITE_OPENAI_API_KEY=sk-...
 ```
 
 ### Ошибка доступа к S3
+
 ```bash
 # Проверьте AWS credentials:
 aws sts get-caller-identity
@@ -146,6 +153,7 @@ aws s3 ls s3://cdn.meni/legal/
 ```
 
 ### Медленный перевод
+
 - Нормально: ~1-2 секунды на абзац
 - С кешом: мгновенно
 - Используйте `--no-cache` только при необходимости
@@ -155,7 +163,7 @@ aws s3 ls s3://cdn.meni/legal/
 При изменении английской версии:
 
 1. Измененные абзацы получат новый хеш
-2. Новые хеши не найдутся в кеше  
+2. Новые хеши не найдутся в кеше
 3. Только они будут переведены заново
 4. Остальные возьмутся из кеша
 

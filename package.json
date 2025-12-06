@@ -7,9 +7,11 @@
     "dev": "vite",
     "dev:7003": "vite --port 7003",
     "build": "tsc && vite build",
+    "prebuild:legal": "tsx scripts/prebuild-legal.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "translate-privacy": "tsx scripts/translate-privacy.ts",
+    "translate-legal": "tsx scripts/translate-legal.ts",
     "list-gpt-models": "tsx scripts/list-gpt-models.ts"
   },
   "dependencies": {
