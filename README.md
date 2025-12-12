@@ -83,21 +83,36 @@ The JSON format should follow this structure:
 }
 ```
 
-### Auto-start Development Server
+### Auto-start Development Environment
 
-The project is configured to automatically start the development server when you open the workspace in VS Code:
+The project is configured to automatically start both the development server and Amplify Sandbox when you open the workspace in VS Code:
 
 1. Open the project folder in VS Code
 2. When prompted "Allow Automatic Tasks in Folder?", click **Allow**
-3. The dev server will start automatically on port 7003
+3. Two tasks will start automatically:
+   - **Frontend Dev Server** on port 7003 (Vite)
+   - **Amplify Sandbox** - syncs with **existing production AWS resources** (Cognito, S3, etc.)
 
-To disable auto-start, go to VS Code settings and set `task.allowAutomaticTasks` to `off`.
+**Important:** The Amplify Sandbox connects to existing production resources and does NOT create new AWS resources. All changes are applied to the production Cognito User Pool (`eu-central-1_g0X3qmr0t`) and S3 bucket.
+
+The tasks will appear in separate terminal tabs. You can view them by opening the Terminal panel (`Ctrl+\``).
+
+To disable auto-start, go to `.vscode/settings.json` and set `task.allowAutomaticTasks` to `off`.
+
+For more details, see [`docs/VSCODE_AUTOSTART.md`](docs/VSCODE_AUTOSTART.md).
 
 ## Features
 
-- **Authentication**: Setup with Amazon Cognito for secure user authentication.
-- **API**: Ready-to-use GraphQL endpoint with AWS AppSync.
-- **Database**: Real-time database powered by Amazon DynamoDB.
+- **Authentication**: Full integration with Amazon Cognito for secure user authentication
+  - Email/Password registration and login
+  - Social providers support (Google, Facebook, Amazon)
+  - User profile management
+  - Multi-language support (Georgian, English, Russian)
+  - See [`docs/TESTING_AUTH.md`](docs/TESTING_AUTH.md) for testing guide
+- **API**: Ready-to-use GraphQL endpoint with AWS AppSync
+- **Database**: Real-time database powered by Amazon DynamoDB
+- **CDN Integration**: Dynamic menu loading from AWS S3/CloudFront
+- **Multi-language**: Support for 27+ languages with easy switching
 
 ## Deploying to AWS
 

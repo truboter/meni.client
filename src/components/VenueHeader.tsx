@@ -3,6 +3,12 @@ import type { Language } from "@/lib/translations";
 import type { Currency } from "@/lib/currency";
 import { SettingsMenu } from "@/components/SettingsMenu";
 import type { GridColumns } from "@/components/GridViewToggle";
+import { User } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
+import { AuthDialog } from "@/components/AuthDialog";
+import { UserProfileDialog } from "@/components/UserProfileDialog";
+import { useState, useEffect } from "react";
+import { getCurrentUser } from "aws-amplify/auth";
 
 interface VenueHeaderProps {
   venue?: VenueInfo;
@@ -31,6 +37,40 @@ export function VenueHeader({
   onConvertPricesChange,
   hideSettings = false,
 }: VenueHeaderProps) {
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+  const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check authentication status on mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    try {
+      await getCurrentUser();
+      setIsAuthenticated(true);
+    } catch {
+      setIsAuthenticated(false);
+    }
+  };
+
+  const handleProfileClick = async () => {
+    try {
+      await getCurrentUser();
+      // User is authenticated, show profile dialog
+      setIsProfileDialogOpen(true);
+    } catch {
+      // User is not authenticated, show auth dialog
+      setIsAuthDialogOpen(true);
+    }
+  };
+
+  const handleSignOut = () => {
+    setIsAuthenticated(false);
+    setIsProfileDialogOpen(false);
+  };
+
   if (!venue) {
     return null;
   }
@@ -60,6 +100,21 @@ export function VenueHeader({
             />
           </div>
         )}
+
+        {/* User Profile Button in top-right */}
+        {!hideSettings && (
+          <div className="absolute top-4 right-4 md:top-6 md:right-6 z-40">
+            <Button
+              variant="secondary"
+              size="icon"
+              className="rounded-full bg-white hover:bg-white/90 shadow-lg border-2 border-neutral-200"
+              onClick={handleProfileClick}
+            >
+              <User size={24} weight="bold" className="text-neutral-800" />
+            </Button>
+          </div>
+        )}
+
         {/* Logo positioned at bottom */}
         <div className="absolute bottom-0 left-4 md:left-6">
           <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white shrink-0 -mb-14 md:-mb-18 relative z-20">
@@ -87,6 +142,27 @@ export function VenueHeader({
           )}
         </div>
       </div>
+
+      {/* Auth Dialog */}
+      <AuthDialog
+        open={isAuthDialogOpen}
+        onOpenChange={(open) => {
+          setIsAuthDialogOpen(open);
+          if (!open) {
+            // Check auth status after dialog closes in case user signed in
+            checkAuthStatus();
+          }
+        }}
+        language={currentLanguage}
+      />
+
+      {/* User Profile Dialog */}
+      <UserProfileDialog
+        open={isProfileDialogOpen}
+        onOpenChange={setIsProfileDialogOpen}
+        language={currentLanguage}
+        onSignOut={handleSignOut}
+      />
     </div>
   );
 }

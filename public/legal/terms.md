@@ -76,6 +76,26 @@ We may update these Terms from time to time. When we make material changes:
 
 If you do not agree to the updated Terms, you must stop using the Service.
 
+#### 2.2.1 Right to object to changes
+
+When we notify you of changes to these Terms, you have **6 weeks** from the date of notification to object to the changes.
+
+If you object within this period:
+
+- The changes will not apply to your use of the Service
+- Either party (you or we) may terminate the Service relationship with reasonable notice
+- If we do not terminate, the previous Terms will continue to apply to you
+
+If you do not object within 6 weeks, the changes will be deemed accepted and will apply to your continued use of the Service.
+
+**Important:** When we notify you of changes, we will explicitly inform you of:
+
+- Your right to object within 6 weeks
+- The consequences of not objecting (deemed acceptance)
+- Your right and our right to terminate if you object
+
+This objection right applies to existing users. If you are a new user, the current Terms apply from the moment you start using the Service.
+
 ### 2.3 Additional terms from Establishments
 
 Some Establishments may have their own terms and conditions, house rules, or policies (for example, reservation cancellation policies, minimum order amounts, service charges). You are responsible for complying with any such Establishment-specific terms.
@@ -89,6 +109,7 @@ You must be at least 18 years old to use the Service, or at least 16 years old w
 For users in jurisdictions where the age of majority is higher than 18, you must meet that age requirement.
 
 If you are under 18 (or the applicable age in your jurisdiction):
+
 - You must have permission from your parent or legal guardian
 - Your parent or guardian is responsible for your use of the Service
 - We may require verification of parental consent
@@ -112,6 +133,8 @@ We reserve the right to suspend or terminate accounts that provide false informa
 ### 3.3 Account security
 
 You are responsible for maintaining the confidentiality of your account credentials. We are not liable for any loss or damage arising from your failure to protect your account.
+
+You may not transfer, sell, or assign your account to any third party without our express written consent. Any attempted transfer without consent is void.
 
 If you believe your account has been compromised, contact us immediately at info@meni.ge.
 
@@ -141,7 +164,79 @@ You agree **not** to:
 
 We reserve the right to investigate and take appropriate action against anyone who violates this section, including removing content, suspending or terminating accounts, and reporting to law enforcement.
 
-### 4.3 Geolocation and camera permissions
+### 4.3 Content reporting and moderation
+
+#### 4.3.1 Prohibited content
+
+Users must not post, upload, or transmit content that:
+
+- Violates any applicable laws or regulations
+- Infringes third-party intellectual property rights, privacy rights, or other legal rights
+- Contains malicious code, viruses, or other harmful software
+- Is defamatory, harassing, threatening, or abusive
+- Contains hate speech, discriminatory content, or incites violence
+- Is sexually explicit or promotes illegal activities
+- Violates these Terms or our community standards
+
+#### 4.3.2 Reporting illegal or harmful content
+
+We provide mechanisms for reporting content that may be illegal or violate these Terms:
+
+- **Email:** info@meni.ge
+- **In-app reporting:** Use the report function within the app (where available)
+
+When submitting a report, please include:
+
+- Clear identification of the content in question (URL, screenshot, description)
+- Explanation of why the content is problematic
+- Your contact information (if you wish to receive follow-up)
+
+#### 4.3.3 Content review process
+
+We review reported content using human moderators (not automated systems) to determine whether it violates our Terms or applicable laws.
+
+We will acknowledge receipt of your report and investigate promptly. We may contact you for additional information if needed.
+
+#### 4.3.4 Moderation actions
+
+If content is found to violate our Terms or applicable laws, we may take the following actions:
+
+- **Warning** – Issue a warning to the user who posted the content
+- **Content removal** – Delete or hide the violating content
+- **Content restriction** – Limit visibility or access to the content
+- **Search demotion** – Reduce visibility in search results or recommendations
+- **Account restriction** – Temporarily limit the user's ability to post, order, or use certain features
+- **Account suspension** – Temporarily suspend the user's account
+- **Account termination** – Permanently ban the user from the Service
+
+#### 4.3.5 Factors considered in moderation decisions
+
+When deciding what action to take, we consider:
+
+- The severity of the violation
+- Whether the violation was intentional or inadvertent
+- The user's history of violations
+- The potential harm to other users or third parties
+- Legal requirements and our obligations under applicable law
+- The user's legitimate interests and freedom of expression
+
+#### 4.3.6 Notice of moderation actions
+
+If we take action against your content or account, we will notify you (unless prohibited by law or where notification would undermine the purpose of the action) and provide:
+
+- A description of the action taken
+- The reason for the action
+- Information about how to appeal (if applicable)
+
+#### 4.3.7 Appeals
+
+If you believe a moderation decision was made in error, you may appeal by contacting us at info@meni.ge within 30 days of the decision. We will review your appeal and respond within a reasonable timeframe.
+
+#### 4.3.8 Transparency
+
+We may forward the content of reports (including reporter information) to the user whose content was reported, where necessary for the investigation or to comply with legal obligations. However, we will generally protect the identity of anonymous reporters unless disclosure is legally required.
+
+### 4.4 Geolocation and camera permissions
 
 The Service may request permission to access your device's:
 
@@ -151,11 +246,16 @@ The Service may request permission to access your device's:
 
 You can grant or deny these permissions in your device or browser settings. Some features may not work without the necessary permissions.
 
-### 4.4 User content
+### 4.5 Service subcontractors
+
+We may use third-party service providers, subcontractors, or affiliates to help us provide, maintain, or improve the Service. These third parties may have access to your information as necessary to perform their functions, but they are obligated to maintain confidentiality and use your information only for the purposes we specify.
+
+### 4.6 User content
 
 When you upload photos, post reviews, or submit other content to the Service, you grant us a worldwide, non-exclusive, royalty-free license to use, store, display, and process that content for the purposes of providing and improving the Service.
 
 You represent and warrant that:
+
 - You own or have the rights to any content you submit
 - Your content does not violate any third-party rights (copyright, privacy, etc.)
 - Your content does not contain illegal, offensive, or inappropriate material
@@ -179,6 +279,7 @@ When you place an order through the Service:
 ### 5.2 Order acceptance and rejection
 
 Establishments have the right to:
+
 - Accept or reject any order at their discretion
 - Refuse service for any lawful reason
 - Cancel orders if items are unavailable or in case of pricing errors
@@ -240,6 +341,7 @@ When placing an order, you are responsible for:
 The Service and all content, features, and functionality (including but not limited to software, text, graphics, logos, images, audio, video, and design) are owned by us or our licensors and are protected by copyright, trademark, patent, and other intellectual property laws.
 
 You may not:
+
 - Use our trademarks, logos, or branding without our written permission
 - Copy, modify, distribute, or create derivative works based on the Service
 - Remove or alter any copyright, trademark, or other proprietary notices
@@ -257,6 +359,7 @@ If you provide us with feedback, suggestions, or ideas about the Service, you gr
 The Service may contain links to third-party websites, services, or content (including Establishments' own websites, social media, payment processors).
 
 We are not responsible for:
+
 - The content, accuracy, or practices of third-party websites or services
 - Any transactions you conduct with third parties
 - Third parties' privacy practices or terms of service
@@ -268,6 +371,7 @@ Your use of third-party services is at your own risk and subject to their terms.
 ### 8.1 Privacy Policy
 
 Your privacy is important to us. Our Privacy Policy (https://meni.ge/privacy) explains:
+
 - What personal data we collect
 - How we use, store, and protect your data
 - Your rights under GDPR and other privacy laws
@@ -283,20 +387,91 @@ We use cookies and similar technologies as described in our Cookie Policy (https
 
 When you place an order or interact with an Establishment, we share necessary information with that Establishment (your name, order details, dietary preferences, etc.). Establishments are independent data controllers responsible for their own compliance with privacy laws.
 
+### 8.4 Data security
+
+We implement appropriate technical and organizational security measures to protect your personal data against unauthorized access, loss, destruction, or alteration. However, no system is completely secure, and we cannot guarantee absolute security.
+
+You are responsible for:
+
+- Maintaining the security of your account credentials
+- Using secure internet connections when accessing the Service
+- Keeping your device and software up to date with security patches
+- Not sharing your account with others
+
+We are not liable for security breaches resulting from your failure to protect your account or device, except where we are at fault.
+
+### 8.5 Technical requirements
+
+To use the Service, you need:
+
+- A compatible device (smartphone, tablet, or computer) with a modern web browser or our mobile app
+- An active internet connection
+- Enabled JavaScript and cookies (for web browser access)
+- Camera access (for QR code scanning and photo upload features)
+- Location services (for venue detection and location-based features)
+
+It is your responsibility to ensure your device and software meet these requirements. We do not guarantee compatibility with all devices, operating systems, or browser versions.
+
+Supported platforms and system requirements may change over time as technology evolves. We will make reasonable efforts to notify users of significant technical requirement changes.
+
 ## 9. Disclaimers and Limitations of Liability
 
-### 9.1 Service provided "as is"
+### 9.1 Service availability and maintenance
+
+#### 9.1.1 Service updates and modifications
+
+We continuously work to improve and update the Service to adapt to technological developments and user needs. We reserve the right to:
+
+- Modify, update, or discontinue features or functionality of the Service
+- Add new features or services
+- Change the appearance, design, or user interface of the Service
+- Perform maintenance, upgrades, or technical improvements
+
+We will make reasonable efforts to notify you of material changes that significantly affect your use of the Service. However, we are not obligated to develop new features or maintain specific features indefinitely, except where necessary for the Service to function as described.
+
+#### 9.1.2 Service interruptions
+
+The Service may be temporarily unavailable due to:
+
+- Scheduled maintenance and updates
+- Technical issues or server problems
+- Network or infrastructure failures
+- Security incidents requiring immediate action
+- Force majeure events (see Section 12.5)
+
+We will endeavor to minimize service interruptions and provide advance notice when possible for scheduled maintenance. However, we do not guarantee uninterrupted availability of the Service.
+
+#### 9.1.3 No liability for service interruptions
+
+We are not liable for any damages, losses, or inconvenience resulting from service interruptions, delays, or unavailability, whether planned or unplanned, except where such liability cannot be excluded by law.
+
+### 9.2 Warranty disclaimer
+
+#### 9.2.1 Service provided "as is"
 
 THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
 
 We do not warrant that:
+
 - The Service will be uninterrupted, secure, or error-free
 - Defects will be corrected
 - The Service is free of viruses or other harmful components
 - Results obtained from using the Service will be accurate or reliable
 - Establishments will accept your orders or honor reservations
 
-### 9.2 No liability for Establishment actions
+#### 9.2.2 Statutory warranty rights
+
+Nothing in these Terms excludes or limits your statutory warranty rights under applicable consumer protection laws, including rights under Georgian law, EU consumer protection directives, or other mandatory consumer protection legislation in your jurisdiction.
+
+If you are a consumer, you may have the right to:
+
+- Require repair or replacement of defective services
+- Receive a price reduction or refund in certain circumstances
+- Cancel the contract in case of substantial non-performance
+
+These statutory rights apply in addition to these Terms and cannot be waived or limited where prohibited by law.
+
+### 9.3 No liability for Establishment actions
 
 We are a technology platform provider. We are **not responsible** for:
 
@@ -310,7 +485,9 @@ We are a technology platform provider. We are **not responsible** for:
 
 **Your sole remedy for any issues with food, service, or payment is to contact the Establishment directly.**
 
-### 9.3 Limitation of liability
+### 9.4 Limitation of liability
+
+#### 9.4.1 General liability limitations
 
 TO THE MAXIMUM EXTENT PERMITTED BY LAW:
 
@@ -318,9 +495,32 @@ WE (AND OUR AFFILIATES, OFFICERS, DIRECTORS, EMPLOYEES, AND AGENTS) SHALL NOT BE
 
 OUR TOTAL LIABILITY TO YOU FOR ANY CLAIMS ARISING OUT OF OR RELATED TO THESE TERMS OR YOUR USE OF THE SERVICE SHALL NOT EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO US (IF ANY) IN THE 12 MONTHS BEFORE THE CLAIM AROSE, OR (B) €100 (ONE HUNDRED EUROS).
 
-SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OR LIMITATION OF CERTAIN DAMAGES. IN SUCH JURISDICTIONS, OUR LIABILITY IS LIMITED TO THE MAXIMUM EXTENT PERMITTED BY LAW.
+#### 9.4.2 Liability for negligence
 
-### 9.4 Indemnification
+Our liability for damages is limited as follows:
+
+- **Intentional misconduct and gross negligence:** We are fully liable for damages caused by intentional misconduct or gross negligence by us or our legal representatives and agents.
+
+- **Breach of essential contractual obligations:** For breach of essential contractual obligations (obligations whose fulfillment is necessary for the proper performance of the contract and on which you may reasonably rely), we are liable for damages caused by slight negligence, but only for foreseeable, typically occurring damages.
+
+- **Slight negligence:** We are not liable for damages caused by slight negligence, except where essential contractual obligations are breached (as described above).
+
+#### 9.4.3 Exceptions to liability limitations
+
+The above liability limitations do not apply to:
+
+- Liability for damages arising from injury to life, body, or health
+- Liability under mandatory product liability laws
+- Liability that cannot be excluded or limited under applicable consumer protection laws
+- Claims based on fraudulent misrepresentation
+
+#### 9.4.4 Jurisdictional variations
+
+SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OR LIMITATION OF CERTAIN DAMAGES OR WARRANTIES. IN SUCH JURISDICTIONS, OUR LIABILITY AND WARRANTIES ARE LIMITED TO THE MAXIMUM EXTENT PERMITTED BY LAW.
+
+If you are a consumer in the EU/EEA, UK, or other jurisdictions with mandatory consumer protection laws, nothing in these Terms affects your statutory rights that cannot be waived or limited by contract.
+
+### 9.5 Indemnification
 
 You agree to indemnify, defend, and hold harmless meni.ge and our affiliates, officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, costs, or expenses (including reasonable legal fees) arising out of or related to:
 
@@ -348,11 +548,22 @@ We may suspend or terminate your access to the Service at any time, with or with
 ### 10.3 Effect of termination
 
 Upon termination:
+
 - Your right to use the Service immediately ceases
 - We may delete your account and data (subject to our data retention obligations)
 - Sections of these Terms that by their nature should survive (including disclaimers, limitations of liability, indemnification, governing law) will continue to apply
 
 We are not liable for any termination of your access to the Service.
+
+### 10.4 Inactive account deletion
+
+We reserve the right to delete user accounts that have been inactive for an extended period (typically 6 months or more of no login activity). Before deleting an inactive account, we will make reasonable efforts to notify you via the email address associated with your account.
+
+If your account is deleted due to inactivity:
+
+- Your personal data will be handled in accordance with our Privacy Policy and data retention obligations
+- Order history and other data may be permanently deleted
+- You may create a new account at any time, but previous data will not be recoverable
 
 ## 11. Dispute Resolution and Governing Law
 
@@ -412,6 +623,7 @@ We are not liable for any failure or delay in performing our obligations under t
 ### 12.6 Notices
 
 We may provide notices to you:
+
 - By email to the address associated with your account
 - By posting on the Service or website
 - By in-app notifications

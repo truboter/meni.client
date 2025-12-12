@@ -6,7 +6,12 @@ import { LegalPageWrapper } from "./LegalPageWrapper.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import { SentryTestPage } from "./components/SentryTest.tsx";
 import { initSentry } from "./lib/sentry.ts";
+import { Amplify } from "aws-amplify";
+import outputs from "../amplify_outputs.json";
 import "./index.css";
+
+// Initialize Amplify
+Amplify.configure(outputs);
 
 // Initialize Sentry BEFORE rendering React
 initSentry();
