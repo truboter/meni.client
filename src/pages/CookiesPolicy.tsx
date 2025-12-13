@@ -7,7 +7,10 @@ interface CookiesPolicyProps {
   onLanguageChange: (language: Language) => void;
 }
 
-export function CookiesPolicy({ language, onLanguageChange }: CookiesPolicyProps) {
+export function CookiesPolicy({
+  language,
+  onLanguageChange,
+}: CookiesPolicyProps) {
   const [content, setContent] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -68,12 +71,12 @@ export function CookiesPolicy({ language, onLanguageChange }: CookiesPolicyProps
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="flex justify-end mb-4">
-          <LanguageSelector 
+          <LanguageSelector
             currentLanguage={language}
             onLanguageChange={onLanguageChange}
           />
         </div>
-        <div 
+        <div
           className="prose prose-neutral dark:prose-invert max-w-none"
           dangerouslySetInnerHTML={{ __html: content }}
         />
