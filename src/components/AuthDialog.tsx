@@ -43,7 +43,7 @@ export function AuthDialog({ open, onOpenChange, language }: AuthDialogProps) {
           setLoading(false);
           return;
         }
-        
+
         await signUp({
           username: email,
           password,
@@ -53,7 +53,7 @@ export function AuthDialog({ open, onOpenChange, language }: AuthDialogProps) {
             },
           },
         });
-        
+
         // After successful signup, show success message or switch to signin
         setMode("signin");
         setError(null);
@@ -64,7 +64,7 @@ export function AuthDialog({ open, onOpenChange, language }: AuthDialogProps) {
           username: email,
           password,
         });
-        
+
         // Close dialog on successful signin
         onOpenChange(false);
         setEmail("");
@@ -78,7 +78,9 @@ export function AuthDialog({ open, onOpenChange, language }: AuthDialogProps) {
     }
   };
 
-  const handleSocialSignIn = async (provider: "Google" | "Facebook" | "Amazon") => {
+  const handleSocialSignIn = async (
+    provider: "Google" | "Facebook" | "Amazon"
+  ) => {
     try {
       setLoading(true);
       await signInWithRedirect({ provider });
@@ -118,8 +120,7 @@ export function AuthDialog({ open, onOpenChange, language }: AuthDialogProps) {
             {mode === "signin"
               ? t("signInDescription") ||
                 "Sign in to your account to access your profile"
-              : t("signUpDescription") ||
-                "Create a new account to get started"}
+              : t("signUpDescription") || "Create a new account to get started"}
           </DialogDescription>
         </DialogHeader>
 
@@ -179,8 +180,8 @@ export function AuthDialog({ open, onOpenChange, language }: AuthDialogProps) {
             {loading
               ? t("loading") || "Loading..."
               : mode === "signin"
-              ? t("signIn") || "Sign In"
-              : t("signUp") || "Sign Up"}
+                ? t("signIn") || "Sign In"
+                : t("signUp") || "Sign Up"}
           </Button>
         </form>
 

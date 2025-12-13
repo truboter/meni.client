@@ -12,6 +12,7 @@
 ## 🚀 Быстрый старт
 
 **Важно:** Проект работает с **production AWS ресурсами**:
+
 - Cognito User Pool: `meni-production-users` (ID: `eu-central-1_vHbpSrCvL`)
 - Все пользователи создаются в production окружении
 - Будьте аккуратны при тестировании!
@@ -34,7 +35,7 @@ npm run dev:7003
      - Заглавные буквы (A-Z)
      - Строчные буквы (a-z)
      - Цифры (0-9)
-     - Специальные символы (!@#$%^&*)
+     - Специальные символы (!@#$%^&\*)
    - Пример пароля: `Test123!@#`
 4. **Нажмите "Sign Up"**
 
@@ -66,6 +67,7 @@ aws cognito-idp admin-confirm-sign-up \
 ### 5. Просмотр профиля
 
 После входа вы увидите:
+
 - Email адрес
 - Статус подтверждения email
 - User ID (UUID)
@@ -105,6 +107,7 @@ aws cognito-idp admin-delete-user \
 ### Ошибка: "User is not confirmed"
 
 Выполните команду подтверждения:
+
 ```bash
 aws cognito-idp admin-confirm-sign-up \
   --user-pool-id eu-central-1_vHbpSrCvL \
@@ -114,6 +117,7 @@ aws cognito-idp admin-confirm-sign-up \
 ### Ошибка: "Password does not conform to policy"
 
 Убедитесь, что пароль содержит:
+
 - ✓ Минимум 8 символов
 - ✓ Заглавную букву
 - ✓ Строчную букву
@@ -121,6 +125,7 @@ aws cognito-idp admin-confirm-sign-up \
 - ✓ Специальный символ
 
 Примеры валидных паролей:
+
 - `Password123!`
 - `MyPass@2024`
 - `Test#123Abc`
@@ -134,6 +139,7 @@ aws cognito-idp admin-confirm-sign-up \
 ### Письмо с кодом не приходит
 
 AWS SES в sandbox режиме. Используйте AWS CLI для подтверждения:
+
 ```bash
 aws cognito-idp admin-confirm-sign-up \
   --user-pool-id eu-central-1_vHbpSrCvL \
@@ -143,6 +149,7 @@ aws cognito-idp admin-confirm-sign-up \
 ### Проверка в консоли браузера
 
 Откройте DevTools (F12) и проверьте:
+
 1. **Console** - ошибки авторизации
 2. **Network** - запросы к Cognito
 3. **Application > Local Storage** - токены авторизации
@@ -167,4 +174,3 @@ aws cognito-idp admin-confirm-sign-up \
 
 - [AWS Cognito Console](https://eu-central-1.console.aws.amazon.com/cognito/v2/idp/user-pools/eu-central-1_g0X3qmr0t/users)
 - [Amplify Auth Documentation](https://docs.amplify.aws/react/build-a-backend/auth/)
-

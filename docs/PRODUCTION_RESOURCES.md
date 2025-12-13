@@ -144,4 +144,3 @@ aws cognito-idp list-users \
 - `docs/COGNITO_SETUP_COMPLETE.md` - Полная документация Cognito
 - `docs/TESTING_AUTH.md` - Руководство по тестированию авторизации
 - `docs/VSCODE_AUTOSTART.md` - Автозапуск Sandbox в VS Code
-

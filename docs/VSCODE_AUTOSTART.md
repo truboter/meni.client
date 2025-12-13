@@ -10,6 +10,7 @@
 ## ⚠️ Важно: Работа с Production ресурсами
 
 **Amplify Sandbox подключается к существующим production AWS ресурсам:**
+
 - **Cognito User Pool**: `eu-central-1_vHbpSrCvL` (meni-production-users)
 - **Identity Pool**: `eu-central-1:8150cddb-da73-483a-8601-95e4fd98411b`
 - **S3 bucket**: production bucket для заказов
@@ -25,18 +26,23 @@
 Файл `.vscode/tasks.json` содержит две задачи с параметром `"runOn": "folderOpen"`:
 
 #### 1. Start Frontend (Port 7003)
+
 Запускает Vite dev server:
+
 ```bash
 npm run dev:7003
 ```
 
 #### 2. Start Amplify Sandbox
+
 Запускает Amplify sandbox в watch режиме:
+
 ```bash
 npx ampx sandbox --identifier meni-client
 ```
 
 **Важно:** Sandbox подключается к **существующим production AWS ресурсам**:
+
 - Cognito User Pool: `eu-central-1_vHbpSrCvL` (meni-production-users)
 - Identity Pool: `eu-central-1:8150cddb-da73-483a-8601-95e4fd98411b`
 - S3 bucket для заказов
@@ -46,6 +52,7 @@ Sandbox **НЕ создает новые ресурсы**, а синхрониз
 ### Настройки VS Code
 
 Файл `.vscode/settings.json` содержит:
+
 ```json
 {
   "task.allowAutomaticTasks": "on"
@@ -66,12 +73,14 @@ Sandbox **НЕ создает новые ресурсы**, а синхрониз
 ### Ожидаемый вывод
 
 **Frontend:**
+
 ```
 VITE v6.4.1  ready in 13282 ms
 ➜  Local:   http://localhost:7003/
 ```
 
 **Amplify Sandbox:**
+
 ```
 Amplify Sandbox
 
@@ -108,6 +117,7 @@ Successfully generated outputs
 ### Метод 1: Через настройки VS Code
 
 В `.vscode/settings.json` измените:
+
 ```json
 {
   "task.allowAutomaticTasks": "off"
@@ -117,6 +127,7 @@ Successfully generated outputs
 ### Метод 2: Удалить runOptions из задач
 
 В `.vscode/tasks.json` удалите блок:
+
 ```json
 "runOptions": {
   "runOn": "folderOpen"
@@ -132,6 +143,7 @@ Successfully generated outputs
 **Проблема:** При открытии проекта задачи не стартуют.
 
 **Решение:**
+
 1. Проверьте `.vscode/settings.json`:
    ```json
    "task.allowAutomaticTasks": "on"
@@ -144,6 +156,7 @@ Successfully generated outputs
 **Проблема:** Ошибки при запуске sandbox.
 
 **Решение:**
+
 1. Проверьте AWS credentials:
    ```bash
    aws sts get-caller-identity
@@ -159,14 +172,17 @@ Successfully generated outputs
 **Проблема:** Frontend не запускается, порт занят.
 
 **Решение:**
+
 1. Найдите процесс на порту 7003:
+
    ```bash
    # Linux/Mac
    lsof -i :7003
-   
+
    # Windows
    netstat -ano | findstr :7003
    ```
+
 2. Остановите процесс или измените порт в `package.json`:
    ```json
    "dev:7003": "vite --port 7004"
@@ -177,6 +193,7 @@ Successfully generated outputs
 **Проблема:** Запущено несколько sandbox одновременно.
 
 **Решение:**
+
 1. Остановите все задачи: `Tasks: Terminate Task`
 2. Убедитесь, что не запущен sandbox в другом терминале:
    ```bash
@@ -186,13 +203,13 @@ Successfully generated outputs
 
 ## Полезные команды VS Code
 
-| Команда | Описание |
-|---------|----------|
-| `Ctrl+Shift+P` → `Tasks: Show Running Tasks` | Показать запущенные задачи |
-| `Ctrl+Shift+P` → `Tasks: Terminate Task` | Остановить задачу |
-| `Ctrl+Shift+P` → `Tasks: Restart Running Task` | Перезапустить задачу |
-| `Ctrl+Shift+P` → `Tasks: Run Task` | Запустить задачу вручную |
-| `Ctrl+`` | Открыть/закрыть панель терминала |
+| Команда                                        | Описание                         |
+| ---------------------------------------------- | -------------------------------- |
+| `Ctrl+Shift+P` → `Tasks: Show Running Tasks`   | Показать запущенные задачи       |
+| `Ctrl+Shift+P` → `Tasks: Terminate Task`       | Остановить задачу                |
+| `Ctrl+Shift+P` → `Tasks: Restart Running Task` | Перезапустить задачу             |
+| `Ctrl+Shift+P` → `Tasks: Run Task`             | Запустить задачу вручную         |
+| `Ctrl+``                                       | Открыть/закрыть панель терминала |
 
 ## Рекомендации
 
@@ -219,4 +236,3 @@ Successfully generated outputs
 - `docs/TESTING_AUTH.md` - Руководство по тестированию авторизации
 - `docs/COGNITO_SETUP_COMPLETE.md` - Полная документация Cognito
 - `COGNITO_SETUP_SUMMARY.md` - Краткое резюме настройки
-

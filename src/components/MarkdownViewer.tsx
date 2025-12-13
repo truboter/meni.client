@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "@phosphor-icons/react";
 import { Button } from "./ui/button";
 import { LanguageSelector } from "./LanguageSelector";
@@ -55,8 +55,8 @@ export function MarkdownViewer({
   // Simple markdown to HTML converter
   const renderMarkdown = (md: string) => {
     const lines = md.split("\n");
-    const elements: JSX.Element[] = [];
-    let listItems: JSX.Element[] = [];
+    const elements: React.JSX.Element[] = [];
+    let listItems: React.JSX.Element[] = [];
     let listIndex = 0;
 
     const flushList = () => {
@@ -71,7 +71,7 @@ export function MarkdownViewer({
     };
 
     const processInlineMarkdown = (text: string) => {
-      const parts: (string | JSX.Element)[] = [];
+      const parts: (string | React.JSX.Element)[] = [];
       let key = 0;
 
       const boldRegex = /\*\*(.*?)\*\*/g;

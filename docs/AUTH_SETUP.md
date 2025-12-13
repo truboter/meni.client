@@ -3,12 +3,14 @@
 ## Обзор
 
 В приложении реализована авторизация пользователей с использованием AWS Amplify Gen 2. Пользователи могут войти через:
+
 - Email и пароль
 - Социальные сети (Google, Facebook, Amazon)
 
 ## Текущий статус
 
 ✅ **Реализовано:**
+
 - Компонент AuthDialog для входа/регистрации
 - Интеграция с VenueHeader
 - Проверка авторизации при клике на кнопку профиля
@@ -16,6 +18,7 @@
 - Инициализация Amplify в приложении
 
 ⚠️ **Требуется настройка:**
+
 - Развертывание AWS Amplify backend
 - Настройка провайдеров социальных сетей
 
@@ -34,6 +37,7 @@ npx ampx sandbox --identifier meni-client
 ```
 
 **Важно:** Sandbox работает с **существующими production ресурсами**:
+
 - Cognito User Pool: `eu-central-1_vHbpSrCvL`
 - Identity Pool: `eu-central-1:8150cddb-da73-483a-8601-95e4fd98411b`
 - S3 bucket для заказов
@@ -76,7 +80,7 @@ Sandbox НЕ создает новые ресурсы, а синхронизир
 Отредактируйте `amplify/auth/resource.ts`:
 
 ```typescript
-import { defineAuth } from '@aws-amplify/backend';
+import { defineAuth } from "@aws-amplify/backend";
 
 export const auth = defineAuth({
   loginWith: {
@@ -94,8 +98,8 @@ export const auth = defineAuth({
         clientId: process.env.AMAZON_CLIENT_ID!,
         clientSecret: process.env.AMAZON_CLIENT_SECRET!,
       },
-      callbackUrls: ['http://localhost:7003/', 'https://yourdomain.com/'],
-      logoutUrls: ['http://localhost:7003/', 'https://yourdomain.com/'],
+      callbackUrls: ["http://localhost:7003/", "https://yourdomain.com/"],
+      logoutUrls: ["http://localhost:7003/", "https://yourdomain.com/"],
     },
   },
 });
@@ -130,20 +134,20 @@ AMAZON_CLIENT_SECRET=your_amazon_client_secret
 ### Проверка статуса
 
 ```typescript
-import { getCurrentUser } from 'aws-amplify/auth';
+import { getCurrentUser } from "aws-amplify/auth";
 
 try {
   const user = await getCurrentUser();
-  console.log('User is authenticated:', user);
+  console.log("User is authenticated:", user);
 } catch {
-  console.log('User is not authenticated');
+  console.log("User is not authenticated");
 }
 ```
 
 ### Выход
 
 ```typescript
-import { signOut } from 'aws-amplify/auth';
+import { signOut } from "aws-amplify/auth";
 
 await signOut();
 ```
@@ -151,7 +155,7 @@ await signOut();
 ### Получение токена
 
 ```typescript
-import { fetchAuthSession } from 'aws-amplify/auth';
+import { fetchAuthSession } from "aws-amplify/auth";
 
 const session = await fetchAuthSession();
 const token = session.tokens?.idToken?.toString();
@@ -169,4 +173,3 @@ const token = session.tokens?.idToken?.toString();
 
 - [AWS Amplify Auth Documentation](https://docs.amplify.aws/gen2/build-a-backend/auth/)
 - [Amplify Gen 2 Guide](https://docs.amplify.aws/gen2/)
-

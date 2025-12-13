@@ -39,7 +39,6 @@ export function VenueHeader({
 }: VenueHeaderProps) {
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
   const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Check authentication status on mount
   useEffect(() => {
@@ -49,9 +48,8 @@ export function VenueHeader({
   const checkAuthStatus = async () => {
     try {
       await getCurrentUser();
-      setIsAuthenticated(true);
     } catch {
-      setIsAuthenticated(false);
+      // User not authenticated
     }
   };
 
@@ -67,7 +65,6 @@ export function VenueHeader({
   };
 
   const handleSignOut = () => {
-    setIsAuthenticated(false);
     setIsProfileDialogOpen(false);
   };
 

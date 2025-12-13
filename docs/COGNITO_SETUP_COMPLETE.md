@@ -5,6 +5,7 @@
 AWS Cognito User Pool успешно настроен для проекта meni-client.
 
 **Важно:** Проект использует **существующие production ресурсы**:
+
 - Cognito User Pool и Identity Pool уже развернуты
 - Amplify Sandbox синхронизируется с этими ресурсами, не создавая новые
 - Все изменения в `amplify/` применяются к production окружению
@@ -12,22 +13,26 @@ AWS Cognito User Pool успешно настроен для проекта meni
 ## Параметры конфигурации
 
 ### User Pool
+
 - **Pool ID**: `eu-central-1_vHbpSrCvL`
 - **Name**: `meni-production-users`
 - **Region**: `eu-central-1`
 
 ### User Pool Client
+
 - **Client ID**: `1cfidd7fmiuvfuitir55v927ol`
 - **Client Name**: `meni-web-client`
 
 ### Identity Pool
+
 - **Pool ID**: `eu-central-1:8150cddb-da73-483a-8601-95e4fd98411b`
 - **Name**: `meni-production-identity`
 - **Unauthenticated access**: Enabled
 
 ### OAuth Domain
+
 - **Domain**: `meni-client-auth.auth.eu-central-1.amazoncognito.com`
-- **Callback URLs**: 
+- **Callback URLs**:
   - http://localhost:7003/
   - https://meni.ge/
 - **Logout URLs**:
@@ -59,6 +64,7 @@ npm run dev:7003
 После регистрации Cognito отправит код подтверждения на указанный email.
 
 **Важно**: Если email не приходит, проверьте:
+
 - Папку спам
 - Настройки SES в AWS (для production нужно вывести из sandbox)
 
@@ -73,6 +79,7 @@ aws cognito-idp admin-confirm-sign-up \
 ### 5. Войдите в систему
 
 После подтверждения email:
+
 1. Вернитесь в приложение
 2. Кликните на кнопку профиля
 3. Введите email и пароль
@@ -113,6 +120,7 @@ aws cognito-idp admin-delete-user \
 ### 2. Добавьте Identity Provider в Cognito
 
 #### Google:
+
 ```bash
 aws cognito-idp create-identity-provider \
   --user-pool-id eu-central-1_vHbpSrCvL \
@@ -123,6 +131,7 @@ aws cognito-idp create-identity-provider \
 ```
 
 #### Facebook:
+
 ```bash
 aws cognito-idp create-identity-provider \
   --user-pool-id eu-central-1_vHbpSrCvL \
@@ -161,6 +170,7 @@ aws cognito-idp update-user-pool-client \
    - Укажите use case и ожидаемый объем
 
 2. Настройте custom FROM email:
+
 ```bash
 aws cognito-idp update-user-pool \
   --user-pool-id eu-central-1_g0X3qmr0t \
@@ -197,15 +207,17 @@ aws cognito-idp admin-confirm-sign-up \
 ### Ошибка "Password does not conform to policy"
 
 Пароль должен содержать:
+
 - Минимум 8 символов
 - Заглавные буквы (A-Z)
 - Строчные буквы (a-z)
 - Цифры (0-9)
-- Специальные символы (!@#$%^&*)
+- Специальные символы (!@#$%^&\*)
 
 ### Ошибка при входе
 
 Проверьте в консоли браузера детали ошибки. Обычные причины:
+
 - Пользователь не подтвержден
 - Неправильный пароль
 - Пользователь не существует
@@ -223,4 +235,3 @@ aws cognito-idp admin-confirm-sign-up \
 
 - [AWS Cognito Console](https://eu-central-1.console.aws.amazon.com/cognito/v2/idp/user-pools/eu-central-1_g0X3qmr0t/users)
 - [Identity Pool Console](https://eu-central-1.console.aws.amazon.com/cognito/pool/?region=eu-central-1&id=eu-central-1:67cdf6ba-48ad-465b-8c8c-bb1b7135309c)
-

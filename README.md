@@ -14,7 +14,7 @@ To start the development server:
 
 ```bash
 # Default port (5173)
-npm run dev  
+npm run dev
 
 # Custom port 7003
 npm run dev:7003

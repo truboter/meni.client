@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { MarkdownViewer } from "../components/MarkdownViewer";
 import { LanguageSelector } from "../components/LanguageSelector";
 import { type Language } from "../lib/translations";
 
 interface CookiesPolicyProps {
   language: Language;
+  onLanguageChange: (language: Language) => void;
 }
 
-export function CookiesPolicy({ language }: CookiesPolicyProps) {
+export function CookiesPolicy({ language, onLanguageChange }: CookiesPolicyProps) {
   const [content, setContent] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -68,9 +68,15 @@ export function CookiesPolicy({ language }: CookiesPolicyProps) {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="flex justify-end mb-4">
-          <LanguageSelector />
+          <LanguageSelector 
+            currentLanguage={language}
+            onLanguageChange={onLanguageChange}
+          />
         </div>
-        <MarkdownViewer content={content} />
+        <div 
+          className="prose prose-neutral dark:prose-invert max-w-none"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
       </div>
     </div>
   );

@@ -26,6 +26,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "amplify_outputs.json"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

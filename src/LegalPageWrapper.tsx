@@ -60,7 +60,7 @@ export function LegalPageWrapper({ page }: LegalPageWrapperProps) {
     case "terms":
       return <TermsOfService language={language} />;
     case "cookies":
-      return <CookiesPolicy language={language} />;
+      return <CookiesPolicy language={language} onLanguageChange={setLanguage} />;
     case "data":
       return (
         <DataManagement

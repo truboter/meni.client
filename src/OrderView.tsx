@@ -312,16 +312,18 @@ export default function OrderView() {
       <MarkdownViewer
         isOpen={privacyDialogOpen}
         onClose={() => setPrivacyDialogOpen(false)}
-        type="privacy"
+        documentType="privacy"
         language={language}
+        onLanguageChange={setLanguage}
       />
 
       {/* Terms of Service Dialog */}
       <MarkdownViewer
         isOpen={termsDialogOpen}
         onClose={() => setTermsDialogOpen(false)}
-        type="terms"
+        documentType="terms"
         language={language}
+        onLanguageChange={setLanguage}
       />
 
       {/* Data Management Dialog */}

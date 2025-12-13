@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { type Language, getUITranslation } from "../lib/translations";
@@ -42,8 +42,8 @@ export function PrivacyPolicy({ language }: PrivacyPolicyProps) {
   // Simple markdown to HTML converter
   const renderMarkdown = (md: string) => {
     const lines = md.split("\n");
-    const elements: JSX.Element[] = [];
-    let listItems: JSX.Element[] = [];
+    const elements: React.JSX.Element[] = [];
+    let listItems: React.JSX.Element[] = [];
     let listIndex = 0;
 
     const flushList = () => {
@@ -58,7 +58,7 @@ export function PrivacyPolicy({ language }: PrivacyPolicyProps) {
     };
 
     const processInlineMarkdown = (text: string) => {
-      const parts: (string | JSX.Element)[] = [];
+      const parts: (string | React.JSX.Element)[] = [];
       let currentText = text;
       let key = 0;
 
