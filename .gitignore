@@ -27,5 +27,8 @@ dist-ssr
 
 # amplify
 .amplify
-amplify_outputs*
+amplify_outputs*.ts
+amplify_outputs*.js
 amplifyconfiguration*
+# Keep amplify_outputs.json in repo for deployment
+!amplify_outputs.json

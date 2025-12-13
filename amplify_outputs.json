@@ -1,0 +1,33 @@
+{
+  "version": "1.4",
+  "auth": {
+    "aws_region": "eu-central-1",
+    "user_pool_id": "eu-central-1_g0X3qmr0t",
+    "user_pool_client_id": "6l1ukf9vgulfkndr53ltauujo",
+    "identity_pool_id": "eu-central-1:67cdf6ba-48ad-465b-8c8c-bb1b7135309c",
+    "password_policy": {
+      "min_length": 8,
+      "require_lowercase": true,
+      "require_uppercase": true,
+      "require_numbers": true,
+      "require_symbols": true
+    },
+    "mfa_configuration": "OPTIONAL",
+    "mfa_methods": ["TOTP"],
+    "unauthenticated_identities_enabled": true,
+    "username_attributes": ["email"],
+    "user_verification_types": ["email"],
+    "standard_required_attributes": ["email"],
+    "oauth": {
+      "identity_providers": ["COGNITO"],
+      "domain": "meni-client-auth.auth.eu-central-1.amazoncognito.com",
+      "scopes": ["email", "openid", "profile"],
+      "redirect_sign_in_uri": ["http://localhost:7003/", "https://meni.ge/"],
+      "redirect_sign_out_uri": ["http://localhost:7003/", "https://meni.ge/"],
+      "response_type": "code"
+    }
+  },
+  "data": {},
+  "storage": {},
+  "custom": {}
+}
